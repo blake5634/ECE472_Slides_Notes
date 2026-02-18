@@ -1,64 +1,63 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%           EE474 Hardware and Basic I/O
+%%
+%   % combined into notes pack
 %
-%           EE474 Hardware and Basic I/O
+%\documentclass{article}
+%\documentclass{seminar}
 %
-<stream, c>   % combined into notes pack
-
-<nh>\documentclass{article}
-<s>\documentclass{seminar}
-
-<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
-<s>\pagestyle{headings}
-<s>\slidepagestyle{BHstyle}
-<s>\addtolength\oddsidemargin{3cm}
-<shn>\usepackage[T1]{fontenc}
-<shn>\usepackage{lmodern}
-<shn>\usepackage[utf8]{inputenc}
-<shn>\usepackage[english]{babel}
-<shn>\usepackage{graphicx}
-<shn>\usepackage[pdftex,
-<shn>    pdftitle={ECE 474: Introduction to USB},
-<shn>    pdfauthor={Blake Hannaford, University of Washington},
-<shn>    pdflang={en-US},
-<shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
-<shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-<shn>    hidelinks,
-<shn>    unicode]{hyperref}
-<shn>\usepackage{listings}
-
-<*hn>
-\oddsidemargin 0in
-\evensidemargin 0in
-\textwidth 6.5in
-\textheight 8.7in
-\topmargin 0.2in
-
-
-\linespread{1.0}     % 1.0 = single space   1.6 = double space
-
-<*shn>
-
-\title{EE 474:  Introduction to USB 1.1}
-
-\author{     Blake Hannaford\\
-        Department of Electrical Engineering \\
-        The University of Washington
-}
-
-\date{\today}
-
-
-<shn>\begin{document}
-<s>\begin{slide}
-
-\maketitle
-
-<*cshn>
+%\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
+%\pagestyle{headings}
+%\slidepagestyle{BHstyle}
+%\addtolength\oddsidemargin{3cm}
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+%\usepackage{graphicx}
+%\usepackage[pdftex,
+%    pdftitle={ECE 474: Introduction to USB},
+%    pdfauthor={Blake Hannaford, University of Washington},
+%    pdflang={en-US},
+%    pdfsubject={ECE 474 Embedded Microcomputer Systems},
+%    pdfkeywords={embedded systems, microcontrollers, ECE 474},
+%    hidelinks,
+%    unicode]{hyperref}
+%\usepackage{listings}
+%
+%
+%\oddsidemargin 0in
+%\evensidemargin 0in
+%\textwidth 6.5in
+%\textheight 8.7in
+%\topmargin 0.2in
+%
+%
+%\linespread{1.0}     % 1.0 = single space   1.6 = double space
+%
+%
+%
+%\title{EE 474:  Introduction to USB 1.1}
+%
+%\author{     Blake Hannaford\\
+%        Department of Electrical Engineering \\
+%        The University of Washington
+%}
+%
+%\date{\today}
+%
+%
+%\begin{document}
+%\begin{slide}
+%
+%\maketitle
+%
+	%<*cshn>
 Source:  Official USB 1.1 Specification. 
 {\tt http://www.usb.org}, Wikipedia 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 1 
 \section{USB Overview}
@@ -75,8 +74,8 @@ Source:  Official USB 1.1 Specification.
         by industry
 \end{itemize}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 1.2
 \subsection{Applications}
 (as anticipated in 1996)
@@ -92,13 +91,13 @@ Source:  Official USB 1.1 Specification.
 %%%%** Section 1.3
 \subsection{Architecture}
  
-<*chn>
+	%<*chn>
 \begin{center}
    \includegraphics[width=4in]{usb_figs/00076.eps}
 \end{center}
 
-<s>  \scalebox{.15}{  \includegraphics{usb_figs/00076.eps} }\\
-<*>
+%  \scalebox{.15}{  \includegraphics{usb_figs/00076.eps} }\\
+	%<*>
 (Figure 4-1, page 16)
 
 ``Function'' --- a USB peripheral device\\
@@ -117,13 +116,13 @@ Functions in a single package.
 %<hn>\scalebox{0.15} {
 %<s>\scalebox{0.45} { 
 \begin{center}
-<chn>   \includegraphics[height=3.5in]{usb_figs/00077.eps} \\
-<s>    \includegraphics[height=2.5in]{usb_figs/00077.eps} \\
+   \includegraphics[height=3.5in]{usb_figs/00077.eps} \\	%<chn>
+%    \includegraphics[height=2.5in]{usb_figs/00077.eps} \\
 (Figure 4-4, page 23)
 \end{center}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 2 
 \section{Bus Protocol}
 Low speed: 1.5Mb / sec
@@ -375,9 +374,9 @@ and configuration.
 \end{itemize}
 Devices must support endpoint 0 for Default Control Pipe.
 
-<s>\end{slide}
+%\end{slide}
 
-<s>\begin{slide}
+%\begin{slide}
 
 %%%%** Section 2.5
 \subsection{Speed}
@@ -401,8 +400,8 @@ Isochronus & 512	& 35\%		    & 1,024,000 \\ \hline
  for ALL Isochronus connections.
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 3 
 \section{Electrical}
@@ -451,11 +450,11 @@ devices plugged in.
 
 
 
-<s>\end{slide}
-<s>\begin{slide} 
+%\end{slide}
+%\begin{slide} 
 %%%%** Section 3.3
 \subsection{Voltage Levels and Rise Times:}
-<*chn>
+	%<*chn>
 \begin{center}
    \includegraphics[height=2in]{usb_figs/00078.eps}   \\
 (Figure 7-1, page 107)
@@ -463,14 +462,14 @@ devices plugged in.
 
 
 %<s>\vspace{-2in}
-<s>  \scalebox{.15}{  \includegraphics{usb_figs/00078.eps} }\\
+%  \scalebox{.15}{  \includegraphics{usb_figs/00078.eps} }\\
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 
-<*>
+	%<*>
 Driver Low, V{\sc ol},  must be $<$ 0.3v (1.5k$\Omega$ to 3.6V)
 
 Driver High, V{\sc oh}, must be $>$ 2.8v (15k$\Omega$ to 0V)
@@ -483,12 +482,12 @@ Worst case inputs: [-1.0V --- +4.6V]
 
 90$\Omega$ characteristic impedance (high speed)
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 3.4
 \subsection{Differential Drive} 
-<s> \scalebox{0.15}{
-<chn>\scalebox{0.15}{
+% \scalebox{0.15}{
+\scalebox{0.15}{	%<chn>
     \includegraphics{usb_figs/00079.eps}
    }
 
@@ -500,8 +499,8 @@ This eliminates common mode noise
 
 {\tt OE} enables the output drivers.
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 3.5
 \subsection{Signaling Levels (high speed)}
 
@@ -517,8 +516,8 @@ Start of Packet (SOP):  Idle $\to$ Differential ``0''
 
 Reset:   D+ and D- $<$ 0.8V for $>=$ 10 ms.
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 4 
 \section{Modulation and Channel Coding}
 %%%%** Section 4.1
@@ -538,8 +537,8 @@ Logic one is sent by not toggling
 11111111 $\to$  11111111
 }
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 4.2
 \subsection{Bit Stuffing}
 
@@ -560,8 +559,8 @@ data stream and so it can keep its clock phase locked.
 
 Receiver hardware automatically removes stuffed bits.
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 4.3
 \subsection{Update: USB 2.0 }
 
@@ -575,6 +574,6 @@ Caution: if a device is labeled ``Full Speed USB 2.0" you are really getting USB
 
 Only ``High Speed" or ``480 Mbit/s" is a ``real" USB 2.0 device.
 
-<s>\end{slide}
+%\end{slide}
 
-<shn>\end{document}
+%\end{document}

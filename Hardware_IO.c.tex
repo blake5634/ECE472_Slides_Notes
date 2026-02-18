@@ -1,50 +1,49 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%           EE474 Hardware and Basic I/O
+%%
+%   % combined into notes pack
 %
-%           EE474 Hardware and Basic I/O
+%\documentclass{article}
+%\documentclass{seminar}
 %
-<stream, c>   % combined into notes pack
+%\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
+%\pagestyle{headings}
+%\slidepagestyle{BHstyle}
+%\addtolength\oddsidemargin{3cm}
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+%\usepackage{graphicx}
+%\usepackage[pdftex,
+%    pdftitle={ECE 474: Hardware and Basic I/O},
+%    pdfauthor={Blake Hannaford, University of Washington},
+%    pdflang={en-US},
+%    pdfsubject={ECE 474 Embedded Microcomputer Systems},
+%    pdfkeywords={embedded systems, microcontrollers, ECE 474},
+%    hidelinks,
+%    unicode]{hyperref}
+%\usepackage{listings}
+%
+%
+%\oddsidemargin 0in
+%\evensidemargin 0in
+%\textwidth 6.5in
+%\textheight 8.7in
+%\topmargin 0.2in
+%
+%
+%
+%\linespread{1.0}
+%
+%
+%\begin{document}
+%
+	%<*>
+%\begin{slide}
 
-<nh>\documentclass{article}
-<s>\documentclass{seminar}
-
-<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
-<s>\pagestyle{headings}
-<s>\slidepagestyle{BHstyle}
-<s>\addtolength\oddsidemargin{3cm}
-<shn>\usepackage[T1]{fontenc}
-<shn>\usepackage{lmodern}
-<shn>\usepackage[utf8]{inputenc}
-<shn>\usepackage[english]{babel}
-<shn>\usepackage{graphicx}
-<shn>\usepackage[pdftex,
-<shn>    pdftitle={ECE 474: Hardware and Basic I/O},
-<shn>    pdfauthor={Blake Hannaford, University of Washington},
-<shn>    pdflang={en-US},
-<shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
-<shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-<shn>    hidelinks,
-<shn>    unicode]{hyperref}
-<shn>\usepackage{listings}
-
-<*hn>
-\oddsidemargin 0in
-\evensidemargin 0in
-\textwidth 6.5in
-\textheight 8.7in
-\topmargin 0.2in
-
-
-<*shn>
-\linespread{1.0}
-
-
-<shn>\begin{document}
-
-<*>
-<s>\begin{slide}
-
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 
 \section{Basic Machine Organization}
@@ -55,13 +54,13 @@ Registers are an array of D flip-flops which can store a collection of bits.
 An n bit register has n inputs, n outputs, and one clock line.
 
 \begin{center}
-<chn>   \includegraphics[height=2.5in]{hwio_figs/00156.eps}   \\
-<s>   \includegraphics[height=2.5in]{hwio_figs/00156.eps}   \\
+   \includegraphics[height=2.5in]{hwio_figs/00156.eps}   \\	%<chn>
+%   \includegraphics[height=2.5in]{hwio_figs/00156.eps}   \\
 
 \end{center}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 \subsection{Busses}
 
@@ -70,8 +69,8 @@ A bus is a parallel bi-directional data path
 Multiple devices can send and receive on one bus
 
 \begin{center}
-<chn>   \includegraphics[height=2.5in]{hwio_figs/00155.eps}   \\
-<s>   \includegraphics[width=\textwidth]{hwio_figs/00155.eps}   \\
+   \includegraphics[height=2.5in]{hwio_figs/00155.eps}   \\	%<chn>
+%   \includegraphics[width=\textwidth]{hwio_figs/00155.eps}   \\
 \end{center}
 
 Address: N bits which specify {\it which location}.
@@ -80,8 +79,8 @@ Data:   Contents to/from memory or I/O device
 
 Control:  'traffic signals'
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 
 More detailed view:
@@ -100,22 +99,22 @@ Address Comparator
  \item Output = 1 iff input1 == input2
 \end{itemize}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 Control bus is gated by ADDR comparator
 
 Device register is strobed by CTL pulse only if addresses match.
 
 \begin{center}
-<chn>   \includegraphics[height=2.5in]{hwio_figs/00157.eps}   \\
-<s>   \includegraphics[width=\textwidth]{hwio_figs/00157.eps}   \\
+   \includegraphics[height=2.5in]{hwio_figs/00157.eps}   \\	%<chn>
+%   \includegraphics[width=\textwidth]{hwio_figs/00157.eps}   \\
 \end{center}
 
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 Bus Logic Notation:
 
@@ -123,8 +122,8 @@ Below is a simple notation for showing timing relationships of signals on
 busses.
 
 \begin{center}
-<chn>   \includegraphics[height=2.5in]{hwio_figs/00158.eps}   \\
-<s>   \includegraphics[width=\textwidth]{hwio_figs/00158.eps}   \\
+   \includegraphics[height=2.5in]{hwio_figs/00158.eps}   \\	%<chn>
+%   \includegraphics[width=\textwidth]{hwio_figs/00158.eps}   \\
 
 \end{center}
 
@@ -134,8 +133,8 @@ same wire?
 Solution:  Tri-state logic.
 
 \begin{center}
-<chn>   \includegraphics[height=2.0in]{hwio_figs/00159.eps}   \\
-<s>   \includegraphics[height=1.5in]{hwio_figs/00159.eps}   \\
+   \includegraphics[height=2.0in]{hwio_figs/00159.eps}   \\	%<chn>
+%   \includegraphics[height=1.5in]{hwio_figs/00159.eps}   \\
 \end{center}
 States:  { Logic 1, Logic 0, switch OFF }
 
@@ -144,45 +143,45 @@ CPU and all devices can ``talk'' on data bus.
 Only {\bf ONE} device my have the tri-state switch closed at
 any time!
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 \subsection{Bus Timing}
 
 Write Cycle
 
 \begin{center}
-<chn>   \includegraphics[height=2.5in]{hwio_figs/00160.eps}   \\
-<s>   \includegraphics[height=2.5in]{hwio_figs/00160.eps}   \\
+   \includegraphics[height=2.5in]{hwio_figs/00160.eps}   \\	%<chn>
+%   \includegraphics[height=2.5in]{hwio_figs/00160.eps}   \\
 
 \end{center}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 Read Cycle
 
 \begin{center}
-<chn>   \includegraphics[height=2.5in]{hwio_figs/00161.eps}   \\
-<s>   \includegraphics[height=2.5in]{hwio_figs/00161.eps}   \\
+   \includegraphics[height=2.5in]{hwio_figs/00161.eps}   \\	%<chn>
+%   \includegraphics[height=2.5in]{hwio_figs/00161.eps}   \\
 \end{center}
 
 
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 \subsection{Microprocessor: Register View}
 
 \begin{center}
-<chn>   \includegraphics[height=2.5in]{hwio_figs/00162.eps}   \\
-<s>   \includegraphics[height=2.75in]{hwio_figs/00162.eps}   \\
+   \includegraphics[height=2.5in]{hwio_figs/00162.eps}   \\	%<chn>
+%   \includegraphics[height=2.75in]{hwio_figs/00162.eps}   \\
 
 \end{center}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 % 
 
 \begin{itemize}
@@ -197,8 +196,8 @@ Read Cycle
 \end{itemize}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 \subsection{Steps to add two numbers}
 
@@ -218,8 +217,8 @@ Read Cycle
 
 \end{enumerate}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 \section{Machine Language Instructions}
 
@@ -234,13 +233,13 @@ Each instruction is typically between one and eight bytes.
 
 Examples:
 \begin{center}
-<chn>   \includegraphics[height=2.5in]{hwio_figs/00163.eps}   \\
-<s>   \includegraphics[height=3in]{hwio_figs/00163.eps}   \\
+   \includegraphics[height=2.5in]{hwio_figs/00163.eps}   \\	%<chn>
+%   \includegraphics[height=3in]{hwio_figs/00163.eps}   \\
 
 \end{center}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 \subsection{Example: Add two numbers}
 Note:  All assembler below is pseudo-code!
@@ -264,8 +263,8 @@ mem addr        & instruction   & comment\\
 \end{tabular}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 There are many more types of operands in most architectures.  Examples:
 
 \begin{itemize}
@@ -284,8 +283,8 @@ MOV   (R2), G1          \\move data from memory location
 \end{itemize}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 
 \section{Basic I/O programming}
@@ -301,8 +300,8 @@ In intel architecture, {\tt R} can be {\tt AL, AX, or EAX} registers.
 
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 {\bf Atmel} I/O Instructions 
 
@@ -315,6 +314,6 @@ Example:   AtMega2560 Chip (Arduino Mega)
     \item Device registers are just like memory locations / variables. 
     \item Arduino libraries predeclare correct memory address for each register you need. 
 \end{itemize}
-<s>\end{slide}
-<shn>\end{document}
+%\end{slide}
+%\end{document}
 

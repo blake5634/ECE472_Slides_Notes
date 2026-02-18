@@ -1,76 +1,75 @@
-<stream, c>
-<nh>\documentclass{article}
-<s>\documentclass{seminar}
-<*nhs>
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
-\usepackage{graphicx}
-\usepackage{graphpap}
-\usepackage[pdftex,
-    pdftitle={ECE 474: Micro-C OS/II Overview},
-    pdfauthor={Blake Hannaford, University of Washington},
-    pdflang={en-US},
-    pdfsubject={ECE 474 Embedded Microcomputer Systems},
-    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-    hidelinks,
-    unicode]{hyperref}
-
-<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 472 \hfil \thepage}{Hannaford \hfil \today}
-<s>\pagestyle{headings}
-<s>\slidepagestyle{BHstyle}
-<s>\addtolength\oddsidemargin{3cm}
-
-\title{Micro-C OS/II Overview}
-
-
-<*hn>
-\usepackage{fancyhdr}
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 %
-%  Set Up Margins
-\input{/users/home1/blake/templates/pagedim.tex}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\documentclass{article}
+%\documentclass{seminar}
 %
-%         Page format Mods HERE
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+%\usepackage{graphicx}
+%\usepackage{graphpap}
+%\usepackage[pdftex,
+%    pdftitle={ECE 474: Micro-C OS/II Overview},
+%    pdfauthor={Blake Hannaford, University of Washington},
+%    pdflang={en-US},
+%    pdfsubject={ECE 474 Embedded Microcomputer Systems},
+%    pdfkeywords={embedded systems, microcontrollers, ECE 474},
+%    hidelinks,
+%    unicode]{hyperref}
 %
-%Mod's to page size for this document
-\addtolength\textwidth{0cm}
-\addtolength\oddsidemargin{0cm}
-\addtolength\headsep{0cm}
-\addtolength\textheight{0cm}
-%\linespread{0.894}   % 0.894 = 6 lines per inch, 1 = "single",  1.6 = "double"
+%\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 472 \hfil \thepage}{Hannaford \hfil \today}
+%\pagestyle{headings}
+%\slidepagestyle{BHstyle}
+%\addtolength\oddsidemargin{3cm}
+%
+%\title{Micro-C OS/II Overview}
+%
+%
+%
+%\usepackage{fancyhdr}
+%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%%
+%%  Set Up Margins
+%\input{/users/home1/blake/templates/pagedim.tex}
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%         Page format Mods HERE
+%%
+%%Mod's to page size for this document
+%\addtolength\textwidth{0cm}
+%\addtolength\oddsidemargin{0cm}
+%\addtolength\headsep{0cm}
+%\addtolength\textheight{0cm}
+%%\linespread{0.894}   % 0.894 = 6 lines per inch, 1 = "single",  1.6 = "double"
+%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER / FOOTER
+%\pagestyle{fancy}
+%%%%%%  Page header/footer fields for "NSF Style" proposal
+%%%%%%  \section* will be changed with each section
+%\lhead{\small\sc EE472}
+%\rhead{}
+\section*{\large\bf Introducing Micro-C OS/II ($\mu$Cos/II)}	%<chn>
+%\lfoot{Hannaford, U. of Washington}
+%\rfoot{Nov. 17, 2003}
+%\cfoot{\thepage}
+%%\renewcommand\headrulewidth{1pt}
+%%\renewcommand\footrulewidth{1pt}
+%
+%
+%\linespread{1.0}
+%
+	%<*>
+%\begin{document}
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER / FOOTER
-\pagestyle{fancy}
-%%%%%  Page header/footer fields for "NSF Style" proposal
-%%%%%  \section* will be changed with each section
-\lhead{\small\sc EE472}
-\rhead{}
-<chn>\section*{\large\bf Introducing Micro-C OS/II ($\mu$Cos/II)}
-\lfoot{Hannaford, U. of Washington}
-\rfoot{Nov. 17, 2003}
-\cfoot{\thepage}
-%\renewcommand\headrulewidth{1pt}
-%\renewcommand\footrulewidth{1pt}
-
-
-\linespread{1.0}
-
-<*>
-<!c>\begin{document}
-
-
-
-<s>\begin{slide}
+%\begin{slide}
 \section*{Introduction to MicroC/OS-II  }
 %%%%** Section 1 
 \section{Overview}
@@ -110,8 +109,8 @@ Does not support
   \item Networking
 \end{itemize}
 
-<s>\end{slide}
-<s>\begin{slide} 
+%\end{slide}
+%\begin{slide} 
 Features
 
 \begin{itemize}
@@ -137,8 +136,8 @@ Features
   into commercial products.
 \end{itemize}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 
 %%%%** Section 2 
@@ -147,7 +146,7 @@ Features
 %%%%** Section 2.1
 \subsection{Task Priorities}
 
-<*chn>All tasks have a unique priority.
+All tasks have a unique priority.	%<*chn>
 Low priority numbers
 have the  highest priority.
 Priority numbers 0,1,2,3, are reserved.
@@ -173,31 +172,31 @@ used to identify the processes (like the pid in Unix).
 The max number of tasks can be reduced at compile time
 to save memory.
 
-<*s>
-\begin{itemize}
-        \item All tasks have a unique priority.
-        \item Priority values can be used to ID tasks.
-        \item 4 Highest Priority numbers (0,1,2,3) are reserved.
-
-        \item 4 Lowest Priority numbers are reserved:
-               {\tt OS\_LOWEST\_PRIO, OS\_LOWEST\_PRIO-1, OS\_LOWEST\_PRIO-2, OS\_LOWEST\_PRIO-3 }
-
-        \item Lowest Usable Priority available to users:
-               {\tt OS\_LOWEST\_PRIO - 4 }
-        \item Normally {\tt OS\_LOWEST\_PRIO = 64}  but can configure
-        system to fewer tasks for smaller memory use.
-\end{itemize}
-
-<*>
+%
+%\begin{itemize}
+%        \item All tasks have a unique priority.
+%        \item Priority values can be used to ID tasks.
+%        \item 4 Highest Priority numbers (0,1,2,3) are reserved.
+%
+%        \item 4 Lowest Priority numbers are reserved:
+%               {\tt OS\_LOWEST\_PRIO, OS\_LOWEST\_PRIO-1, OS\_LOWEST\_PRIO-2, OS\_LOWEST\_PRIO-3 }
+%
+%        \item Lowest Usable Priority available to users:
+%               {\tt OS\_LOWEST\_PRIO - 4 }
+%        \item Normally {\tt OS\_LOWEST\_PRIO = 64}  but can configure
+%        system to fewer tasks for smaller memory use.
+%\end{itemize}
+%
+	%<*>
 %%%%** Section 2.2
 \subsection{OS Function Calls (selected)}
 
-<chn> Tables \ref{Ta:FC0} and \ref{Ta:FC1}
-<chn> summarize key function calls in $\mu$C/OS-II.
+ Tables \ref{Ta:FC0} and \ref{Ta:FC1}	%<chn>
+ summarize key function calls in $\mu$C/OS-II.	%<chn>
 
-<s> See Tables from Notes!!   too big for slides.
+% See Tables from Notes!!   too big for slides.
 
-<*chn>
+	%<*chn>
 %%%%** Table 1 
 \begin{table}
 \begin{center}
@@ -211,7 +210,7 @@ Name   &  Prototype  &  Function \\ \hline
  OSIntEnter()   & {\tt void OSIntEnter(void)}   & Must be called at start of an ISR.
                                                   Lets OS keep track of number of ISRs. \\ \hline
  OSIntExit()    & {\tt void OSIntExit(void)}    & Call at end of an ISR
-<hn>                                              {\it before} restoring conext and {\tt IRET}.
+%                                              {\it before} restoring conext and {\tt IRET}.
                                                   \\ \hline
  OSTaskCreate() & {\tt INT8U OSTaskCreate( void (*task)(void *pd), void *pdata, OS\_STK *ptos, INT8U prio) }
                 & Creates a new task.
@@ -304,15 +303,15 @@ OSSemPend()     & {\tt void OSSemPend(OS\_EVENT *pevent, INT16U timeout, INT8U *
 \end{table}
 
 
-<*>
-<s>\end{slide}
+	%<*>
+%\end{slide}
 
-<s>\begin{slide}
+%\begin{slide}
 
-<chn>\newpage
+\newpage	%<chn>
 %%%%** Section 3 
 \section{Code Example}
-<s>\tiny{
+%\tiny{
 \begin{verbatim}
 //----------------------------------------------------------------------------
 // AUTHOR:    Jered Aasheim
@@ -527,10 +526,10 @@ void far interrupt Timer0_ISR()
    outport(0xFF22,0x0008);          // Non-specific EOI
 }
 \end{verbatim}
-<s>}    % end of tiny
+%}    % end of tiny
 
-<s>\end{slide}
+%\end{slide}
 
 
-<shn>\end{document}
+%\end{document}
 

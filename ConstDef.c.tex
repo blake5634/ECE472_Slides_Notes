@@ -1,48 +1,47 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%           EE474 C constants and #define
+%%
+%%
+%   % combined into notes pack
 %
-%           EE474 C constants and #define
+%\documentclass{article}
+%\documentclass{seminar}
+%
+%\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
+%\pagestyle{headings}
+%\slidepagestyle{BHstyle}
+%\addtolength\oddsidemargin{3cm}
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+%\usepackage{graphicx}
+%\usepackage[pdftex,
+%    pdftitle={ECE 474: C Constants and Preprocessor Directives},
+%    pdfauthor={Blake Hannaford, University of Washington},
+%    pdflang={en-US},
+%    pdfsubject={ECE 474 Embedded Microcomputer Systems},
+%    pdfkeywords={embedded systems, microcontrollers, ECE 474},
+%    hidelinks,
+%    unicode]{hyperref}
+%\usepackage{listings}
 %
 %
-<stream, c>   % combined into notes pack
-
-<nh>\documentclass{article}
-<s>\documentclass{seminar}
-
-<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
-<s>\pagestyle{headings}
-<s>\slidepagestyle{BHstyle}
-<s>\addtolength\oddsidemargin{3cm}
-<shn>\usepackage[T1]{fontenc}
-<shn>\usepackage{lmodern}
-<shn>\usepackage[utf8]{inputenc}
-<shn>\usepackage[english]{babel}
-<shn>\usepackage{graphicx}
-<shn>\usepackage[pdftex,
-<shn>    pdftitle={ECE 474: C Constants and Preprocessor Directives},
-<shn>    pdfauthor={Blake Hannaford, University of Washington},
-<shn>    pdflang={en-US},
-<shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
-<shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-<shn>    hidelinks,
-<shn>    unicode]{hyperref}
-<shn>\usepackage{listings}
-
-<*hn>
-\oddsidemargin 0in
-\evensidemargin 0in
-\textwidth 6.5in
-\textheight 8.7in
-\topmargin 0.2in
-
-
-<*shn>
-
-\linespread{1.0}
-
-
-<shn>\begin{document}
-<*>
-<s>\begin{slide}
+%\oddsidemargin 0in
+%\evensidemargin 0in
+%\textwidth 6.5in
+%\textheight 8.7in
+%\topmargin 0.2in
+%
+%
+%
+%
+%\linespread{1.0}
+%
+%
+%\begin{document}
+	%<*>
+%\begin{slide}
 \section*{{\tt C} Constants, Defines and Integers \footnote{
  B. Kernigan and D. Ritchie, ``The C Programming Language,,''
  2nd Edition, Prentice Hall, 1988.  \\
@@ -50,8 +49,8 @@
  Embedded Software, {\it Where C and Assembly Meet}, Prentice Hall, 2002.}
  }
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 1 
 \section{Review of C Constants}
@@ -62,14 +61,14 @@ very precisely.
 %%%%** Section 1.1
 \subsection{HEX and OCTAL review}
 
-<*chn>
+	%<*chn>
 Entering binary numbers can wear out the 1 and 0 keys on
 your computer!   HEX is a good shorthand for binary since
 each HEX character maps to a specific bit pattern.
 
 
-<chn>\vspace{0.2in}
-<*>
+\vspace{0.2in}	%<chn>
+	%<*>
 \begin{tabular}{|c|c|r|}
 \hline
 bits  &  HEX & Octal \\ \hline
@@ -88,11 +87,11 @@ bits  &  HEX & Octal \\ \hline
 \hline
 \end{tabular}
 
-<chn>\vspace{0.2in}
+\vspace{0.2in}	%<chn>
 
 Hex Place value: To convert {\tt 0xD2FB} to decimal:
 
-<hn>\vspace{0.2in}
+%\vspace{0.2in}
 \begin{tabular}{|c|c|c|c|}
 \hline
 D       &       2       &       F       &       B \\ \hline
@@ -100,22 +99,22 @@ $2^{12}$        &       $2^8$   &       $2^4$   &       $2^0$ \\ \hline
 4096    &       256     &       16      &       1 \\ \hline
         &               &               &          \\ \hline
 \end{tabular}
-<hn>\vspace{0.2in}
+%\vspace{0.2in}
 
-<*chn>
+	%<*chn>
 Octal
 can also be used and is easier to memorize because there are
 only 8 symbols (0-7). However, to fill
 a byte of memory requires 2.5 octal characters since each
 character only encodes 3 bits.  For example,
-<*>
+	%<*>
 
 {\tt HEX 9A}  = Binary {\tt 1011010 } = Octal {\tt 132}
 
 (Hex: 4-bit groups.   Octal: 3-bit groups)
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 
 \begin{itemize}
@@ -132,8 +131,8 @@ character only encodes 3 bits.  For example,
 \end{itemize}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 1.2
 \subsection{Constant Syntax in C}
@@ -148,7 +147,7 @@ main reasons:
 
 %%%%** Section 1.2.1 
 \subsubsection{Example and Exercise}
-<*chs>
+	%<*chs>
 {\small\tt
 \begin{verbatim}
 // Constants
@@ -176,38 +175,38 @@ else {};
 \end{verbatim}
 }
 
-<*n>
-{\small\tt
-\begin{verbatim}
-// Constants
-#define EXAMPLE_CONST_D  1234 ;  /* DECIMAL value  */
-#define EXAMPLE_CONST_H 0x4D2 ;  /* HEX value == dec: 1234 */
-#define EXAMPLE_CONST_O 02322  ; /* OCTAL value */
+%
+%{\small\tt
+%\begin{verbatim}
+%// Constants
+%#define EXAMPLE_CONST_D  1234 ;  /* DECIMAL value  */
+%#define EXAMPLE_CONST_H 0x4D2 ;  /* HEX value == dec: 1234 */
+%#define EXAMPLE_CONST_O 02322  ; /* OCTAL value */
+%
+%int x = EXAMPLE_CONST_D;
+%int y = EXAMPLE_CONST_H;
+%int z = EXAMPLE_CONST_O;
+%
+%// test yourself here: (which of these print?)
+%if (x == y) printf ("Hello there ... \n");  **YES**
+%else {};
+%
+%if (y == 1234) printf ("What's up doc?? \n");  **YES**
+%else {};
+%
+%if (z == 2322)  printf ("The Rain in Spain  ...\n");  **NO**
+%else {};
+%
+%if (z = 2322)  printf ("Falls mainly on the plains.\n");   **YES**
+%else {};
+%
+%\end{verbatim}
+%}
+	%<*>
 
-int x = EXAMPLE_CONST_D;
-int y = EXAMPLE_CONST_H;
-int z = EXAMPLE_CONST_O;
 
-// test yourself here: (which of these print?)
-if (x == y) printf ("Hello there ... \n");  **YES**
-else {};
-
-if (y == 1234) printf ("What's up doc?? \n");  **YES**
-else {};
-
-if (z == 2322)  printf ("The Rain in Spain  ...\n");  **NO**
-else {};
-
-if (z = 2322)  printf ("Falls mainly on the plains.\n");   **YES**
-else {};
-
-\end{verbatim}
-}
-<*>
-
-
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 
 %%%%** Section 1.2.2 
@@ -230,16 +229,16 @@ IO_Register_Set(0x2DA, 0x10) ;
 \end{verbatim}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<*cnh>
+	%<*cnh>
 However, if we come back to that code later (1 week or 10 years)
 we will not know what that statement does (or if the comment is
 correct) without a lot of research.  Instead we use defines
 for much better code as follows:
-<s>Use {\tt\#define} compiler directives instead!
-<*>
+%Use {\tt\#define} compiler directives instead!
+	%<*>
 \begin{verbatim}
 
 \\ (this part is in the preamble before "main ()"
@@ -255,15 +254,15 @@ IO_Register_Set(CD_ROM_CONTROL_REG, CD_ROM_DOOR_OPEN) ;
 \end{verbatim}
 
 Now, isn't that better?!!
-<s>
+%
 It is a requirement of EE474 that
 your code be written this way.
-<s>
+%
 We will take off points for
 any numberical constants in the main body of code.
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 2 
 \section{Bitwise vs. Logical Operators}
@@ -297,8 +296,8 @@ These work on {\em arithmetic } types or pointers.
 \end{tabular}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 2.2
 \subsection{Bitwise Operators}
@@ -319,8 +318,8 @@ These operators are only defined for integer-like variables i.e.
 \end{tabular}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 2.3
 \subsection{Examples:}
@@ -355,52 +354,52 @@ int z2 = z | Bit_Four;  // z2 = [... 0 0 1 1 1 1 0 0]
 }
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<!s>\newpage
+\newpage	%<!s>
 %%%%** Section 3 
 \section{In-class Exercise:}
 
-<*n>
-\begin{verbatim}
-
-Convert 0x1A to decimal: __26_
-
-
-Convert 0xA2 to decimal:  __162____
-
-
-Convert 020 to Hex:    _____10_______
-
-
-Convert 0x20 to Octal: _____40_________
-
-\end{verbatim}
-
-{\tt
-\begin{verbatim}
-/* Give the binary value of the least significant
-8 bits of the following values:   */
-
-int aa = 0xC5;     // aa = [  1 1 0 0 0 1 0 1  ]
-
-int ab = 017 + 1;  // ab = [  0 0 0 1 0 0 0 0  ]
-
-int a = x | y;     // a  = [  0 0 0 0 1 0 1 1  ]
-
-int b = Bit_Two | Bit_Five | Bit_Seven;
-                   // b  = [  1 0 1 0 0 1 0 0  ]
-
-int c = ~((z | Bit_Zero) << 1);
-                   // c  = [  1 0 1 0 0 1 0 1 ]
-
-int d = !(z1 | Bit_Two);
-                   // d  = [  0 0 0 0 0 0 0 0 ]
-\end{verbatim}
-}
-
-<*chs>
+%
+%\begin{verbatim}
+%
+%Convert 0x1A to decimal: __26_
+%
+%
+%Convert 0xA2 to decimal:  __162____
+%
+%
+%Convert 020 to Hex:    _____10_______
+%
+%
+%Convert 0x20 to Octal: _____40_________
+%
+%\end{verbatim}
+%
+%{\tt
+%\begin{verbatim}
+%/* Give the binary value of the least significant
+%8 bits of the following values:   */
+%
+%int aa = 0xC5;     // aa = [  1 1 0 0 0 1 0 1  ]
+%
+%int ab = 017 + 1;  // ab = [  0 0 0 1 0 0 0 0  ]
+%
+%int a = x | y;     // a  = [  0 0 0 0 1 0 1 1  ]
+%
+%int b = Bit_Two | Bit_Five | Bit_Seven;
+%                   // b  = [  1 0 1 0 0 1 0 0  ]
+%
+%int c = ~((z | Bit_Zero) << 1);
+%                   // c  = [  1 0 1 0 0 1 0 1 ]
+%
+%int d = !(z1 | Bit_Two);
+%                   // d  = [  0 0 0 0 0 0 0 0 ]
+%\end{verbatim}
+%}
+%
+	%<*chs>
 
 \begin{verbatim}
 
@@ -439,8 +438,8 @@ int d = !(z1 | Bit_Two);
 \end{verbatim}
 }
 
-<*>
-<!s>\newpage
+	%<*>
+\newpage	%<!s>
 %%%%** Section 4 
 \section{Binary Integers}
 
@@ -457,8 +456,8 @@ If {\tt x } is of type {\tt unsigned int}, then
 \]
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 C declaration of unsigned integers:
 
@@ -470,8 +469,8 @@ unsigned long int p,q,r;      // 32 bit unsigned
 
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 4.1.1 
 \subsubsection{Exercise}
@@ -479,44 +478,44 @@ unsigned long int p,q,r;      // 32 bit unsigned
 Write a C function using bitwise logical operators etc. to print
 the binary value of a 16 bit word.
 
-<cn>\vspace{4in}
+\vspace{4in}	%<cn>
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<h>\vspace{3.0in}
-<*sn>
-\begin{verbatim}
-void bin_display(unsigned int x)
-{
-        unsigned int i,j;
-        for(i=0;i<16;i++)
-        {
-                j = 1<<(15-i);
-                if(j & x) printf("1");
-                else      printf("0");
-        }
-}
-
-<sn>\end{verbatim}
-
-<s>\end{slide}
-<s>\begin{slide}
-
-<*>
+%\vspace{3.0in}
+%
+%\begin{verbatim}
+%void bin_display(unsigned int x)
+%{
+%        unsigned int i,j;
+%        for(i=0;i<16;i++)
+%        {
+%                j = 1<<(15-i);
+%                if(j & x) printf("1");
+%                else      printf("0");
+%        }
+%}
+%
+%\end{verbatim}
+%
+%\end{slide}
+%\begin{slide}
+%
+	%<*>
 %%%%** Section 4.2
 \subsection{2's Complement Integers}
-<*chn>
+	%<*chn>
 Most common way to represent integers which can have both positive and negative
 values.   Most significant bit (MSB) is the ``sign bit'' 0=positive, 1=negative.
 however, if MSB is 1, other bits are subject to ``2's complement''.
-<*s>
-\begin{itemize}
-        \item MSB is ``sign bit'' 0= positive, 1=negative
-        \item if sign bit is 1, rest of word is in ``2's complement''
-\end{itemize}
-
-<*>
+%
+%\begin{itemize}
+%        \item MSB is ``sign bit'' 0= positive, 1=negative
+%        \item if sign bit is 1, rest of word is in ``2's complement''
+%\end{itemize}
+%
+	%<*>
 
 To convert a number to or from two's complement,
 \begin{enumerate}
@@ -531,8 +530,8 @@ For an $n$ bit number, $x$,  the range of all possible integers in 2's complemen
 \]
 (see Lewis Figure 2-4, page 22 for a useful chart).
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 4.2.1 
 \subsubsection{Exercise}
@@ -543,57 +542,57 @@ your variables.
 (do not just multiply by -1)
 
 
-<hc>\vspace{3.0in}
+\vspace{3.0in}	%<hc>
 
-<s>\end{slide}
-<s>\begin{slide}
-<*sn>
-\begin{verbatim}
-
-[blake@alec code]$ cat twocomp.c
-/* twocomp.c
- *
- *  Demonstrate 2's complement
- *
- */
-void bin_display(unsigned int x);
-main(argc,argv)
-int argc;
-char *argv;
-{
-        int  a = -23;
-        int  b;
-        int i,j;
-        printf(" Decimal: %d \n    Binary:     ", a);
-        b = a;
-        bin_display((unsigned int)b);
-        printf("\n    Complement: ");
-        b =   ~a;     // complement all bits
-        bin_display((unsigned int)b);
-        printf("\n1 + Complement: ");
-        b = 1 + ~a;     // complement all bits and add 1
-        bin_display((unsigned int)b);
-        printf("\n Compare: %d %d\n", a, -b);   // should be the same
-}
-
-
-\end{verbatim}
-<s>\end{slide}
-<s>\begin{slide}
-%%%%** Section 4.3
-\subsection{Test Run}
-\begin{verbatim}
-
-[blake@alec code]$ ./twocomp
- Decimal: -23
-    Binary:     1111111111101001
-    Complement: 0000000000010110
-1 + Complement: 0000000000010111
- Compare: -23 -23
-[blake@alec code]$
-
-\end{verbatim}
-
-<s>\end{slide}
-<shn>\end{document}
-
+%\end{slide}
+%\begin{slide}
+%
+%\begin{verbatim}
+%
+%[blake@alec code]$ cat twocomp.c
+%/* twocomp.c
+% *
+% *  Demonstrate 2's complement
+% *
+% */
+%void bin_display(unsigned int x);
+%main(argc,argv)
+%int argc;
+%char *argv;
+%{
+%        int  a = -23;
+%        int  b;
+%        int i,j;
+%        printf(" Decimal: %d \n    Binary:     ", a);
+%        b = a;
+%        bin_display((unsigned int)b);
+%        printf("\n    Complement: ");
+%        b =   ~a;     // complement all bits
+%        bin_display((unsigned int)b);
+%        printf("\n1 + Complement: ");
+%        b = 1 + ~a;     // complement all bits and add 1
+%        bin_display((unsigned int)b);
+%        printf("\n Compare: %d %d\n", a, -b);   // should be the same
+%}
+%
+%
+%\end{verbatim}
+%\end{slide}
+%\begin{slide}
+%%%%%** Section 4.3
+%\subsection{Test Run}
+%\begin{verbatim}
+%
+%[blake@alec code]$ ./twocomp
+% Decimal: -23
+%    Binary:     1111111111101001
+%    Complement: 0000000000010110
+%1 + Complement: 0000000000010111
+% Compare: -23 -23
+%[blake@alec code]$
+%
+%\end{verbatim}
+%
+%\end{slide}
+%\end{document}
+%

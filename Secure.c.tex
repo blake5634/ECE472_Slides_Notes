@@ -1,48 +1,47 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%           EE474 Pointers in C
+%%
+%   % combined into notes pack
 %
-%           EE474 Pointers in C
+%\documentclass{article}
+%\documentclass{seminar}
 %
-<stream, c>   % combined into notes pack
-
-<nh>\documentclass{article}
-<s>\documentclass{seminar}
-
-<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
-<s>\pagestyle{headings}
-<s>\slidepagestyle{BHstyle}
-<s>\addtolength\oddsidemargin{3cm}
-<shn>\usepackage[T1]{fontenc}
-<shn>\usepackage{lmodern}
-<shn>\usepackage[utf8]{inputenc}
-<shn>\usepackage[english]{babel}
-<shn>\usepackage{graphicx}
-<shn>\usepackage[pdftex,
-<shn>    pdftitle={ECE 474: Secure Coding},
-<shn>    pdfauthor={Blake Hannaford, University of Washington},
-<shn>    pdflang={en-US},
-<shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
-<shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-<shn>    hidelinks,
-<shn>    unicode]{hyperref}
-<shn>\usepackage{listings}
-
-<*hn>
-\oddsidemargin 0in
-\evensidemargin 0in
-\textwidth 6.5in
-\textheight 8.7in
-\topmargin 0.2in
-
-
-<*shn>
-\linespread{1.0}
-
-<shn>\begin{document}
-<s>\begin{slide}
-
-<n>\section*{INSTRUCTOR NOTES}
-
-<*>
+%\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
+%\pagestyle{headings}
+%\slidepagestyle{BHstyle}
+%\addtolength\oddsidemargin{3cm}
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+%\usepackage{graphicx}
+%\usepackage[pdftex,
+%    pdftitle={ECE 474: Secure Coding},
+%    pdfauthor={Blake Hannaford, University of Washington},
+%    pdflang={en-US},
+%    pdfsubject={ECE 474 Embedded Microcomputer Systems},
+%    pdfkeywords={embedded systems, microcontrollers, ECE 474},
+%    hidelinks,
+%    unicode]{hyperref}
+%\usepackage{listings}
+%
+%
+%\oddsidemargin 0in
+%\evensidemargin 0in
+%\textwidth 6.5in
+%\textheight 8.7in
+%\topmargin 0.2in
+%
+%
+%
+%\linespread{1.0}
+%
+%\begin{document}
+%\begin{slide}
+%
+%\section*{INSTRUCTOR NOTES}
+%
+	%<*>
 
 \begin{center}
     \section*{Introduction to Secure Communications}
@@ -52,17 +51,17 @@ References: J. Freer, Computer and Communication Networks, 2nd Edition,
 IEEE Press, 1996.  Chapter 11.,  
 Wikipedia.
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 1 
 \section{XOR Review}
 
-<*chn>
+	%<*chn>
 At its most basic level, the most common approach to
 encryption of digital data boils down to the exclusive OR operation,
 XOR.    The truth table is:
 
-<*>
+	%<*>
 \begin{center}
 Truth Table:
 \begin{tabular}{cc|c}
@@ -81,8 +80,8 @@ Two interpretations:
         \item ``programmable inverter''
 \end{itemize}
 We'll use the second:   ``{\tt a} controls whether or not {\tt b} is inverted."
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 Basic idea:   scramble message by XOR'ing with a random series of
 bits.  Idea as old as WWI, 1917 teletypes  (Vernam).
@@ -96,8 +95,8 @@ Let the received data be {\tt a} = {\tt b} $\otimes$ {\tt c}.
 
 In {\tt C} the exclusive OR operation ($\otimes$ above) is represented with $\wedge$.
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 One bit messages are not very interesting.   The following code could use an 8 bit key on
 an 8-bit message:
 \begin{verbatim}
@@ -110,9 +109,9 @@ a = b ^ c ;     // a is b XOR c
 \end{verbatim}
 What is {\tt c}?
 
-<s>\end{slide}
-<s>\begin{slide}
-<*cnh>
+%\end{slide}
+%\begin{slide}
+	%<*cnh>
 One way to view this is to realize that for each bit of {\tt c} that is one, the
 corresponding bit of {\tt b} is changed.  If a bit of {\tt c} is zero,  that bit
 in {\tt b} is not changed.   If we think of {\tt b} as the data and {\tt c} as a
@@ -120,10 +119,10 @@ in {\tt b} is not changed.   If we think of {\tt b} as the data and {\tt c} as a
 encrypted data, {\tt a}, s/he has no way to recover the data without knowing
 {\tt c}.   {\tt c=0} is NOT a good key. (Why not?). How can we encrypt many
 bytes instead of just one? One way would be to use a single key as follows:
-<*>
+	%<*>
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 \begin{verbatim}
 #define BUFSIZE 1000
@@ -135,16 +134,16 @@ c = 0xA5;       // the key
 while (i < BUFSIZE)
  { a[i] = b[i] ^ c ; i++}
 \end{verbatim}
-<*chn>
+	%<*chn>
 This however is rather weak for two reasons.  First there are
 only 256 possible keys. Second, there are easy statistical methods
 to extract the key from {\tt a}.   A more secure method (but still
  weak)
 is to use a longer key as follows:
-<*>
+	%<*>
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 \begin{verbatim}
 #define BUFSIZE 1000
@@ -163,12 +162,12 @@ while (i < BUFSIZE)
  i++
  }
 \end{verbatim}
-<*chn>
+	%<*chn>
 Here we are rotating through the key array and using one of the five
  key bytes on each data byte.
-<*>
-<s>\end{slide}
-<s>\begin{slide}
+	%<*>
+%\end{slide}
+%\begin{slide}
 
 
 %%%%** Section 1.1
@@ -187,19 +186,19 @@ Here we are rotating through the key array and using one of the five
          \item Key Quality.
          \begin{itemize}
                 \item short keys are ``bad":   
-<chn>8 bit key has only 256 possibilities to try.
+8 bit key has only 256 possibilities to try.	%<chn>
          	\item Not all keys are created equal.
                 \item Key = {\it all zeros} is a {\bf BAD} key!
                 (also all 1's).
                 \item Need key to have a mix of ones / zeros
-<s> and have a bound on the longest stretch of 1's or 0's.
+% and have a bound on the longest stretch of 1's or 0's.
  
           \end{itemize}
   \end{itemize}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 2 
 \section{Public Key Systems}
 
@@ -220,20 +219,20 @@ y = f(a,b) = a \times b
 \noindent
 where $a$ and $b$ are large integers.
 
-<*chn>
+	%<*chn>
 Surprisingly this simple function can be one way.   Consider when $a$ and $b$ are 
 large (i.e. 50-100 digits) prime numbers.   Now $y$ is a {\it very} large integer
 but $a$ and $b$ can only be recovered if you can {\it factor} $y$.
 
 
-<*>
+	%<*>
 %%%%** Section 2.2
 \subsection{Algorithm}
 Assume existence of a matched pair of one-way functions,
 $f_A(x,k)$ and $f_B(x,k)$.
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 Properties:
 \begin{itemize}
@@ -243,8 +242,8 @@ Properties:
         \item $f^{-1}_{A/B}(y,k)$ is unknown.
 \end{itemize}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 2.3
 \subsection{Use}
 \begin{enumerate}
@@ -267,8 +266,8 @@ Properties:
 Advantage:  No more key distribution problem!
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 2.4
 \subsection{RSA Method}
 Rivest, Shamir, Adloeman, 1977 MIT.
@@ -291,8 +290,8 @@ Most Famous Public Key System
 
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 3 
 \section{Data Encryption Standard (DES)}
 
@@ -305,14 +304,14 @@ US Government Standard developed by IBM.
 
 64 bit block code with single encryption key.
 
-<*chn> Some claimed that the US National Security Agency (NSA) designed weaknesses into
+ Some claimed that the US National Security Agency (NSA) designed weaknesses into	%<*chn>
 the DES in the 1970's so that it could have the ability to break it at will.   However
 later research has seemed to reduce this concern. 
-<*> 
+ 	%<*>
 
 
 
-<s>\end{slide}
+%\end{slide}
 
-<shn>\end{document}
+%\end{document}
 

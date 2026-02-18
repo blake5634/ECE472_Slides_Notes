@@ -1,90 +1,89 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%           EE474 Scheduler Implementation
+%%
+%   % combined into notes pack
 %
-%           EE474 Scheduler Implementation
+%\documentclass{article}
+%\documentclass{seminar}
 %
-<stream, c>   % combined into notes pack
-
-<nh>\documentclass{article}
-<s>\documentclass{seminar}
-
-<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
-<s>\pagestyle{headings}
-<s>\slidepagestyle{BHstyle}
-<s>\addtolength\oddsidemargin{3cm}
-<shn>\usepackage[T1]{fontenc}
-<shn>\usepackage{lmodern}
-<shn>\usepackage[utf8]{inputenc}
-<shn>\usepackage[english]{babel}
-<shn>\usepackage{graphicx}
-<shn>\usepackage[pdftex,
-<shn>    pdftitle={ECE 474: Scheduler Implementation},
-<shn>    pdfauthor={Blake Hannaford, University of Washington},
-<shn>    pdflang={en-US},
-<shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
-<shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-<shn>    hidelinks,
-<shn>    unicode]{hyperref}
-<shn>\usepackage{listings}
-
-<*hn>
-\oddsidemargin 0in
-\evensidemargin 0in
-\textwidth 6.5in
-\textheight 8.7in
-\topmargin 0.2in
-
-<h>\title{Scheduler Implementations\\ECE/CSE474}
-<*shn>
-\linespread{1.0}
- 
-
-<shn>
-\begin{document}
-
-
-<s>\begin{slide}
-<hn>\maketitle
-
-
-%%%%** Section 1 
-<schn>\section{How to Build a Scheduler}
-Up till now we have used a very simple loop such as 
-\begin{verbatim}
-while(1)
-  {
-  taskA();
-  taskB();
-  taskC();
-  time_delay();
-  }
-\end{verbatim}
-<s>\end{slide}
-<s>\begin{slide}
-
-<*chn>
+%\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
+%\pagestyle{headings}
+%\slidepagestyle{BHstyle}
+%\addtolength\oddsidemargin{3cm}
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+%\usepackage{graphicx}
+%\usepackage[pdftex,
+%    pdftitle={ECE 474: Scheduler Implementation},
+%    pdfauthor={Blake Hannaford, University of Washington},
+%    pdflang={en-US},
+%    pdfsubject={ECE 474 Embedded Microcomputer Systems},
+%    pdfkeywords={embedded systems, microcontrollers, ECE 474},
+%    hidelinks,
+%    unicode]{hyperref}
+%\usepackage{listings}
+%
+%
+%\oddsidemargin 0in
+%\evensidemargin 0in
+%\textwidth 6.5in
+%\textheight 8.7in
+%\topmargin 0.2in
+%
+%\title{Scheduler Implementations\\ECE/CSE474}
+%
+%\linespread{1.0}
+% 
+%
+%
+%\begin{document}
+%
+%
+%\begin{slide}
+%\maketitle
+%
+%
+%%%%%** Section 1 
+\section{How to Build a Scheduler}	%<schn>
+%Up till now we have used a very simple loop such as 
+%\begin{verbatim}
+%while(1)
+%  {
+%  taskA();
+%  taskB();
+%  taskC();
+%  time_delay();
+%  }
+%\end{verbatim}
+%\end{slide}
+%\begin{slide}
+%
+	%<*chn>
 To make a very basic non-premptive, round-robin scheduler.   We can call this a {\it static} scheduler because the order of the task execution will never change. 
 In this section we will expand our basic scheduler to give it some new features: 
 
-<s>\subsection*{New features}
-<*>
+%\subsection*{New features}
+	%<*>
 \begin{itemize}
   \item The ability of a task to halt itself.
   \item The ability of a task to sleep for a while.
 \end{itemize}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 1.1
 \subsection{Part I   Using function pointers to start a task}
 
-<*chn>Throught the course we are using the terms ``task" and ``function" almost interchangably.    This is because we implement our tasks with C functions. 
+Throught the course we are using the terms ``task" and ``function" almost interchangably.    This is because we implement our tasks with C functions. 	%<*chn>
 How can we manipulate these functions so that they do not nescessarily execute in a fixed order?  
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<*>
+	%<*>
 We learned that the syntax:
 
 \begin{verbatim}
@@ -96,10 +95,10 @@ indicates a function pointer called {\tt name} which can point to any function h
 int (*fp)(char x, int y, double z)
 \end{verbatim}
 
-<*chn>creates a function pointer {\tt fp} which can point to any function which returns an {\tt int} and has three arguments which are {\tt char, int, double} respectively.  With function pointers we can write code that can start an arbitrary function.   For example:
+creates a function pointer {\tt fp} which can point to any function which returns an {\tt int} and has three arguments which are {\tt char, int, double} respectively.  With function pointers we can write code that can start an arbitrary function.   For example:	%<*chn>
 
-<s>\subsection*{Example: start function}
-<*>
+%\subsection*{Example: start function}
+	%<*>
 \begin{verbatim}
 
 void start_function(void (*functionPTR)() )
@@ -110,8 +109,8 @@ void start_function(void (*functionPTR)() )
 \end{verbatim}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 Now our basic scheduler could be written:
 
@@ -127,21 +126,21 @@ while(1)
 
 but this is still kind of a trivial re-write of our basic loop above.   
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 1.2
 \subsection{Part II   Keeping lists of functions }
 
-<*chn>
+	%<*chn>
 For our scheduler to be smarter than the basic {\tt while(1)} loop, we need to be able to put functions into lists.   That way we can keep track of which functions are ready, 
 waiting, and inactive.    One approach would be a single list of tasks, with a corresponding array of integers to determine which state the task is in. 
 Although logically OK. This approach is not preferred at this point, because the scheduler will have to do a lot of looking through the list to find which tasks are in a certain state.  
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<*>
+	%<*>
 We can create an array of function pointers as follows:
 
 \begin{verbatim}
@@ -162,10 +161,10 @@ We can use a {\tt NULL} pointer
 at the end of the list if there are less than {\tt NT\_RUNNING} active tasks 
 (similar to the zero byte at the end of a string). 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<*chn>
+	%<*chn>
 In the example above we created an  array which could hold 10 function pointers.  Each function pointer in the array must point to a function with the prototype:
 
 \begin{verbatim}
@@ -173,7 +172,7 @@ void function(void *p)
 \end{verbatim}
 This is a good prototype for tasks because they do not need to return a value and the  {\tt void } pointer parameter is a flexible way to pass a parameter to a task that is being created (although we will not use this much).
  
-<*>
+	%<*>
 Here then is some pseudocode for a main program and scheduler function:
  
 \begin{verbatim}
@@ -209,15 +208,15 @@ main()
  } // end of main
 \end{verbatim}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<*chn>
+	%<*chn>
 Here, we have set up an array to contain pointers to the task as a global variable (so that it will be visible to both main and the scheduler function (not shown). 
 Then, inside {\tt main()}, we have initialized each element of the array to point to one of our tasks.   The scheduler function will do the following (pseudocode)
 
-<s>\subsection*{Scheduler function (pseudocode)}
-<*>
+%\subsection*{Scheduler function (pseudocode)}
+	%<*>
 \begin{verbatim}
 scheduler() {
   if(readytasks[task_index] == NULL && task_index != 0) 
@@ -232,20 +231,20 @@ scheduler() {
  }
 \end{verbatim}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 1.3
 \subsection{part III  Manipulating the Task Lists}
 
-<*chn>
+	%<*chn>
 So far, we have just made a more complicated form of our basic {\tt while(1) } loop scheduler.  Now let's allow tasks to halt themselves by calling a function called
 {\tt halt\_me()}.   
 First, we need to generate a second list for the tasks which might be halted.     Let's call it {\tt haltedtasks[]}.   Now, the scheduler can work as before, but when 
 a task calls {\tt halt\_me()}, the following things have to happen:
 
-<s>\subsection*{{\tt halt\_me} function}
-<*>
+%\subsection*{{\tt halt\_me} function}
+	%<*>
 \begin{verbatim}
 halt_me() {
    * identify which task is currently running 
@@ -260,16 +259,16 @@ halt_me() {
   }
 \end{verbatim}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<*hn>
-When {\tt halt\_me} returns to the task, the task should {\tt return} and then it will not be started again by the scheduler since the current task has been deleted from 
-{\tt readytasks}.  But note, to make sure the program logic is correct, a task which wants to
-halt itself must add the {\tt return} after using {\tt halt\_me() }:
-
-<s>Watch out for potential logic bug!
-<*>
+%
+%When {\tt halt\_me} returns to the task, the task should {\tt return} and then it will not be started again by the scheduler since the current task has been deleted from 
+%{\tt readytasks}.  But note, to make sure the program logic is correct, a task which wants to
+%halt itself must add the {\tt return} after using {\tt halt\_me() }:
+%
+%Watch out for potential logic bug!
+	%<*>
 \begin{verbatim}
 
 if (time_to_halt) {
@@ -279,24 +278,24 @@ if (time_to_halt) {
      
 \end{verbatim}
 
-<*hn>
-because otherwise the task will run its course after {\tt halt\_me()} until it eventually encouters {\tt return}.
-<*>
+%
+%because otherwise the task will run its course after {\tt halt\_me()} until it eventually encouters {\tt return}.
+	%<*>
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 \subsection*{Sleep}
 
-<*chn>
+	%<*chn>
   Now let's try to set up a {\tt Sleep(int d)} function which can let our tasks
 go to sleep for {\tt d} msec.   Just like with {\tt halt\_me()},
 we need to call {\tt return} after {\tt sleep()}. 
 A function which wants to sleep will have to
 look like:
 
-<*>
-<s>\subsection*{Typical Task using sleep()}
+	%<*>
+%\subsection*{Typical Task using sleep()}
 \begin{verbatim}
 task_c(p) {
    compute for a while;
@@ -311,15 +310,15 @@ task_c(p) {
    }
 \end{verbatim}
 
-<*chn>
+	%<*chn>
 We will impose the requirement that the new {\tt sleep(d)} function will not put the task to sleep until the task that called it has {\tt return}ed.    How would the scheduler work now?
 As above, we need to generate a new list for tasks which are waiting for time delays.   Lets call it {\tt waitingtasks[]}.   Then we also have to make an array for 
 the time delays for each waiting task.    When a function calls {\tt sleep(d)} the following things should happen
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<*>
+	%<*>
 \subsection*{Sleep function (pseudocode)}
 \begin{verbatim}
 sleep(int d) {
@@ -331,14 +330,14 @@ sleep(int d) {
   }
 \end{verbatim}
 
-<*chn>
+	%<*chn>
 Now the scheduler must keep track of waiting times for any tasks which are sleeping and  wake them up  by moving them back to the {\tt readytasks[]} array at the right time.
 Let's add some pseudocode to the bottom of the scheduler function above:
 
-<s>\end{slide}
-<s>\begin{slide}
-<*>
-<s>\subsection*{Keeping track of sleep delays}
+%\end{slide}
+%\begin{slide}
+	%<*>
+%\subsection*{Keeping track of sleep delays}
 \begin{verbatim}
 ...
 * for each element of waitingtasks which is not NULL:
@@ -352,16 +351,16 @@ Let's add some pseudocode to the bottom of the scheduler function above:
 \end{verbatim}
  
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<*>
+	%<*>
 %%%%** Section 1.4
 \subsection{An Alternate Data Structure for Scheduling}
-<*chn>
+	%<*chn>
 So far we have used arrays of function pointers to keep track of the tasks in each state.  We also used an array of delay values for the remaining delay of sleeping tasks.   Another approach is to keep everything about the task in a struct and then manipulate the structs to change task states.  We call such structs {\bf Task Control Blocks (TCB's)}.   For example, we could define the TCB as follows:
-<s> Let's set up a struct which contains everything we need to track about a Task:
-<*>
+% Let's set up a struct which contains everything we need to track about a Task:
+	%<*>
 \begin{verbatim}
 typedef struct TCBstruct {
     void (*ftpr)(void *p);     // the function pointer
@@ -371,13 +370,13 @@ typedef struct TCBstruct {
     } ;
 \end{verbatim}
 
-<*chn>
+	%<*chn>
 Now we have a single place that stores everything about a task.  Now we can set up an array of {\tt tcb}'s to hold all tasks and define constants for the states:
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<*>
+	%<*>
 \begin{verbatim}
 #define  STATE_RUNNING   0
 #define  STATE_READY     1
@@ -413,14 +412,14 @@ TaskList[j].fptr = NULL;  // marks end of list
 ... maybe other tasks  ...
 \end{verbatim}
 
-<*chn>
+	%<*chn>
 We have initialized the scheduler with two tasks, A and B.  Their information goes into the first two entries in {\tt TaskList[]}.   Task A has no argument (more precisely the single void pointer argument will not be used), and starts out in {\tt STATE\_INACTIVE}.   This means that it will have to be started by some other task.   In this example, we want to start task B with an argument of 56, so we set an integer to 56, make a pointer which points to it, and then cast it to {\tt void*} before assigning it to the {\tt arg.ptr} member.   We might want Task B to start right up so Task B starts in {\tt STATE\_READY} to
 go into the CPU as soon as possible.   The next element of {\tt TaskList[]} is set to NULL which will be our signal for no more tasks. 
 
 Now, {\tt halt\_me()} just has to figure out which element of {\tt TaskList[]} it currently belongs to and change its state from {\tt STATE\_RUNNING} to {\tt STATE\_INACTIVE}.   Similarly, if Task B called a function to {\tt start} Task A, then that function would just have to change Task A's state from {\tt STATE\_INACTIVE} to {\tt STATE\_RUNNING}.
-<s>\end{slide}
-<s>\begin{slide}
-<*>
+%\end{slide}
+%\begin{slide}
+	%<*>
 \subsubsection*{In Class Exercise: Starting, Stopping, Delay}
  Write pseudocode for {\tt halt\_me()}, {\tt start\_task(int task)},  and {\tt delay(int d)} a task.  
  
@@ -431,26 +430,26 @@ Now, {\tt halt\_me()} just has to figure out which element of {\tt TaskList[]} i
 \vspace{0.5in}
 {\bf (solution on next slide!) }
 
-<ch>\vspace{5.0in}
-<s>\end{slide}
-<s>\begin{slide}
-<*sn>
-\begin{verbatim}
-halt_me() {
-    TaskList[t_curr].state = STATE_INACTIVE;
-    }
-
-start_task(int task_id) {
-    TaskList[task_id].state = STATE_READY;
-    }
-
-delay(int d) {
-    TaskList[t_curr].delay = d;
-    TaskList[t_curr].state = STATE_WAITING;
-    }
-\end{verbatim}
-
-
-<s>\end{slide}
-<shn> \end{document}
-
+\vspace{5.0in}	%<ch>
+%\end{slide}
+%\begin{slide}
+%
+%\begin{verbatim}
+%halt_me() {
+%    TaskList[t_curr].state = STATE_INACTIVE;
+%    }
+%
+%start_task(int task_id) {
+%    TaskList[task_id].state = STATE_READY;
+%    }
+%
+%delay(int d) {
+%    TaskList[t_curr].delay = d;
+%    TaskList[t_curr].state = STATE_WAITING;
+%    }
+%\end{verbatim}
+%
+%
+%\end{slide}
+% \end{document}
+%

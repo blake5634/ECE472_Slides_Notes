@@ -1,43 +1,42 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%           EE474 Hardware and Basic I/O
+%%
+%   % combined into notes pack
 %
-%           EE474 Hardware and Basic I/O
+%\documentclass{article}
+%\documentclass{seminar}
 %
-<stream, c>   % combined into notes pack
-
-<nh>\documentclass{article}
-<s>\documentclass{seminar}
-
-<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
-<s>\pagestyle{headings}
-<s>\slidepagestyle{BHstyle}
-<s>\addtolength\oddsidemargin{3cm}
-<shn>\usepackage[T1]{fontenc}
-<shn>\usepackage{lmodern}
-<shn>\usepackage[utf8]{inputenc}
-<shn>\usepackage[english]{babel}
-<shn>\usepackage{graphicx}
-<shn>\usepackage[pdftex,
-<shn>    pdftitle={ECE 474: Serial Communication},
-<shn>    pdfauthor={Blake Hannaford, University of Washington},
-<shn>    pdflang={en-US},
-<shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
-<shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-<shn>    hidelinks,
-<shn>    unicode]{hyperref}
-<shn>\usepackage{listings}
-
-<*hn>
-\oddsidemargin 0in
-\evensidemargin 0in
-\textwidth 6.5in
-\textheight 8.7in
-\topmargin 0.2in
-
-
-\linespread{1.0}     % 1.0 = single space   1.6 = double space
-
-
-<*>
+%\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
+%\pagestyle{headings}
+%\slidepagestyle{BHstyle}
+%\addtolength\oddsidemargin{3cm}
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+%\usepackage{graphicx}
+%\usepackage[pdftex,
+%    pdftitle={ECE 474: Serial Communication},
+%    pdfauthor={Blake Hannaford, University of Washington},
+%    pdflang={en-US},
+%    pdfsubject={ECE 474 Embedded Microcomputer Systems},
+%    pdfkeywords={embedded systems, microcontrollers, ECE 474},
+%    hidelinks,
+%    unicode]{hyperref}
+%\usepackage{listings}
+%
+%
+%\oddsidemargin 0in
+%\evensidemargin 0in
+%\textwidth 6.5in
+%\textheight 8.7in
+%\topmargin 0.2in
+%
+%
+%\linespread{1.0}     % 1.0 = single space   1.6 = double space
+%
+%
+	%<*>
 \title{EE 472:  Serial Communication}
 
 \author{Blake Hannaford\\
@@ -47,19 +46,19 @@
 
 \date{\today}
 
-<shn>\begin{document}
-<s>\begin{slide}
+%\begin{document}
+%\begin{slide}
 
 
-<c>\section*{\large\bf Serial Communication}
+\section*{\large\bf Serial Communication}	%<c>
  
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 \maketitle
-<n>\subsection*{INSTRUCTOR NOTES}
+%\subsection*{INSTRUCTOR NOTES}
 
-<*>
+	%<*>
 %%%%** Section 1 
 \section{Serial Communication}
 
@@ -76,8 +75,8 @@ An international standard for serial communication (~1960s).
 
 Very old but still influential in ~2020 systems.
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 1.1
 \subsection{Electrical Signaling}
 
@@ -102,8 +101,8 @@ Today some systems use
 
 to save power supply costs.
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 1.2
 \subsection{Serial Signaling}
@@ -128,12 +127,12 @@ Pos.    & Value         & Function      \\ \hline
 can have 1.5 Stop
 Bits.
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 \includegraphics[width=\linewidth]{Serial_figs/rs232_serialbits.png}
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 \subsection{Parity}
 
@@ -148,8 +147,8 @@ Interpretation of XOR(bits) is
    \item "0" if number of ones is EVEN
 \end{itemize}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 Example: 
 
 \begin{tabular}{|c|c|c|c|}\hline
@@ -166,8 +165,8 @@ D0 & D1 & D2 & XOR(D0,D1,D2) \\ \hline
 
 Check if received correct parity bit. 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 1.3
 \subsection{Speed and Timing}
@@ -181,8 +180,8 @@ line per second.  Commonly equal to bits per second.
 
 {\bf Example: }  Arduino serial port default: 9600 Baud. (it's actually USB!)
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 1.4
 \subsection{Synchronization}
@@ -200,8 +199,8 @@ to be logic 0.  Falling (rising?) edge triggers
 a local clock in the receiver.
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 1.5
 \subsection{Multiplexing}
 Sending information in both directions.  (Stringing 2 telegraph wires was very expensive!)
@@ -215,8 +214,8 @@ Sending information in both directions.  (Stringing 2 telegraph wires was very e
 {\it Full Duplex} Both sides can send at same time.
 
 Typical serial communication today is {\it Full Duplex}.
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 1.6
 \subsection{RS232 Wiring}
 
@@ -227,8 +226,8 @@ Minimum 3 wires:
         \item gnd  (V=0 reference)
 \end{itemize}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 Maximum 23 wires!
 
 \includegraphics[height=2.75in]{Serial_figs/rs232_db25pinout.png}
@@ -236,8 +235,8 @@ Maximum 23 wires!
 Source(https://www.aggsoft.com/rs232-pinout-cable/}
 {\tiny serial-cable-connections.htm)}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 1.7
 \subsection{Connections}
 Must have:
@@ -250,8 +249,8 @@ Cables are easier to make if pins are
 ``straight through''. i.e. pin {\it n}
 connects to pin {\tt n}.
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 1.8
 \subsection{Connectors}
 23 pin (ancient, un-needed)
@@ -267,8 +266,8 @@ Two connector wiring types
 Thus, {\tt DCE }can talk to {\tt DTE} with
 a ``straight through'' cable.
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 {\tt DTE, DCE} are ancient
 names from pre-PC days!!.
@@ -279,8 +278,8 @@ PC == {\tt DTE } \\
 modem, printer, etc, == {\tt DCE}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 1.9
 \subsection{Multi-Drop}
 
@@ -295,8 +294,8 @@ users from talking simultaneously.
 
 (like half-duplex)
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 1.10
 \subsection{``Null Modem''}
 
@@ -310,8 +309,8 @@ pin 2 $\to$ pin 3 {\it and} \\
 pin 3 $\to$ pin 2
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 1.11
 \subsection{Flow Control}
 
@@ -335,8 +334,8 @@ Hardware flow control can be enabled/disabled.
 
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 1.12
 \subsection{Flow Control Note}
 
@@ -347,8 +346,8 @@ IBM standard).
 
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 2 
 \section{Error Control}
 %%%%** Section 2.1
@@ -366,8 +365,8 @@ to errors.  Sources:
 \end{itemize}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 2.2
 \subsection{Solutions}
 \begin{description}
@@ -382,8 +381,8 @@ to errors.  Sources:
        is divisible by some known polynomial.
 \end{description}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 2.3
 \subsection{Packets}
 
@@ -413,8 +412,8 @@ Start &   Type & Length  & ... & Checksum  \\
         \item[Checksum] Checksum computed on previous packet.
 \end{description}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 2.4
 \subsection{Packet Error Control}
 
@@ -435,8 +434,8 @@ Error:
 3. goto step 1.
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 2.5
 \subsection{ACK/NAK}
 
@@ -453,8 +452,8 @@ Start &   ACK/NAK &  Checksum  \\
 \end{tabular}
 }
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 2.6
 \subsection{Protocol Issues}
 
@@ -469,6 +468,6 @@ Do we have to send {\tt ACK/NAK} on receipt of an {\tt ACK/NAK}?
 Answers to all these questions must be worked out in a
 protocol spec.
 
-<s>\end{slide}
-<shn>\end{document}
+%\end{slide}
+%\end{document}
 

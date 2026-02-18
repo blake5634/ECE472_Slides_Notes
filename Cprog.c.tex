@@ -1,56 +1,55 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%           EE474 Intro to C Programming
+%   % combined into notes pack
 %
-%           EE474 Intro to C Programming
-<stream, c>   % combined into notes pack
+%\documentclass{article}
+%\documentclass{seminar}
+%
+%\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
+%\pagestyle{headings}
+%\slidepagestyle{BHstyle}
+%\addtolength\oddsidemargin{3cm}
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+%\usepackage{graphicx}
+%\usepackage[pdftex,
+%    pdftitle={ECE 474: Structure and Compilation of C Programs},
+%    pdfauthor={Blake Hannaford, University of Washington},
+%    pdflang={en-US},
+%    pdfsubject={ECE 474 Embedded Microcomputer Systems},
+%    pdfkeywords={embedded systems, microcontrollers, ECE 474},
+%    hidelinks,
+%    unicode]{hyperref}
+%\usepackage{listings}
+%
+%
+%\oddsidemargin 0in
+%\evensidemargin 0in
+%\textwidth 6.5in
+%\textheight 8.7in
+%\topmargin 0.2in
+%
+%
+%
+%\linespread{1.0}
+%
+%\begin{document}
+%
+%
+	%<*>
+%\begin{slide}
 
-<nh>\documentclass{article}
-<s>\documentclass{seminar}
-
-<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
-<s>\pagestyle{headings}
-<s>\slidepagestyle{BHstyle}
-<s>\addtolength\oddsidemargin{3cm}
-<shn>\usepackage[T1]{fontenc}
-<shn>\usepackage{lmodern}
-<shn>\usepackage[utf8]{inputenc}
-<shn>\usepackage[english]{babel}
-<shn>\usepackage{graphicx}
-<shn>\usepackage[pdftex,
-<shn>    pdftitle={ECE 474: Structure and Compilation of C Programs},
-<shn>    pdfauthor={Blake Hannaford, University of Washington},
-<shn>    pdflang={en-US},
-<shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
-<shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-<shn>    hidelinks,
-<shn>    unicode]{hyperref}
-<shn>\usepackage{listings}
-
-<*hn>
-\oddsidemargin 0in
-\evensidemargin 0in
-\textwidth 6.5in
-\textheight 8.7in
-\topmargin 0.2in
-
-
-<*shn>
-\linespread{1.0}
-
-\begin{document}
-
-
-<*>
-<s>\begin{slide}
-
-<*>
+	%<*>
 
 \begin{center}
 {\Large Structure and Compilation of C-Programs}
 \end{center}
 
-<*>
-<s>\end{slide}
-<s>\begin{slide}
+	%<*>
+%\end{slide}
+%\begin{slide}
 \section{Types}
 On the most basic level, the type of a variable identifies how many
 bits it has, and how we interpret its bits.   A classic example is
@@ -77,7 +76,7 @@ then we can not meaningfully multiply them.
 Similar examples could be given for floats, ints,
 etc.
 
-<*chn>
+	%<*chn>
 \paragraph{``Types of types''} In non-embedded applications,
 we don't worry as much about the bits.  The mainstream types
 such as {\tt int, float} etc., may have different numbers of
@@ -95,13 +94,13 @@ to work with 16-bit integers.  This is why the more specific
 types like {\tt unint16\_t} exist.  Generally if the number
 of bits isn't right there in the type name its not a good
 idea to assume you know how many bits are in that type.
-<*>
+	%<*>
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 \section{Creating a variable or function in C}
 
-<*hcn>
+	%<*hcn>
 Unlike Python, C requires a lot of information from you before you can
 create a variable or function (i.e.
 allocate memory to data or code).
@@ -125,7 +124,7 @@ There's a lot of repetition or similarity between declarations
 and definitions, so we'll define them carefully since you need to
 use both.
 
-<*chn>
+	%<*chn>
 \subsection{Variable declarations}
 
 \begin{itemize}
@@ -199,8 +198,8 @@ use both.
 
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 5
 \section{Variable Scope}
 
@@ -214,8 +213,8 @@ other ``.c" files --- if {\tt extern} is used.
 outside a function in {\it another } ``.c" file.
 \end{itemize}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 
 %%%%** Section 6
@@ -234,9 +233,9 @@ outside a function in {\it another } ``.c" file.
 
 \end{itemize}
 
-<s>\end{slide}
+%\end{slide}
 
-<s>\begin{slide}
+%\begin{slide}
 
 %%%%** Section 1 
 \section{C Programs in Multiple Files}
@@ -247,8 +246,8 @@ Simpler editing (?)
 
 Helps modularity and multiple authors.
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
     
 File: \framebox{main.c}
 \lstset{language=c}
@@ -266,8 +265,8 @@ fcn1()
 \end{lstlisting}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 File: \framebox{functions.c}
 
 \lstset{language=c}
@@ -287,8 +286,8 @@ fcn3()
 \end{lstlisting}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 Execution starts with first line of {\tt main() }.
 
@@ -297,14 +296,14 @@ in any file in which they will be called or defined.
 
 All functions are visible from any file (but prototype must be supplied in the file).
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 %%%%** Section 2 
 \section{Include Files (.h files)}
 Text can be read in to your C-Source file just prior to compilation. 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 File: \framebox{A.c}
 
 \lstset{language=c}
@@ -327,8 +326,8 @@ File: \framebox{X.h}
 */
 \end{lstlisting}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 output:
 
 \lstset{language=c}
@@ -345,8 +344,8 @@ main()
 \end{lstlisting}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 Reasons:
 \begin{itemize}
@@ -356,8 +355,8 @@ Reasons:
     \item ensures consistency.
 \end{itemize}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
     \includegraphics[width=4.5in]{cprog_figs/includes_multi_protos.png}
     
@@ -365,10 +364,10 @@ Reasons:
     and data declarations into multiple files without having to maintain 
     separate identical copies in multiple files. 
     
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<*chn>
+	%<*chn>
 \subsection{What goes in {\tt xxxxx.h}}
 
 \paragraph{Include files ({\tt xxxxx.h})}
@@ -390,8 +389,8 @@ Reasons:
   Define the code for the function (which will also allocate memory for that code).
 \end{itemize}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 
 %%%%** Section 3 
@@ -402,22 +401,22 @@ Reasons:
 
 like the search-replace function in your word processor.
 
-<!s>ex:
+ex:	%<!s>
 
 {\tt \#define  TRUE  1}
 
 c pre-processor will replace all occurrences of {\tt TRUE} with {\tt 1}.
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 3.2
 \subsection{\tt\#ifdef / \#endif}
 
 C pre-processor can turn on-off  blocks of code before compilation.
 
-<!s>ex:
+ex:	%<!s>
 
 \lstset{language=c}
 \lstset{basicstyle=\ttfamily, commentstyle=\textit}
@@ -437,16 +436,16 @@ C pre-processor can turn on-off  blocks of code before compilation.
 \end{lstlisting}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 3.3
 \subsection{C pre-processor overview}
 
-<s>\includegraphics[width=4.0in]{cprog_figs/c-building.png}
-<chn>\includegraphics[width=5.5in]{cprog_figs/c-building.png}
+%\includegraphics[width=4.0in]{cprog_figs/c-building.png}
+\includegraphics[width=5.5in]{cprog_figs/c-building.png}	%<chn>
     
-<*>
+	%<*>
 
 The C pre-processor applies some convenience features to your code before 
 compilation.  Specifically, the {\tt \#ifdef} macro can turn on and off C-code
@@ -457,14 +456,14 @@ Code from files indicated in {\tt \#include} statements (typically {\tt .h } fil
 substitutions are made in your code.   Most likely, you will not need to worry about
 these complexities unless you are working on very big packages of code.   For 
 ECE474, you {\bf  probably} do not need {\tt \#ifdef}s at all. 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<*>
+	%<*>
 %%%%** Section 4 
 \section{Building a C program}
 
-<*hnc>
+	%<*hnc>
 Converting a package of several ``.c'' and ``.h'' files can be a complex
 process which is fortunately automated by a build system.
 
@@ -480,7 +479,7 @@ will also include code from libraries, such as a device driver, which
 somebody else wrote some other time.  It will be stitched in with your
 code so that your code can use it.
 
-<*>
+	%<*>
 
 \begin{enumerate}
 	\item Run C pre-processor on the ``.c" file
@@ -493,8 +492,8 @@ code so that your code can use it.
 
 {\bf Then: } ``Link" all ``.o" files, and library files,
 	to create ``executable" binary file. 
-<s>\end{slide}
-<shn>\end{document}
+%\end{slide}
+%\end{document}
 
 
 

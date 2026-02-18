@@ -1,71 +1,70 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%           EE474 Pointers in C
+%%
+%   % combined into notes pack
 %
-%           EE474 Pointers in C
+%\documentclass{article}
+%\documentclass{seminar}
 %
-<stream, c>   % combined into notes pack
-
-<nh>\documentclass{article}
-<s>\documentclass{seminar}
-
-<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
-<s>\pagestyle{headings}
-<s>\slidepagestyle{BHstyle}
-<s>\addtolength\oddsidemargin{3cm}
-<shn>\usepackage[T1]{fontenc}
-<shn>\usepackage{lmodern}
-<shn>\usepackage[utf8]{inputenc}
-<shn>\usepackage[english]{babel}
-<shn>\usepackage{graphicx}
-<shn>\usepackage[pdftex,
-<shn>    pdftitle={ECE 474: Pointers in C},
-<shn>    pdfauthor={Blake Hannaford, University of Washington},
-<shn>    pdflang={en-US},
-<shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
-<shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-<shn>    hidelinks,
-<shn>    unicode]{hyperref}
-<shn>\usepackage{listings}
-
-<*hn>
-\oddsidemargin 0in
-\evensidemargin 0in
-\textwidth 6.5in
-\textheight 8.7in
-\topmargin 0.2in
-
-
-<*shn>
-\linespread{1.0}
-
-<shn>\begin{document}
-<s>\begin{slide}
-<ch>\section*{Pointers in C}
-<n>\subsection*{INSTRUCTOR NOTES}
-<*hn>\noindent
- Blake Hannaford \& James Peckol\\
-        Department of Electrical Engineering \\
-        The University of Washington\\
-         \today
-
-<s>\end{slide}
-<s>\begin{slide}
-<*>
+%\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
+%\pagestyle{headings}
+%\slidepagestyle{BHstyle}
+%\addtolength\oddsidemargin{3cm}
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+%\usepackage{graphicx}
+%\usepackage[pdftex,
+%    pdftitle={ECE 474: Pointers in C},
+%    pdfauthor={Blake Hannaford, University of Washington},
+%    pdflang={en-US},
+%    pdfsubject={ECE 474 Embedded Microcomputer Systems},
+%    pdfkeywords={embedded systems, microcontrollers, ECE 474},
+%    hidelinks,
+%    unicode]{hyperref}
+%\usepackage{listings}
+%
+%
+%\oddsidemargin 0in
+%\evensidemargin 0in
+%\textwidth 6.5in
+%\textheight 8.7in
+%\topmargin 0.2in
+%
+%
+%
+%\linespread{1.0}
+%
+%\begin{document}
+%\begin{slide}
+\section*{Pointers in C}	%<ch>
+%\subsection*{INSTRUCTOR NOTES}
+%\noindent
+% Blake Hannaford \& James Peckol\\
+%        Department of Electrical Engineering \\
+%        The University of Washington\\
+%         \today
+%
+%\end{slide}
+%\begin{slide}
+	%<*>
 \section{Data in memory}
 
-<*>
+	%<*>
 The {\bf key} to understanding C code and writing C code is to clearly visualize data in the computer memory in it's lowest level form: 
 a bunch of 0's and 1's.  
-<*chn>If you don't feel confident on binary, octal, and hex representations
+If you don't feel confident on binary, octal, and hex representations	%<*chn>
 of numbers, now would be the time to review (there are many  online tutorials and quizzes). 
 But don't rely on converting calculators.  You must understand what the conversion actually means. 
-<*>
+	%<*>
 
 Now let's review what happens in computer memory when we write a statement like this in C.
 \begin{verbatim}
 int c_int_variable = 17;   // 
 \end{verbatim}
 
-<*chn>
+	%<*chn>
 First of all this is called a ``variable declaration" because it ``declares" the existence
 of a thing we are going to call {\tt c\_int\_variable}, and also that it is an 
 integer (``{\tt int}").  More precisely, the statement reserves a specific slot in memory
@@ -80,7 +79,7 @@ get 64 bits, but on an embedded processor, it might only get 16 bits.
 You need to have a good idea what these standard sizes are for the computer you use,
 especially if it is a small one. 
 
-<*>
+	%<*>
 Assuming that the size of an {\tt int} is 2 bytes (16 bits), the C compiler sets up our 
 declaration as follows:
 
@@ -111,17 +110,17 @@ character  & numerical ASCII code \\ \hline
 'K'  & 75(dec),1001011(bin) \\ \hline
 \end{tabular}
 
-<*chn>
+	%<*chn>
 Now, we all know that a computer may have billions of bytes of memory (but maybe much fewer
 for an embedded computer).   How do we find those bits?  The answer is that each 
 byte has a unique {\bf address} just like all the houses in a big city.   So, we might redraw the previous 
 examples as:
 
 
-<s>Example memory locations:\\
+%Example memory locations:\\
 
 
-<*>
+	%<*>
 \vspace{0.1in}
 2457568: $\to$ \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
 0&0&0&0&0&0&0&0&0&0&0&1&0&0&0&1\\\hline
@@ -133,11 +132,11 @@ examples as:
 \end{tabular}
 \vspace{0.1in}
 
-<*chn>
+	%<*chn>
 where the address of the first 16 bits above is 2457568.  Or,
 let's say the same data is packed into sequential locations:
-<*>
-<s> Another layout: sequential locations:
+	%<*>
+% Another layout: sequential locations:
 
 \vspace{0.1in}
 \begin{tabular}{l|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
@@ -146,11 +145,11 @@ let's say the same data is packed into sequential locations:
 \end{tabular}
 \vspace{0.1in}
 
-<*chn>
+	%<*chn>
 Here we have incremented the address by 2 since there are two bytes per line. 
 Finally, memory locations are almost always represented in Hex (base 16) so 
 more commonly the above would be:
-<*>
+	%<*>
 
  Using Hex ... like the pros:
 
@@ -162,36 +161,36 @@ more commonly the above would be:
 \end{tabular}
 \vspace{0.1in}
 
-<*s>
-\end{slide}
-\begin{slide}
-<*>
+%
+%\end{slide}
+%\begin{slide}
+	%<*>
 
-<chn>In C you can set the value of constants directly in hex and octal as:
+In C you can set the value of constants directly in hex and octal as:	%<chn>
 
-<s> Initializing constants.
+% Initializing constants.
 
 \begin{verbatim}
 int c_int_01 = 0x4F7; // 0xmmm = a hex numer  (m in {0-9A-F})
 int c_int_02 = 02367; // 0nnnn = an octal number (n in {0-7})
 \end{verbatim}
 
-<*s>
-\end{slide}
-\begin{slide}
-
-\section*{Quiz:  }
-Does this print out or not?
-\begin{verbatim}
-if(c_int_01 == c_int_02) {
-   printf("the values are the same");
-   }
-\end{verbatim}
-
-<*s>
-\end{slide}
-\begin{slide}
-<*>
+%
+%\end{slide}
+%\begin{slide}
+%
+%\section*{Quiz:  }
+%Does this print out or not?
+%\begin{verbatim}
+%if(c_int_01 == c_int_02) {
+%   printf("the values are the same");
+%   }
+%\end{verbatim}
+%
+%
+%\end{slide}
+%\begin{slide}
+	%<*>
 
 Wrapping this up, when we write for example:
 
@@ -218,21 +217,21 @@ name & address(hex) & type \\ \hline
 %             Section 
 
 
-<*s>
-\end{slide}
-\begin{slide}
-<*> 
+%
+%\end{slide}
+%\begin{slide}
+ 	%<*>
 
 %%%%** Section 1 
 \section{Memory Addresses and Pointers}
 \subsection{What is a pointer?}
-<*chn>
+	%<*chn>
 In the last section, we saw that the variable {\tt c\_int\_variable} 
 represents a value stored at {\tt 0x257FE0} in memory.   For each 
 C data type ({\tt int}, {\tt char} etc.) C has an additional type,
 a ``pointer".  Pointers for each type are declared with an asterisk, '*'
 like so:
-<*>
+	%<*>
 \begin{verbatim}
 // my_int_pointer is a pointer to an int
 int * my_int_pointer; 
@@ -240,10 +239,10 @@ int * my_int_pointer;
 now {\tt my\_int\_pointer} is set up to hold the {\it address of} an {\tt int}.
 If we want {\tt my\_int\_pointer} to ``point to" {\tt c\_int\_variable}, we write
 
-<*s>
-\end{slide}
-\begin{slide}
-<*> 
+%
+%\end{slide}
+%\begin{slide}
+ 	%<*>
 
 \begin{verbatim}
 // make my_int_pointer point to c_int_variable
@@ -253,29 +252,29 @@ using the $=$ and ampersand (\&) in this way means
 \begin{quotation} 
    ``Make {\tt my\_int\_pointer} equal to the address of {\tt c\_int\_variable}."
 \end{quotation}
-<*chn>
+	%<*chn>
 but pointers do not have to be constants.   Later on, we can change it to:
 
-<*>
-<s> or ...
+	%<*>
+% or ...
 \begin{verbatim}
 // the pointer now points to c_int_01 instead!
 my_int_pointer = &c_int_01 ;  
 \end{verbatim}
 
 
-<*s>
-\end{slide}
-\begin{slide}
-<*> 
+%
+%\end{slide}
+%\begin{slide}
+ 	%<*>
 
 
 \subsection{``Dereferencing a pointer"}
-<*chn>
+	%<*chn>
 OK, since a pointer holds the location of some data, what can we do with that?   The phrase 
 ``to dereference pointer" means to grab the data stored at the location stored in the pointer. 
 As a trivial example, suppose we have the code:
-<*>
+	%<*>
 
 \begin{verbatim}
 int c_int_01 = 50;
@@ -287,10 +286,10 @@ if (x == 50) printf(" I understand pointers!\n");
 
 
 
-<*s>
-\end{slide}
-\begin{slide}
-<*> 
+%
+%\end{slide}
+%\begin{slide}
+ 	%<*>
 
 
 After this code is executed, {\tt (x==50)} is true.  
@@ -302,9 +301,9 @@ When not used in a declaration (e.g. {\tt int * x = 0x2457854}),
 asterisk (*) is known as the ``dereferencing operator".
    
    
-<*>
-<s>\end{slide}
-<s>\begin{slide} 
+	%<*>
+%\end{slide}
+%\begin{slide} 
 Consider some more examples:
 
 \begin{verbatim}
@@ -320,7 +319,7 @@ What are the values of
 (int)pa == ??
 \end{verbatim}
 
-<*ch>
+	%<*ch>
 \begin{tabular}{l|c|c|c|c|c|}
 \hline
 Name &Addr & & & & \\ \hline
@@ -334,30 +333,30 @@ Name &Addr & & & & \\ \hline
 \end{tabular}
 
 
-<*sn>
-\subsubsection*{Answers}
-\begin{tabular}{l|c|c|c|c|c|}
-\hline
-Name &Addr & & & & \\ \hline
-     & 3000 &0 &0 &1 &0 \\ \hline
-pa$\to$ & 3004 &0 &0 &0 &0 \\ \hline
-     & 3008 &0 &0 &C &0 \\ \hline
-     & 300C &0 &0 &0 &0 \\ \hline
-     & & & & & \\ \hline
-     & & & & & \\ \hline
-     & & & & & \\ \hline
-\end{tabular}
-\begin{verbatim}
-*pa + 1 == 0001
-(int)pa == 3004
-\end{verbatim}
-<*>
+%
+%\subsubsection*{Answers}
+%\begin{tabular}{l|c|c|c|c|c|}
+%\hline
+%Name &Addr & & & & \\ \hline
+%     & 3000 &0 &0 &1 &0 \\ \hline
+%pa$\to$ & 3004 &0 &0 &0 &0 \\ \hline
+%     & 3008 &0 &0 &C &0 \\ \hline
+%     & 300C &0 &0 &0 &0 \\ \hline
+%     & & & & & \\ \hline
+%     & & & & & \\ \hline
+%     & & & & & \\ \hline
+%\end{tabular}
+%\begin{verbatim}
+%*pa + 1 == 0001
+%(int)pa == 3004
+%\end{verbatim}
+	%<*>
 
 %%    Incrementing pointers.
 \subsection{Pointer Types and increments}
 Pointers are typed so that they ``know" how big the thing is they point to.  
-<chn>For example, if an integer is 32 bits (4 bytes), suppose we have memory as follows:
-<s>Example:
+For example, if an integer is 32 bits (4 bytes), suppose we have memory as follows:	%<chn>
+%Example:
 
 \begin{tabular}{c|c|c|c|c|}
 address & byte & byte & byte & byte \\\hline
@@ -369,15 +368,15 @@ address & byte & byte & byte & byte \\\hline
 
 {(assume a blank cell contains 0x00)}
 
-<chn>Note how the addresses differ by increments of 4.
+Note how the addresses differ by increments of 4.	%<chn>
 We have stored an integer in each row of 4 bytes, specifically \{1, 2, 16, 513\}.  
-<chn>Now lets say we have the following code:
+Now lets say we have the following code:	%<chn>
 
-<*s>
-\end{slide}
-\begin{slide}
-<*> 
-<s> Example code:
+%
+%\end{slide}
+%\begin{slide}
+ 	%<*>
+% Example code:
 \begin{verbatim}
 int * p1 = 0x257FE0
 printf("%d", *p1);   // prints 1
@@ -385,25 +384,25 @@ printf("%d", *(p1+1) );  // prints 2 (added 4 to byte address)
 printf("%d", *(p1+2) );  // prints 16 (added 8 to byte address)
 \end{verbatim}
 
-<*chn>
+	%<*chn>
 The C compiler knows that an int takes 4 bytes so when you increment an int pointer, it automatically adds 4. 
 To summarize,
-<*>
+	%<*>
 C Pointers advance in increments of the thing they
 point to.
 
 
-<*s>
-\end{slide}
-\begin{slide}
-<*> 
+%
+%\end{slide}
+%\begin{slide}
+ 	%<*>
 
-<*chn>How can you print a pointer to see what address it contains?   We can convert it to an {\tt int} using the 
+How can you print a pointer to see what address it contains?   We can convert it to an {\tt int} using the 	%<*chn>
 {\bf cast} operator, in this case {\tt (int) }.  For example, 
 
-<s> You can change variables from one type to another by ``casting"
+% You can change variables from one type to another by ``casting"
 
-<*>
+	%<*>
 \begin{verbatim}
 // "cast" my_int_pointer to instead BE an int
 int x = (int) my_int_pointer;
@@ -412,13 +411,13 @@ print(x);
 
 creates an {\tt int} with the address in it and prints it like any other integer.
 
-<*>
+	%<*>
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<*>
+	%<*>
 \noindent
 {\bf Example:}    What will print?
 
@@ -440,27 +439,27 @@ printf("fltPtr++ = %d\n", (int)fltPtr++ );
 
 
 
-<*>
+	%<*>
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<*>\subsubsection*{Answers}
+\subsubsection*{Answers}	%<*>
 \begin{verbatim}
 
 Not so fast!!   Lets check with actual code
 
 \end{verbatim}
 
-<*>
+	%<*>
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<*>
-<*chn>
+	%<*>
+	%<*chn>
 
 File: \framebox{ptrCastExpl.c}
 
@@ -509,7 +508,7 @@ void main() {
 }
 \end{lstlisting}
 
-<*>
+	%<*>
 %%%%** Section 1.1
 \subsection{Memory Map}
 \noindent
@@ -534,7 +533,7 @@ Also assume that an integer is 32 bits (4 bytes). Assuming the Exanoke code just
 is compiled, show each byte of memory as it would be assigned
 by the compiler.
 
-<*chs>
+	%<*chs>
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline
 Addr & & & & \\ \hline
@@ -552,41 +551,41 @@ for where the data will go when your program does run.
 
 
 
-<*n>
-
-%%%%** Section 1.2
-\subsection{Memory Map}
-Assume compiler assigns memory up from {\tt 0x3000}. \\
-
-Answer:
-\vspace{0.4in}
-\begin{tabular}{|l|c|c|c|c|c|}
-\hline
-Name &Addr & & & & \\ \hline
- j   & 3000 &0 &0 &0  &3 \\ \hline
- pa  & 3004 &0 &0 &30 &00 \\ \hline
- a   & 3008 &0 &0 &0 &3 \\ \hline
- b   & 300C &0 &0 &0 &2F \\ \hline
-     & & & & & \\ \hline
-     & & & & & \\ \hline
-     & & & & & \\ \hline
-\end{tabular}
-
-
-<*>
-<s>\end{slide}
-<s>\begin{slide}
+%
+%
+%%%%%** Section 1.2
+%\subsection{Memory Map}
+%Assume compiler assigns memory up from {\tt 0x3000}. \\
+%
+%Answer:
+%\vspace{0.4in}
+%\begin{tabular}{|l|c|c|c|c|c|}
+%\hline
+%Name &Addr & & & & \\ \hline
+% j   & 3000 &0 &0 &0  &3 \\ \hline
+% pa  & 3004 &0 &0 &30 &00 \\ \hline
+% a   & 3008 &0 &0 &0 &3 \\ \hline
+% b   & 300C &0 &0 &0 &2F \\ \hline
+%     & & & & & \\ \hline
+%     & & & & & \\ \hline
+%     & & & & & \\ \hline
+%\end{tabular}
+%
+%
+	%<*>
+%\end{slide}
+%\begin{slide}
 %%%%** Section 1.5
 \subsection{Example: Pointers and Arrays}
 {\bf (Lewis, Section 3.6)}\\
 Consider the original IBM-PC
 80 col x 40 rows, display buffer \\
 
-<*chn> This is the graphics hardware that generates
+ This is the graphics hardware that generates	%<*chn>
 the clunky screen that you use to configure
 your {\tt BIOS}.
 
-<*>
+	%<*>
 
 \begin{tabular}{l|c|c|c|c|c|c|c}
 \hline
@@ -600,15 +599,15 @@ your {\tt BIOS}.
        & & & & & & \\ \hline
 \end{tabular}
 
-<*chn>
+	%<*chn>
 \noindent
 where ch is a {\tt char} display character, and
 cl is a {\tt char} which encodes the color of that
 character position.
 
-<*>
-<s>\end{slide}
-<s>\begin{slide}
+	%<*>
+%\end{slide}
+%\begin{slide}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%** Section 1.7
@@ -670,15 +669,15 @@ AND
 a <------->  &a[0]
 are exactly the same.
 \end{verbatim}
-<*chn>
+	%<*chn>
 You can use the array name ({\tt a}) without the subscript
 ({\tt [1]}) and it is identical to a pointer to the first element.
 Also, any pointer can be
 subscripted whether it was declared as an array or not.
 
-<*>
-<s>\end{slide}
-<s>\begin{slide}
+	%<*>
+%\end{slide}
+%\begin{slide}
 
 \subsection*{Lewis Approach}
 
@@ -696,8 +695,8 @@ p = (char *) (DISP_BUFFER + 2 *(80*row + col))
 *p = disp_char;
 \end{verbatim}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 1.6
 \subsection{Exercise in Class}
@@ -708,32 +707,32 @@ p = (char *) (DISP_BUFFER + 2 *(80*row + col))
  Assume the color byte should be
  assigned the value {\tt COLOR\_BYTE}.
 
-<*chn> The color byte has 2 4-bit fields which
+ The color byte has 2 4-bit fields which	%<*chn>
 set the background color (16 possible colors)
 and the character color (16 possible colors).
-<*>
+	%<*>
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
-<ch>\vspace{2.0in}
-<*ns>
-\subsection*{Answer}
-\begin{verbatim}
-
-#define COLOR_BYTE  0xBB  // (made up hex value)
-
-int row, col;
-char *p;
-row = 4;
-col = 20;
-p = (char *) ((DISP_BUFFER + 2 *(80*row + col))  + 1 )
-*p = COLOR_BYTE;
-\end{verbatim}
-
-<*>
-<s>\end{slide}
-<s>\begin{slide}
+\vspace{2.0in}	%<ch>
+%
+%\subsection*{Answer}
+%\begin{verbatim}
+%
+%#define COLOR_BYTE  0xBB  // (made up hex value)
+%
+%int row, col;
+%char *p;
+%row = 4;
+%col = 20;
+%p = (char *) ((DISP_BUFFER + 2 *(80*row + col))  + 1 )
+%*p = COLOR_BYTE;
+%\end{verbatim}
+%
+	%<*>
+%\end{slide}
+%\begin{slide}
 %%%%** Section 1.10
 \subsection{Array/Pointer Example}
 
@@ -742,8 +741,8 @@ To find the character at each row/col, we had \\
 p = (char *) (DISP\_BUFFER + 2 *(80*row + col)} \\
 Can we express this as an array reference?
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 \subsubsection*{Yes}
 
 {\tt
@@ -756,8 +755,8 @@ char *disp_buff = DISP_BUFFER;
 disp_buff[2 *(80*row + col)] = 'A';
 \end{verbatim}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 Even more succinctly:
 \begin{verbatim}
@@ -771,8 +770,8 @@ disp_buff[row][col][1] = COLOR_BYTE ;
 \end{verbatim}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 1.11
 \subsection{Exercise in Class}
@@ -782,32 +781,32 @@ Modify the scheme in Lewis, sec 3.6, so that we
 can address display characters and display colors
 each in a separate row/column array.
 
-<s>\end{slide}
-<s>\begin{slide}
-<ch>\vspace{2.5in}
-<*sn>
-\subsubsection*{Answer}
+%\end{slide}
+%\begin{slide}
+\vspace{2.5in}	%<ch>
+%
+%\subsubsection*{Answer}
+%
+%\begin{verbatim}
+%
+%typedef char CELL[2]    // a CELL is 2 chars
+%
+%CELL *graphics_chars =  (CELL *)DISP_BUFFER;
+%CELL *graphics_colors = (CELL *)(DISP_BUFFER+1);
+%  // NOT: graphics_colors = 1 + graphics_chars -- Why?
+%
+%graphics_chars[80*row + col] = 'A';
+%graphics_colors[80*row + col] = COLOR_BYTE;
+%
+%\end{verbatim}
+%
+%We could have used {\tt [0]} after each array reference but we
+%didn't have to --- why not?
+%
+	%<*>
 
-\begin{verbatim}
-
-typedef char CELL[2]    // a CELL is 2 chars
-
-CELL *graphics_chars =  (CELL *)DISP_BUFFER;
-CELL *graphics_colors = (CELL *)(DISP_BUFFER+1);
-  // NOT: graphics_colors = 1 + graphics_chars -- Why?
-
-graphics_chars[80*row + col] = 'A';
-graphics_colors[80*row + col] = COLOR_BYTE;
-
-\end{verbatim}
-
-We could have used {\tt [0]} after each array reference but we
-didn't have to --- why not?
-
-<*>
-
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 2 
 \section{Generic ({\tt void}) Pointers}
@@ -827,8 +826,8 @@ void *name ;   // declare a generic pointer called name
 \end{itemize}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 \subsubsection*{Examples}
 \begin{verbatim}
@@ -845,8 +844,8 @@ t = *ip;   // OK!!
 
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 2.1
 \subsection{Null Pointer}
@@ -872,8 +871,8 @@ if(ip == NULL) {
     i = *ip;}
 \end{verbatim}
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 2.2
 \subsection{Function Pointers}
@@ -895,8 +894,8 @@ double(*doubleFuncPtr)(int arg1, char arg2)
 \end{verbatim}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 Assignment to function pointers:
 
 \begin{verbatim}
@@ -908,8 +907,8 @@ IFP = realfunction;    // can skip &
 \end{verbatim}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 Dereferencing function pointers:
 
 \begin{verbatim}
@@ -921,8 +920,8 @@ IFP(5)       // can also use function pointer just like
 \end{verbatim}
 
 
-<s>\end{slide}
-<s>\begin{slide}
+%\end{slide}
+%\begin{slide}
 
 %%%%** Section 3 
 \section{Pointer Arithmetic}
@@ -970,6 +969,6 @@ address in memory?  Which way will subtraction come out?
 
 
 
-<s>\end{slide}
-<shn>\end{document}
+%\end{slide}
+%\end{document}
 
