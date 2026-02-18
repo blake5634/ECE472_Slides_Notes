@@ -1,0 +1,263 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%           EE474 Hardware and Basic I/O
+%
+   % combined into notes pack	%<stream, c>
+
+\documentclass{article}	%<nh>
+
+\usepackage{graphicx}	%<shn>
+\usepackage{hyperref}	%<shn>
+\usepackage{listings}	%<shn>
+
+	%<*hn>
+\oddsidemargin 0in
+\evensidemargin 0in
+\textwidth 6.5in
+\textheight 8.7in
+\topmargin 0.2in
+
+
+	%<*shn>
+\linespread{1.0}
+
+
+\begin{document}	%<shn>
+
+	%<*>
+
+
+
+\section{Basic Machine Organization}
+\subsection{Registers}
+
+Registers are an array of D flip-flops which can store a collection of bits.
+
+An n bit register has n inputs, n outputs, and one clock line.
+
+\begin{center}
+   \includegraphics[height=2.5in]{hwio_figs/00156.eps}   \\	%<chn>
+
+\end{center}
+
+
+\subsection{Busses}
+
+A bus is a parallel bi-directional data path
+
+Multiple devices can send and receive on one bus
+
+\begin{center}
+   \includegraphics[height=2.5in]{hwio_figs/00155.eps}   \\	%<chn>
+\end{center}
+
+Address: N bits which specify {\it which location}.
+
+Data:   Contents to/from memory or I/O device
+
+Control:  'traffic signals'
+
+
+
+More detailed view:
+
+Address Comparator
+
+\begin{itemize}
+ \item A combinatorial logic circuit at each device
+ \item 2 $n$-bit binary inputs:
+   \begin{enumerate}
+          \item ADDR bus (changing)
+          \item Device address (fixed)
+    \end{enumerate}
+
+ \item Control input
+ \item Output = 1 iff input1 == input2
+\end{itemize}
+
+
+Control bus is gated by ADDR comparator
+
+Device register is strobed by CTL pulse only if addresses match.
+
+\begin{center}
+   \includegraphics[height=2.5in]{hwio_figs/00157.eps}   \\	%<chn>
+\end{center}
+
+
+
+
+Bus Logic Notation:
+
+Below is a simple notation for showing timing relationships of signals on
+busses.
+
+\begin{center}
+   \includegraphics[height=2.5in]{hwio_figs/00158.eps}   \\	%<chn>
+
+\end{center}
+
+Problem:  How can multiple logic outputs be connected to the
+same wire?
+
+Solution:  Tri-state logic.
+
+\begin{center}
+   \includegraphics[height=2.0in]{hwio_figs/00159.eps}   \\	%<chn>
+\end{center}
+States:  { Logic 1, Logic 0, switch OFF }
+
+CPU and all devices can ``talk'' on data bus.
+
+Only {\bf ONE} device my have the tri-state switch closed at
+any time!
+
+
+\subsection{Bus Timing}
+
+Write Cycle
+
+\begin{center}
+   \includegraphics[height=2.5in]{hwio_figs/00160.eps}   \\	%<chn>
+
+\end{center}
+
+
+Read Cycle
+
+\begin{center}
+   \includegraphics[height=2.5in]{hwio_figs/00161.eps}   \\	%<chn>
+\end{center}
+
+
+
+
+
+\subsection{Microprocessor: Register View}
+
+\begin{center}
+   \includegraphics[height=2.5in]{hwio_figs/00162.eps}   \\	%<chn>
+
+\end{center}
+
+% 
+
+\begin{itemize}
+\item ALU: Arithmetic \& Logic Unit
+\item PC:  Program Counter. Holds Address of next instruction.
+\item IR:  Instruction Register. Holds current instruction.
+\item ADDR: Address Register. Holds address of next bus access.
+\item GP\#: General Purpose Registers.  Hold intermediate results.
+\item A1, A2: ALU Arguments. Hold inputs to an ALU operation.
+\item r: 'Result', holds result of ALU operation.
+\item FLAGS: a set of bits which tell things like zero/non-zero, negative, etc about the last Result.
+\end{itemize}
+
+
+
+\subsection{Steps to add two numbers}
+
+ C statement: {\tt c = a + b ;}
+\begin{enumerate}
+
+\item  Load addr of {\tt a} into ADDR
+\item  Wait for data from memory
+\item  Clock data into A1
+\item  Load addr of {\tt b} into ADDR
+\item  Wait for data from memory
+\item  Clock data into A2
+\item  Send ADD command to ALU
+\item  Load addr of {\tt c}
+\item  Transfer RES to data bus
+\item  Wait for data write to memory.
+
+\end{enumerate}
+
+
+\section{Machine Language Instructions}
+
+The above example may be controlled by one or more machine instructions.
+A machine instruction is binary data typically broken up into fields:
+
+The Operation Code (Op-Code)
+
+One, two, or three Operands.
+
+Each instruction is typically between one and eight bytes.
+
+Examples:
+\begin{center}
+   \includegraphics[height=2.5in]{hwio_figs/00163.eps}   \\	%<chn>
+
+\end{center}
+
+
+\subsection{Example: Add two numbers}
+Note:  All assembler below is pseudo-code!
+
+C: {\tt c = a + b;}
+
+Assembler:
+
+\begin{tabular}{|r|l|l|}
+\hline
+mem addr        & instruction   & comment\\
+\hline
+0xA000          & MOV  a, A1   & move mem location a to ALU Arg 1 \\
+\hline
+0xA002          & MOV  b, A2    & move mem location b to ALU Arg 2 \\
+\hline
+0xA004          & ADD           & a one-byte instruction \\
+\hline
+0xA005          & MOV  r, c     & move ALU result to mem location c\\
+\hline
+\end{tabular}
+
+
+There are many more types of operands in most architectures.  Examples:
+
+\begin{itemize}
+\item INDEXED
+\begin{verbatim}
+MOV   0xCA04(R2), G1    \\move data from memory location
+                        \\ 0xCA04 + contents of R2 to register G1
+\end{verbatim}
+
+\item REGISTER INDIRECT
+\begin{verbatim}
+MOV   (R2), G1          \\move data from memory location
+                        \\ contents of R2
+\end{verbatim}
+
+\end{itemize}
+
+
+
+
+\section{Basic I/O programming}
+
+{\bf Intel} I/O instructions
+
+{\tt IN         R, char }
+where {\tt char} is an 8-bit constant
+
+{\tt OUT        char, R }
+
+In intel architecture, {\tt R} can be {\tt AL, AX, or EAX} registers.
+
+
+
+
+{\bf Atmel} I/O Instructions 
+
+Example:   AtMega2560 Chip (Arduino Mega)
+
+\begin{itemize}
+
+    \item ``Memory Mapped" I/O
+    \item Devices and Memory {\bf share } the same address space
+    \item Device registers are just like memory locations / variables. 
+    \item Arduino libraries predeclare correct memory address for each register you need. 
+\end{itemize}
+\end{document}	%<shn>
+

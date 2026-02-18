@@ -1,0 +1,471 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%           EE474 C constants and #define
+%
+%
+   % combined into notes pack	%<stream, c>
+
+\documentclass{article}	%<nh>
+
+\usepackage{graphicx}	%<shn>
+\usepackage{hyperref}	%<shn>
+\usepackage{listings}	%<shn>
+
+	%<*hn>
+\oddsidemargin 0in
+\evensidemargin 0in
+\textwidth 6.5in
+\textheight 8.7in
+\topmargin 0.2in
+
+
+	%<*shn>
+
+\linespread{1.0}
+
+
+\begin{document}	%<shn>
+	%<*>
+\section*{{\tt C} Constants, Defines and Integers \footnote{
+ B. Kernigan and D. Ritchie, ``The C Programming Language,,''
+ 2nd Edition, Prentice Hall, 1988.  \\
+ Daniel W. Lewis, Fundamentals of
+ Embedded Software, {\it Where C and Assembly Meet}, Prentice Hall, 2002.}
+ }
+
+
+%%%%** Section 1 
+\section{Review of C Constants}
+
+We will often need to specify the content of memory
+very precisely.
+
+%%%%** Section 1.1
+\subsection{HEX and OCTAL review}
+
+	%<*chn>
+Entering binary numbers can wear out the 1 and 0 keys on
+your computer!   HEX is a good shorthand for binary since
+each HEX character maps to a specific bit pattern.
+
+
+\vspace{0.2in}	%<chn>
+	%<*>
+\begin{tabular}{|c|c|r|}
+\hline
+bits  &  HEX & Octal \\ \hline
+0000  &  0   & 0     \\ \hline
+0001  &  1   & 1     \\ \hline
+0010  &  2   & 2     \\ \hline
+...   &  ...    & ...      \\ \hline
+0111  &  7   & 7     \\ \hline
+1000  &  8   & 10     \\ \hline
+1001  &  9   & 11     \\ \hline
+1010  &  A   & 12     \\ \hline
+1011  &  B   & 13     \\ \hline
+
+...   & ...  & ...   \\ \hline
+1111  &  F   & 17     \\
+\hline
+\end{tabular}
+
+\vspace{0.2in}	%<chn>
+
+Hex Place value: To convert {\tt 0xD2FB} to decimal:
+
+\vspace{0.2in}	%<hn>
+\begin{tabular}{|c|c|c|c|}
+\hline
+D       &       2       &       F       &       B \\ \hline
+$2^{12}$        &       $2^8$   &       $2^4$   &       $2^0$ \\ \hline
+4096    &       256     &       16      &       1 \\ \hline
+        &               &               &          \\ \hline
+\end{tabular}
+\vspace{0.2in}	%<hn>
+
+	%<*chn>
+Octal
+can also be used and is easier to memorize because there are
+only 8 symbols (0-7). However, to fill
+a byte of memory requires 2.5 octal characters since each
+character only encodes 3 bits.  For example,
+	%<*>
+
+{\tt HEX 9A}  = Binary {\tt 1011010 } = Octal {\tt 132}
+
+(Hex: 4-bit groups.   Octal: 3-bit groups)
+
+
+
+\begin{itemize}
+  \item
+  Ordinary numbers are interpreted by the C compiler
+          as decimal values.   Example: {\tt 25 = 1101}
+
+  \item Hex values are indicated to the C compiler by the
+              prefix {\tt Ox} for example:   {\tt Ox2F}
+
+  \item Octal values are indicated by a leading zero: {\tt 028}
+            is a syntax error (why?).
+
+\end{itemize}
+
+
+
+%%%%** Section 1.2
+\subsection{Constant Syntax in C}
+
+It is very important to use symbolic constants ({\tt \#define}'s )
+for {\em all} your numeric constants.  Here are the
+main reasons:
+\begin{itemize}
+        \item Code is more readable by humans.
+        \item Code is much easier to change.
+\end{itemize}
+
+%%%%** Section 1.2.1 
+\subsubsection{Example and Exercise}
+	%<*n>
+{\small\tt
+\begin{verbatim}
+// Constants
+#define EXAMPLE_CONST_D  1234 ;  /* DECIMAL value  */
+#define EXAMPLE_CONST_H 0x4D2 ;  /* HEX value == dec: 1234 */
+#define EXAMPLE_CONST_O 02322  ; /* OCTAL value */
+
+int x = EXAMPLE_CONST_D;
+int y = EXAMPLE_CONST_H;
+int z = EXAMPLE_CONST_O;
+
+// test yourself here: (which of these print?)
+if (x == y) printf ("Hello there ... \n");  **YES**
+else {};
+
+if (y == 1234) printf ("What's up doc?? \n");  **YES**
+else {};
+
+if (z == 2322)  printf ("The Rain in Spain  ...\n");  **NO**
+else {};
+
+if (z = 2322)  printf ("Falls mainly on the plains.\n");   **YES**
+else {};
+
+\end{verbatim}
+}
+	%<*>
+
+
+
+
+%%%%** Section 1.2.2 
+\subsubsection{Example 2}
+Suppose you are going to control a CD-ROM drive and you want
+to open and close the drive door.  The bit to open and close
+the drawer is the 4th bit in a register located at address
+{\tt 0x2DA}.  Let's say that to set that bit we use the function
+\begin{verbatim}
+IO_Register_Set([addr],[value])
+\end{verbatim}
+where {\tt [addr]}
+is the bus address of the I/O register you want to manipulate
+and {\tt [value]} is the bit pattern you want to put there.
+
+It is ``technically'' correct to use the following code:
+\begin{verbatim}
+\\ open CD-ROM door
+IO_Register_Set(0x2DA, 0x10) ;
+\end{verbatim}
+
+
+
+	%<*cnh>
+However, if we come back to that code later (1 week or 10 years)
+we will not know what that statement does (or if the comment is
+correct) without a lot of research.  Instead we use defines
+for much better code as follows:
+	%<*>
+\begin{verbatim}
+
+\\ (this part is in the preamble before "main ()"
+\\  or in a special ".h" include file
+#define  CD_ROM_CONTROL_REG  0x2DA
+#define  CD_ROM_DOOR_OPEN    0x010
+
+\\ .... skip to inside the code
+
+\\ open CD-ROM door
+IO_Register_Set(CD_ROM_CONTROL_REG, CD_ROM_DOOR_OPEN) ;
+
+\end{verbatim}
+
+Now, isn't that better?!!
+It is a requirement of EE474 that
+your code be written this way.
+We will take off points for
+any numberical constants in the main body of code.
+
+
+%%%%** Section 2 
+\section{Bitwise vs. Logical Operators}
+
+The familiar Boolean
+operations {\tt\bf AND}, {\tt\bf OR}  and  {\tt\bf NOT}
+are provided {\em two ways} in C.
+
+
+%%%%** Section 2.1
+\subsection{Logical Operators}
+
+These work on {\em arithmetic } types or pointers.
+
+\begin{tabular}{l p{1.5in} }
+
+{\tt\bf True}           & a non zero value. \\
+
+{\tt\bf False}          & zero.           \\
+
+{\tt\bf \&\&}           & {\tt\bf AND}     \\
+
+{\tt A \&\& B }         & True if {\it both} {\tt A} and {\tt B} are non-zero. \\
+
+{\tt ||}                &  {\tt\bf OR} \\
+
+{\tt A || B }           &  True if {\it either} {\tt A} and {\tt B} are non-zero.\\
+
+{\tt ! }                &   {\tt\bf NOT} \\
+
+\end{tabular}
+
+
+
+%%%%** Section 2.2
+\subsection{Bitwise Operators}
+
+A very important C feature for embedded microcomputer systems.
+These operators are only defined for integer-like variables i.e.
+{\tt char, short, int, and long} signed or unsigned.
+
+
+\begin{tabular}{l l}
+\&                      &       bitwise AND \\
+\textbar                &       bitwise OR   \\
+\textasciicircum        &       bitwise XOR  \\
+\textless\textless      &       left shift   \\
+\textgreater\textgreater&       right shift    \\
+\textasciitilde         &       ones complement \\
+
+\end{tabular}
+
+
+
+%%%%** Section 2.3
+\subsection{Examples:}
+
+{\tt
+\begin{verbatim}
+
+/* Use of bitwise logical operators  */
+
+#define  Bit_Zero   0x01
+#define  Bit_One    0x02
+#define  Bit_Two    0x04
+#define  Bit_Three  0x08
+#define  Bit_Four   0x10
+#define  Bit_Five   0x20
+#define  Bit_Six    0x40
+
+// etc etc etc ..
+
+
+int x = 0x0B;           // x  = [... 0 0 0 0 1 0 1 1]
+
+int y = 011;            // y  = [... 0 0 0 0 1 0 0 1]
+
+int z = x << 2;         // z  = [... 0 0 1 0 1 1 0 0]
+
+int z1 = y & Bit_Three; // z1 = [... 0 0 0 0 1 0 0 0]
+
+int z2 = z | Bit_Four;  // z2 = [... 0 0 1 1 1 1 0 0]
+
+\end{verbatim}
+}
+
+
+
+\newpage	%<!s>
+%%%%** Section 3 
+\section{In-class Exercise:}
+
+	%<*n>
+\begin{verbatim}
+
+Convert 0x1A to decimal: __26_
+
+
+Convert 0xA2 to decimal:  __162____
+
+
+Convert 020 to Hex:    _____10_______
+
+
+Convert 0x20 to Octal: _____40_________
+
+\end{verbatim}
+
+{\tt
+\begin{verbatim}
+/* Give the binary value of the least significant
+8 bits of the following values:   */
+
+int aa = 0xC5;     // aa = [  1 1 0 0 0 1 0 1  ]
+
+int ab = 017 + 1;  // ab = [  0 0 0 1 0 0 0 0  ]
+
+int a = x | y;     // a  = [  0 0 0 0 1 0 1 1  ]
+
+int b = Bit_Two | Bit_Five | Bit_Seven;
+                   // b  = [  1 0 1 0 0 1 0 0  ]
+
+int c = ~((z | Bit_Zero) << 1);
+                   // c  = [  1 0 1 0 0 1 0 1 ]
+
+int d = !(z1 | Bit_Two);
+                   // d  = [  0 0 0 0 0 0 0 0 ]
+\end{verbatim}
+}
+
+	%<*>
+\newpage	%<!s>
+%%%%** Section 4 
+\section{Binary Integers}
+
+%%%%** Section 4.1
+\subsection{Unsigned Integer}
+
+Typically just a
+16 bit binary number.  Straightforward, but cannot represent
+negative numbers.
+
+If {\tt x } is of type {\tt unsigned int}, then
+\[
+0 \leq {\mathtt x} \leq 65535
+\]
+
+
+
+C declaration of unsigned integers:
+
+\begin{verbatim}
+unsigned char a,b;            // 8 bit unsigned
+unsigned int  x,y,z;          // 16 bit unsigned
+unsigned long int p,q,r;      // 32 bit unsigned
+\end{verbatim}
+
+
+
+
+%%%%** Section 4.1.1 
+\subsubsection{Exercise}
+
+Write a C function using bitwise logical operators etc. to print
+the binary value of a 16 bit word.
+
+\vspace{4in}	%<cn>
+
+
+	%<*sn>
+\begin{verbatim}
+void bin_display(unsigned int x)
+{
+        unsigned int i,j;
+        for(i=0;i<16;i++)
+        {
+                j = 1<<(15-i);
+                if(j & x) printf("1");
+                else      printf("0");
+        }
+}
+
+\end{verbatim}	%<sn>
+
+
+	%<*>
+%%%%** Section 4.2
+\subsection{2's Complement Integers}
+	%<*chn>
+Most common way to represent integers which can have both positive and negative
+values.   Most significant bit (MSB) is the ``sign bit'' 0=positive, 1=negative.
+however, if MSB is 1, other bits are subject to ``2's complement''.
+	%<*>
+
+To convert a number to or from two's complement,
+\begin{enumerate}
+  \item complement all bits
+  \item add 1
+\end{enumerate}
+Taking the 2's complement of the entire $n$ bits is equivalent to negation.
+
+For an $n$ bit number, $x$,  the range of all possible integers in 2's complement is
+\[
+-2^{n-1} \leq x \leq (2^{n-1}-1)
+\]
+(see Lewis Figure 2-4, page 22 for a useful chart).
+
+
+%%%%** Section 4.2.1 
+\subsubsection{Exercise}
+
+Write a c code fragment which negates a signed (2's complement) integer
+using bitwise logical operators and addition.  Include declarations for
+your variables.
+(do not just multiply by -1)
+
+
+
+	%<*sn>
+\begin{verbatim}
+
+[blake@alec code]$ cat twocomp.c
+/* twocomp.c
+ *
+ *  Demonstrate 2's complement
+ *
+ */
+void bin_display(unsigned int x);
+main(argc,argv)
+int argc;
+char *argv;
+{
+        int  a = -23;
+        int  b;
+        int i,j;
+        printf(" Decimal: %d \n    Binary:     ", a);
+        b = a;
+        bin_display((unsigned int)b);
+        printf("\n    Complement: ");
+        b =   ~a;     // complement all bits
+        bin_display((unsigned int)b);
+        printf("\n1 + Complement: ");
+        b = 1 + ~a;     // complement all bits and add 1
+        bin_display((unsigned int)b);
+        printf("\n Compare: %d %d\n", a, -b);   // should be the same
+}
+
+
+\end{verbatim}
+%%%%** Section 4.3
+\subsection{Test Run}
+\begin{verbatim}
+
+[blake@alec code]$ ./twocomp
+ Decimal: -23
+    Binary:     1111111111101001
+    Complement: 0000000000010110
+1 + Complement: 0000000000010111
+ Compare: -23 -23
+[blake@alec code]$
+
+\end{verbatim}
+
+\end{document}	%<shn>
+

@@ -1,0 +1,123 @@
+%% Default Latex document template
+%%
+%%  blake@rcs.ee.washington.edu
+
+\documentclass[letterpaper]{book}
+
+% Uncomment for bibliog.
+%\bibliographystyle{unsrt}
+
+\usepackage{graphicx}
+\usepackage{lineno}
+\usepackage{listings}
+\usepackage{hyperref}
+%\usepackage{fancyhdr}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%
+%  Set Up Margins
+\input{templates/pagedim.tex}
+
+%
+%        Font selection
+%
+%\renewcommand{\rmdefault}{ptm}             % Times
+%\renewcommand{\rmdefault}{phv}             % Helvetica
+%\renewcommand{\rmdefault}{pcr}             % Courier
+%\renewcommand{\rmdefault}{pbk}             % Bookman
+%\renewcommand{\rmdefault}{pag}             % Avant Garde
+%\renewcommand{\rmdefault}{ppl}             % Palatino
+%\renewcommand{\rmdefault}{pch}             % Charter
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%         Page format Mods HERE
+%
+%Mod's to page size for this document
+\addtolength\textwidth{0cm}
+\addtolength\oddsidemargin{0cm}
+\addtolength\headsep{0cm}
+\addtolength\textheight{0cm}
+%\linespread{0.894}   % 0.894 = 6 lines per inch, 1 = "single",  1.6 = "double"
+
+% header options for fancyhdr
+
+%\pagestyle{fancy}
+%\lhead{LEFT HEADER}
+%\chead{CENTER HEADER}
+%\rhead{RIGHT HEADER}
+%\lfoot{Hannaford, U. of Washington}
+%\rfoot{\today}
+%\cfoot{\thepage}
+
+
+
+% Make table rows deeper
+%\renewcommand\arraystretch{2.0}% Vertical Row size, 1.0 is for standard spacing)
+
+\begin{document}
+
+\title{--- ECE474 Notes Pack Spring 2026 ---}
+
+\author{
+        Blake Hannaford\\
+        Department of Electrical \& Computer Engineering \\
+        The University of Washington
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  This uses the 'c' output stream from our SHN documents
+%  Build this notes pack as follows:
+%
+%  1) run ./gen_tex_files to generate all the *.c.tex files
+%     below
+%  2) pdflatex (this file)
+%
+%  The command used by ./gen_tex_files is 
+%    >coursetex --out c file.shn
+%
+
+\date{\today}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Introduction}
+    \input{474_IntroW22.c.tex}
+\chapter{C Program Structure}
+    \input{Cprog.c.tex}
+\chapter{Pointers}
+    \input{Pointers.c.tex}
+\chapter{Constants and Defines in C}
+    \input{ConstDef.c.tex}
+\chapter{Tasks and Schedulers}
+    \input{Schedulers.c.tex}
+\chapter{Scheduler Implementation}
+    \input{SchedImplementation.c.tex}
+\chapter{Embedded System Hardware and I/O}
+    \input{Hardware_IO.c.tex}
+\chapter{Interrupts}
+    \input{Interrupts.c.tex}
+\chapter{Serial Communication}
+    \input{Serial.c.tex}
+% \chapter{TCP/IP and Socket Communciation}
+%     \input{Tcpip.c.tex}
+\chapter{Introduction to Secure Communication}
+%     \input{Secure.c.tex}
+\chapter{$\mu$/C-OS-II Real Time Operating System}
+    \input{MicroCos.c.tex}
+\chapter{FreeRTOS Real Time Operating System}
+%      \input{FreeRTOS.c.tex}
+\chapter{Concurrency Problems, Critical Sections, and Threads}
+    \input{CritSect.c.tex}
+\chapter{USB}
+    \input{USB.c.tex}
+\end{document}
+
+%  Use name of bibliography files without .bib extension
+%\bibliography{brl}
+\end{document}
+

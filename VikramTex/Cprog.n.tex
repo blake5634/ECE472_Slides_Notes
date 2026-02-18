@@ -1,0 +1,254 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%           EE474 Intro to C Programming
+   % combined into notes pack	%<stream, c>
+
+\documentclass{article}	%<nh>
+
+\usepackage{graphicx}	%<shn>
+\usepackage{hyperref}	%<shn>
+\usepackage{listings}	%<shn>
+
+	%<*hn>
+\oddsidemargin 0in
+\evensidemargin 0in
+\textwidth 6.5in
+\textheight 8.7in
+\topmargin 0.2in
+
+
+	%<*shn>
+\linespread{1.0}
+
+\begin{document}
+
+
+	%<*>
+
+	%<*shnc>
+\begin{center}
+{\Large Structure and Compilation of C-Programs}
+\end{center}
+	%<*>
+
+
+%%%%** Section 1 
+\section{C Programs in Multiple Files}
+
+A C program is typically written in multiple files.
+
+Simpler editing (?)
+
+Helps modularity and multiple authors.
+
+    
+File: \framebox{main.c}
+\lstset{language=c}
+\lstset{basicstyle=\ttfamily, commentstyle=\textit}
+\begin{lstlisting}[frame=trbl]{}
+main()
+  {
+   ... code  ...
+  }
+
+fcn1()
+  {
+  ... code ...
+  }
+\end{lstlisting}
+
+
+File: \framebox{functions.c}
+
+\lstset{language=c}
+\lstset{basicstyle=\ttfamily, commentstyle=\textit}
+\begin{lstlisting}[frame=trbl]{}
+fnc2()
+  {
+   ... code  ...
+  }
+
+fcn3()
+  {
+  ... code ...
+  }
+
+... etc ...
+\end{lstlisting}
+
+
+
+Execution starts with first line of {\tt main() }.
+
+All functions (except {\tt main()}) require a {\bf function prototype}
+in any file in which they will be called or defined. 
+
+All functions are visible from any file (but prototype must be supplied in the file).
+
+%%%%** Section 2 
+\section{Include Files (.h files)}
+Text can be read in to your C-Source file just prior to compilation. 
+
+File: \framebox{A.c}
+
+\lstset{language=c}
+\lstset{basicstyle=\ttfamily, commentstyle=\textit}
+\begin{lstlisting}[frame=trbl]{}
+#include X.h
+main()
+  {
+   ... code  ...
+  }
+ 
+\end{lstlisting}
+File: \framebox{X.h}
+
+\lstset{language=c}
+\lstset{basicstyle=\ttfamily, commentstyle=\textit}
+\begin{lstlisting}[frame=trbl]{}
+/*
+ hello, this is just a comment
+*/
+\end{lstlisting}
+
+output:
+
+\lstset{language=c}
+\lstset{basicstyle=\ttfamily, commentstyle=\textit}
+\begin{lstlisting}[frame=trbl]{}
+/*
+ hello, this is just a comment
+*/
+main()
+  {
+   ... code  ...
+  }
+ 
+\end{lstlisting}
+
+
+
+Reasons:
+\begin{itemize}
+	\item {\tt \#include} text which should be {\bf the same} in multiple ``.c" files. 
+	\item keep and edit just 1 copy.
+	\item less typing and ensures consistency.
+\end{itemize}
+
+
+    \includegraphics[width=4.5in]{cprog_figs/includes_multi_protos.png}
+    
+    A single {\tt .h} file introduces the exact same function prototypes
+    and data declarations into multiple files without having to maintain 
+    separate identical copies in multiple files. 
+    
+
+%%%%** Section 3 
+\section{Other C pre-processor functions}
+
+%%%%** Section 3.1
+\subsection{{\tt\#define }}
+
+like the search-replace function in your word processor.
+
+ex:	%<!s>
+
+{\tt \#define  TRUE  1}
+
+c pre-processor will replace all occurrences of {\tt TRUE} with {\tt 1}.
+
+
+
+%%%%** Section 3.2
+\subsection{\tt\#ifdef / \#endif}
+
+C pre-processor can turn on-off  blocks of code before compilation.
+
+ex:	%<!s>
+
+\lstset{language=c}
+\lstset{basicstyle=\ttfamily, commentstyle=\textit}
+\begin{lstlisting}[]{}
+#define LINUX 1
+//#define WINDOWS 1
+
+...
+
+#ifdef WINDOWS
+     ... windows-specific code ...
+#endif 
+
+#ifdef LINUX
+     ... linux-specific code ...
+#endif 
+\end{lstlisting}
+
+
+
+%%%%** Section 3.3
+\subsection{C pre-processor overview}
+
+\includegraphics[width=5.5in]{cprog_figs/c-building.png}	%<chn>
+    
+	%<*>
+
+The C pre-processor applies some convenience features to your code before 
+compilation.  Specifically, the {\tt \#ifdef} macro can turn on and off C-code
+until {\tt \#endif} is encountered.   You might use this to define a constant only 
+if it has not already been defined by some earlier statements in a {\tt \#include}'d .h file.  If {\tt \#includes} were processed before the {\tt \#ifdef}, their statements
+are taken into account when evaluating {\tt \#ifdef}.
+Code from files indicated in {\tt \#include} statements (typically {\tt .h } files) is merged into your code.  Finally, all {\tt \#defines} are evaluated and the 
+substitutions are made in your code.   Most likely, you will not need to worry about
+these complexities unless you are working on very big packages of code.   For 
+ECE474, you {\bf  probably} do not need {\tt \#ifdef}s at all. 
+
+	%<*>
+%%%%** Section 4 
+\section{Building a C program}
+For each ``.c" file:
+\begin{enumerate}
+	\item Run C pre-processor on the ``.c" file
+	\item Compile output into ``object" file.
+	\begin{itemize}
+		\item Incomplete machine language program
+		\item ``.o" file for each ``.c" file
+	\end{itemize}
+
+\end{enumerate}
+
+{\bf Then: } ``Link" all ``.o" files, and library files,
+	to create ``executable" binary file. 
+%%%%** Section 5 
+\section{Variable Scope}
+
+\begin{itemize}
+	\item Variable declared  inside a function is {\it local}.
+	\item Variable declared outside a function is visible anywhere 
+inside that ``.c" file.
+	\item Variable declared outside a function can also be visible in 
+other ``.c" files --- if {\tt extern} is used.
+	\item Variables declared with prefix {\tt extern} must be declared
+outside a function in {\it another } ``.c" file.
+\end{itemize}
+
+
+%%%%** Section 6 
+\section{Function Scope}
+\begin{itemize}
+
+\item
+Functions cannot be used without a function prototype.
+
+\item
+Each ``.c" file must have a function prototype for each function which is used
+in that ``.c" file. 
+
+\item
+{\tt \#include } can help manage your function prototypes. 
+
+\end{itemize}
+
+\end{document}	%<shn>
+
+
+

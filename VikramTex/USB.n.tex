@@ -1,0 +1,534 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%           EE474 Hardware and Basic I/O
+%
+   % combined into notes pack	%<stream, c>
+
+\documentclass{article}	%<nh>
+
+\usepackage{graphicx}	%<shn>
+\usepackage{hyperref}	%<shn>
+\usepackage{listings}	%<shn>
+
+	%<*hn>
+\oddsidemargin 0in
+\evensidemargin 0in
+\textwidth 6.5in
+\textheight 8.7in
+\topmargin 0.2in
+
+
+\linespread{1.0}     % 1.0 = single space   1.6 = double space
+
+	%<*shn>
+
+\title{EE 474:  Introduction to USB 1.1}
+
+\author{     Blake Hannaford\\
+        Department of Electrical Engineering \\
+        The University of Washington
+}
+
+\date{\today}
+
+
+\begin{document}	%<shn>
+
+\maketitle
+
+	%<*cshn>
+Source:  Official USB 1.1 Specification. 
+{\tt http://www.usb.org}, Wikipedia 
+
+
+%%%%** Section 1 
+\section{USB Overview}
+%%%%** Section 1.1
+\subsection{Goals}
+\begin{itemize}
+        \item Ease of Use (for consumer)
+        \item Low cost
+        \item up to 12Mb/sec
+        \item support real-time data / multimedia
+        \item flexibility for different devices/needs
+        \item Compatible with laptop \& desktop
+        \item Highly standardized for easy adoption
+        by industry
+\end{itemize}
+
+%%%%** Section 1.2
+\subsection{Applications}
+(as anticipated in 1996)
+
+{\bf Low Speed: 1.5 Mbit/s} Keyboard, mouse, stylus, game peripherals.
+
+{\bf Full Speed: 12Mbit/s} Phone/Audio.
+
+{\bf NOT: } High Speed: Video, Disk Drive
+
+%<s>\end{slide}
+%<s>\begin{slide}
+%%%%** Section 1.3
+\subsection{Architecture}
+ 
+	%<*chn>
+\begin{center}
+   \includegraphics[width=4in]{usb_figs/00076.eps}
+\end{center}
+
+	%<*>
+(Figure 4-1, page 16)
+
+``Function'' --- a USB peripheral device\\
+A function can have one or more ``endpoints''
+
+
+``Hub'' --- a node that can join USB wires
+
+
+``Compound Device'' --- a HUB and one or more
+Functions in a single package.
+
+%<s>\end{slide}
+%<s>\begin{slide}
+\subsection*{Compound Device}
+%<hn>\scalebox{0.15} {
+%<s>\scalebox{0.45} { 
+\begin{center}
+   \includegraphics[height=3.5in]{usb_figs/00077.eps} \\	%<chn>
+(Figure 4-4, page 23)
+\end{center}
+
+%%%%** Section 2 
+\section{Bus Protocol}
+Low speed: 1.5Mb / sec
+
+Full speed: 12.5 Mb/sec (8x faster)
+
+(we'll ignore low speed mode ...)
+%%%%** Section 2.1
+\subsection{Frames and Polling}
+Time is divided into 1ms ``Frames''.
+Each frame time the Host transmits a ``Start of Frame"
+(SOF)  packet.
+
+%%%%** Section 2.1.1 
+\subsubsection{SOF packet structure}
+
+\begin{tabular}{|c|c|c|c|}
+\hline
+SYNC  & PID & Frame Number (11bits) & CRC (5bits) \\
+\hline
+\end{tabular}
+
+Frame Number rolls over.
+
+%%%%** Section 2.1.2 
+\subsubsection{PID}
+{\bf ALL} packets have a packet ID (PID)
+
+
+\begin{tabular}{|c|c| }
+\hline
+PID (4 bits) & $\overline{\mathrm {PID}}$ (4 bits)\\
+\hline
+\end{tabular}
+
+
+The 4-bit PID is repeated, complemented, inside the PID
+byte for error detection.
+
+32 PID values including: \hspace{0.25in}
+\begin{tabular}{|c|c|}
+\hline
+Type	& Code \\ \hline
+ACK	& 0010 \\ \hline
+NAK	& 1010 \\ \hline
+IN	& 1001 \\ \hline
+OUT	& 0001 \\ \hline
+SOF	& 0101 \\ \hline
+DATA0	& 0011 \\ \hline
+DATA1	& 1011 \\ \hline
+\end{tabular}
+
+{\tt TOKEN} packets are for {\tt SOF}, polling,  and pipe control
+
+%%%%** Section 2.1.3 
+\subsubsection{Polling Sequence}
+
+\begin{enumerate}
+     \item Host sends ``token packet''  \\
+     \begin{tabular}{|c|c|c|c|}
+       \hline
+        PID  &  ADDR (7 bits)  & Endpoint (4 bits) & CRC (5 bits)\\
+       \hline
+     \end{tabular}
+
+     PID: {\tt OUT (0001)} = host asks endpoint to receive data.\\
+     {\tt IN (1001)} = host asks endpoint to send data.
+
+     \item source sends data packet to destination\\
+     \begin{tabular}{|c|c|c|}
+       \hline
+        PID  & DATA (0-1023 bytes)  &  CRC (16 bits)\\
+       \hline
+     \end{tabular}
+
+
+     \item destination sends handshake packet (ACK/NAK) \\
+    \begin{tabular}{|c|}
+       \hline
+        PID  \\
+       \hline
+     \end{tabular}
+
+\end{enumerate}
+
+There can be many transactions in each frame.   10\%
+of each frame is reserved for Control packets.
+
+%%%%** Section 2.2
+\subsection{Pipes}
+Connections are called ``pipes''.  Attributes of pipes:
+\begin{itemize}
+     \item bandwidth
+     \item data flow  type
+     \item endpoint characteristics (direction, buffer
+     size).
+\end{itemize}
+
+Pipes are established when a device is plugged in and (auto)
+configured.
+
+``Default Control Pipe" always exists for each device to
+set and query status and control of device.
+
+%%%%** Section 2.3
+\subsection{Data Flow Types}
+Each pipe can be one of the following types
+\begin{enumerate}
+        \item Control Transfer. configure the device when
+        it is attached.  Other control functions.
+        \item Bulk Data Transfer. non-realtime transfer
+        of big file.  Example: Printer
+        \item Interrupt Data Transfer.  Small data amounts
+        with short latency requirements. Example: Mouse
+        \item Isochronous Data Transfer. Fixed (negotiated)
+        bandwidth amount with constant latency. Example:
+        Audio.
+\end{enumerate}
+
+%%%%** Section 2.3.1 
+\subsubsection{Characteristics of Data Flow Types}
+\begin{enumerate}
+	\item Packet format
+	\item Direction of flow
+	\item Packet size (or size ranges)
+	\item Bus Access constraints
+	\item Latency Constraints
+	\item Error Handling
+\end{enumerate}
+
+%%%%** Section 2.3.2 
+\subsubsection{Control Transfer}
+10\% of the bus bandwidth is reserved for control transfers.
+
+%%%%** Section 2.3.3 
+\subsubsection{Bulk}
+Low priority in the sense that Interrupt and Isochronus
+get the bandwidth first, Bulk gets what is left.
+
+No data format requirement.
+
+Max packet size is 8, 16, 32, or 64 bytes.
+
+Packet Overhead 
+
+\begin{tabular}{|c|c|c|c| }
+\hline
+SYNC (3)  & PID (3) & Endpoint & CRC (3)   \\
+\hline
+\end{tabular}
+
+Counts () indicate total for three transactions:
+
+\begin{enumerate}
+	\item Poll (host to function)
+	\item Data (either direction) \\
+	
+\begin{tabular}{|c|c|c|c|}
+\hline
+SYNC    & PID   & Data & CRC (2)   \\
+\hline
+\end{tabular}
+
+	\item {\tt ACK/NAK}
+\end{enumerate}
+
+Total overhead, 13 bytes packet header, 3 byte delay between
+packets.
+
+Access granted as bandwidth is available.
+
+If errors are detected, transfers are re-tried.
+
+Guaranteed data delivery. No bandwidth or latency guarantee.
+
+Transfer completion is detected when endpoint: \\
+\hspace{0.5in}Has sent all bytes expected \\
+\hspace{0.5in}Sends a packet with less than max payload size.
+
+%%%%** Section 2.3.4 
+\subsubsection{Interrupt}
+typically keystrokes and mouse movements.
+
+Endpoints specify max packet size when configured.
+
+Negotiated based on min(source,dest,bus avail).
+
+Max packet size 64 bytes, max 108 transactions per frame.
+
+A mouse typically sends packets only when moved by user.
+Each packet consists of a sync byte, and one byte each
+for $\Delta$X, $\Delta$Y, and button/wheel status.
+
+%%%%** Section 2.3.5 
+\subsubsection{Isochronus}
+
+Periodic bursts of data at a pre-set rate.   Host
+makes sure bus is available (quiet) at scheduled
+times for this transfer.
+
+Endpoint specifies packet size when it is configured.
+
+Packet overhead:
+
+\begin{tabular}{|c|c|c|c| }
+\hline
+SYNC (2)  & PID (2) & Endpoint & CRC (3)   \\
+\hline
+\end{tabular}
+
+Total overhead, 8 bytes packet header, 1 byte delay between
+packets.
+
+No {\it length} field in header but length can vary(!)
+
+Payload is up to 1023 bytes.  max 150 1-byte transfers
+per frame.
+
+1 packet per frame per endpoint.
+
+Because latency must be maintained low, there is
+no time for {\tt ACK/NAK} and re-transmission.
+
+Hardware error rate is expected to be very low.
+But 0 error rate is not expected in this mode.
+
+%%%%** Section 2.4
+\subsection{Devices}
+
+Devices are divided into classes (similar to C++ idea).
+
+Devices must be able to {\it report} info on their identity
+and configuration.
+
+\begin{itemize}
+        \item Standard Info: All USB devices:
+        vendor ID, Class, Pwr Mgt., endpoints.
+
+        USB Control and status info.
+
+        \item Class Info: same for all devices of
+        the same class.  Example: Specific info for
+        keyboards.
+
+        \item Vendor: Proprietary info for the
+        device vendor.  Example: Firmware revision
+        number.
+
+\end{itemize}
+Devices must support endpoint 0 for Default Control Pipe.
+
+
+
+%%%%** Section 2.5
+\subsection{Speed}
+\begin{tabular}{|l|c|c|r|}
+\hline
+Type	&  Payload Size	& Frame Utilization & Max bytes/sec \\ \hline
+\hline
+Bulk	&  16		& 2\%		    & 816,000	    \\ \hline
+Bulk	&  64		& 5\%		    & 1,216,000    \\ \hline
+Interrupt & 4		& 1\%		    & 352,000    \\ \hline
+Isochronus & 16		& 2\%		    & 960,000    \\ \hline
+Isochronus & 512	& 35\%		    & 1,024,000 \\ \hline
+
+\end{tabular}
+
+{\bf Notes:}
+
+ 1,000,000 bytes / sec = 8 MBaud(!)
+
+ Isochronus --- only 1 transfer per frame.  BW above shows {\it total }
+ for ALL Isochronus connections.
+
+
+
+%%%%** Section 3 
+\section{Electrical}
+Four wires:
+\begin{enumerate}
+        \item V{\sc BUS} \\
+        +5V DC power.  May power devices.
+        \item D+  Data line 1
+        \item D-  Data line 2
+        \item GND
+\end{enumerate}
+Software support for power management (suspend/resume)
+
+%%%%** Section 3.1
+\subsection{Robustness}
+
+\begin{itemize}
+        \item differential line drivers and shielding
+        \item CRC protection of all parts of packet.
+        (1 and 2 bit errors 100\% detected).
+        \item timeouts for lost packets --- self recovery
+        \item Flow control for low priority streams
+        prevents buffer overflow/underflow.
+\end{itemize}
+
+%%%%** Section 3.2
+\subsection{Attachment}
+
+Devices can be plugged in to hub at any time. Hub
+has status bits which let host know which ports have
+devices plugged in.
+
+\begin{itemize}
+        \item host queries hub
+        \item hub reports status bits
+        \item if host detects a new device, it
+        \item assigns a unique USB address to the new
+        port.
+        \item sends a control packet to enable the port.
+        \item if the new device is a hub, repeat process
+        for new hub.
+        \item if new device is a function, notify software
+        driver on host that a new instance of this function
+        has been attached to the bus.
+\end{itemize}
+
+
+
+%%%%** Section 3.3
+\subsection{Voltage Levels and Rise Times:}
+	%<*chn>
+\begin{center}
+   \includegraphics[height=2in]{usb_figs/00078.eps}   \\
+(Figure 7-1, page 107)
+\end{center}
+
+
+%<s>\vspace{-2in}
+
+
+
+
+	%<*>
+Driver Low, V{\sc ol},  must be $<$ 0.3v (1.5k$\Omega$ to 3.6V)
+
+Driver High, V{\sc oh}, must be $>$ 2.8v (15k$\Omega$ to 0V)
+
+Receiver High, V{\sc ih}, $>$ 2.0V must be detected as High
+
+Receiver Low, V{\sc il}, $<$ 0.8V must be detected as Low
+
+Worst case inputs: [-1.0V --- +4.6V]
+
+90$\Omega$ characteristic impedance (high speed)
+
+%%%%** Section 3.4
+\subsection{Differential Drive} 
+\scalebox{0.15}{	%<chn>
+    \includegraphics{usb_figs/00079.eps}
+   }
+
+(Fig 7-2 page 108)
+
+D+ and D- usually signal by their {\it difference}
+
+This eliminates common mode noise
+
+{\tt OE} enables the output drivers.
+
+%%%%** Section 3.5
+\subsection{Signaling Levels (high speed)}
+
+Differential ``1'':  (D+ $-$ D-) $>$ 200mV
+
+Differential ``0'':  (D- $-$ D+) $>$ 200mV
+
+Idle: Differential ``1''
+
+Start of Packet (SOP):  Idle $\to$ Differential ``0''
+
+(``J" and ``K" states (!))
+
+Reset:   D+ and D- $<$ 0.8V for $>=$ 10 ms.
+
+%%%%** Section 4 
+\section{Modulation and Channel Coding}
+%%%%** Section 4.1
+\subsection{NRZI}
+
+Non Return to Zero:
+
+Logic zero is sent by toggling
+
+Logic one is sent by not toggling
+
+{\tt Data} $\to$ {\tt NRZI Signal }
+
+{\tt
+00000000 $\to$  01010101
+
+11111111 $\to$  11111111
+}
+
+%%%%** Section 4.2
+\subsection{Bit Stuffing}
+
+Packets don't have as many start and stop bits as RS-232
+
+Receiver needs to see 1$\to$0 or 0$\to$1 transitions at
+least every seven bits.
+
+Bit-stuffing inserts a zero whenever there are 6 ones
+in a row.
+
+{\tt
+11111111 $\to$  111111011
+}
+
+Now the receiver sees at least a few transitions for {\it any}
+data stream and so it can keep its clock phase locked.
+
+Receiver hardware automatically removes stuffed bits.
+
+%%%%** Section 4.3
+\subsection{Update: USB 2.0 }
+
+Released April 2000.
+
+Logically the same as 1.1, backwards compatible.
+
+Provides additional speed mode:  {\bf Hi-Speed}  480 Mbit/s
+
+Caution: if a device is labeled ``Full Speed USB 2.0" you are really getting USB 1.1 (!)
+
+Only ``High Speed" or ``480 Mbit/s" is a ``real" USB 2.0 device.
+
+
+\end{document}	%<shn>

@@ -1,0 +1,519 @@
+<nh>\documentclass{article}
+<s>\documentclass{seminar}
+<*nhs>
+\usepackage{graphicx}
+\usepackage{graphpap}
+
+<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 472 \hfil \thepage}{Hannaford \hfil \today}
+<s>\pagestyle{headings}
+<s>\slidepagestyle{BHstyle}
+<s>\addtolength\oddsidemargin{3cm}
+
+\title{Schedulers}
+
+
+<*hn>
+\usepackage{fancyhdr}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%
+%  Set Up Margins
+\input{/users/home1/blake/templates/pagedim.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%         Page format Mods HERE
+%
+%Mod's to page size for this document
+\addtolength\textwidth{0cm}
+\addtolength\oddsidemargin{0cm}
+\addtolength\headsep{0cm}
+\addtolength\textheight{0cm}
+%\linespread{0.894}   % 0.894 = 6 lines per inch, 1 = "single",  1.6 = "double"
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER / FOOTER
+\pagestyle{fancy}
+%%%%%  Page header/footer fields for "NSF Style" proposal
+%%%%%  \chead will be changed with each section
+\lhead{\small\sc EE472}
+\rhead{}
+<cshn>\chead{\large\bf Schedulers}
+\lfoot{Hannaford, U. of Washington}
+\rfoot{\today}
+\cfoot{\thepage}
+%\renewcommand\headrulewidth{1pt}
+%\renewcommand\footrulewidth{1pt}
+
+
+\linespread{1.0}
+
+<*>
+\begin{document}
+<s>\begin{slide}
+
+<!s>\maketitle
+\section{RTOS Types}
+
+\subsection{Soft vs. Hard Real Time}
+
+{\bf Real Time:} A computer system which must meet
+deadlines in time.
+
+{\bf Soft Real Time:} If the deadlines are not met,
+performance is considered low.
+
+{\bf Hard Real Time:} If the deadlines are not met,
+the system has failed.
+
+{\bf Super Hard Real Time:} Task length comparable to
+clock tick interrupts.
+
+Time is measured by a real time clock:
+<hn>We use the terms
+
+``Time Quanta'' ``Time Slice''  ``Ticks''
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\subsection{RTOS Types}
+
+{\tt
+\begin{tabular}{|l|c|c|c|}
+\hline
+Type            & Dur. (ticks)      & Task D.L.     & Scheduling \\ \hline
+``Super HRT''   &  $\ll 1$          & 1             & Trivial    \\ \hline
+``Hard RT''     &  1-5              & 10-20         & Complex    \\ \hline
+``Soft RT''     & 10-20             & $\sim 100$    & Complex    \\ \hline
+Non RT          &   X               & X             & Trivial    \\ \hline
+
+\end{tabular}
+}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\subsection{Scheduling}
+
+
+At each opportunity, OS asks:
+If $N$ tasks are ready, which one should I run?
+
+
+Scheduler Types:
+<hn>\begin{itemize}
+
+<hn>        \item
+Infinite Loop
+        \begin{itemize}
+                \item Most primitive of all
+                \item \begin{verbatim}
+while(1)
+{
+task1_fcn();
+task2_fcn();
+task3_fcn();
+...
+}
+                \end{verbatim}
+                \item Each task {\bf must} voluntarily return to
+                scheduler quickly.
+                \item \begin{verbatim}
+taskN_fcn()
+{
+compute a little bit;
+return();
+}
+                \end{verbatim}
+        \end{itemize}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+<hn>        \item
+Synchronized While Loop
+        \begin{itemize}
+                \item the top of the loop waits on a hardware clock.
+                \item \begin{verbatim}
+while(1)
+{
+wait(clock_pulse);
+task1_fcn();
+task2_fcn();
+task3_fcn();
+...
+}
+                \end{verbatim}
+                \item Each task {\bf must} voluntarily return to
+                scheduler quickly, as above.
+        \end{itemize}
+
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+<hn>        \item
+Non-preemptive Round Robin
+        \begin{itemize}
+                \item like initial EE472 labs
+                \item Each task {\bf must} voluntarily return to
+                scheduler quickly.
+                \item \begin{verbatim}
+Task()
+{
+compute a little bit;
+return();
+}
+                \end{verbatim}
+        \end{itemize}
+
+<hn>\end{itemize}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\subsection{Schedulers and I/O}
+
+<*hn>
+Sometimes tasks in embedded systems do I/O by directly manipulating
+hardware. For example, a task may set some bits on a digital output
+port. More sophisticated devices such as  disk drives or network
+interfaces require complex driver
+software and importantly take significant time to respond to commands.
+This type of I/O is typically supported by an embedded operating system
+which handles all I/O requests through subroutine calls.  Since tasks
+using these devices will have to wait for them to respond, the scheduler
+is invoked after I/O requests.  If a task is waiting for I/O, the
+scheduler will not try to run it unless the I/O is complete.
+
+<*s>
+\begin{itemize}
+ \item I/O to devices like disk drives and network interfaces is complex
+ \item Requires driver software
+ \item Requires time
+ \item Operating System handles I/O with subroutine calls to driver SW.
+ \item After task ``A'' calls for I/O, scheduler runs another task.
+ \item Task ``A'' will not be started by scheduler until I/O is ready.
+\end{itemize}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+
+<*>
+\subsection*{Exercises}
+
+<*hn>
+In this part we will study in detail how tasks are selected to run by
+various schedulers.  We will see that the amount and timing of CPU
+access depends on both the nature of the tasks, and the scheduling
+algorithm.  Our tasks are functions like the task of the lab which are
+called by the scheduler.  When these functions {\tt return}, the
+scheduler starts again.
+<*>
+Tasks can do three possible things.
+\begin{itemize}
+        \item Run  - meaning compute in the CPU for a certain amount of
+time.
+        \item Ask the system for I/O
+
+        \item Return to scheduler.
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\subsubsection*{Diagramming Scheduler Operation}
+<*hn>
+To study scheduling, print out a ``Scheduler Diagramming Worksheet" from
+the EE472 web site. This chart plots time going down the page and CPU
+processes (tasks) accross the page. We can think of the horizontal axis
+as the memory space of the computer. We will put a shaded box in a
+square (or part of a square) when a certain task is running on the CPU.
+For example, when the scheduler is running, we would shade under the
+``OS'' column. We might also have three tasks labeled A, B, C. We would
+shade their columns when they are running. Rember, {\em only one column
+may be shaded in each row}.
+
+Assume that each line represents 333 $\mu$s.   Assume that there is
+a system clock which generates OS interrups every 1,000 $\mu$s.
+To indicate these, make a mark at the left edge of every third
+horizontal line.
+
+<*s>
+
+Use on-line PDF scheduler worksheet.
+
+Each Line = 333 $\mu$sec.
+
+Assume a system interrupt every 1,000 $\mu$sec.
+
+Mark interrupts at left edge of every third line.
+
+Each time scheduler runs it requires 100$\mu$sec.
+
+<s>\end{slide}
+<s>\begin{slide}
+
+
+Diagram the flow of control between the OS and the three tasks:
+
+\begin{itemize}
+\item The three tasks are labeled A, B, C
+\item When priorities are used, they are such that B $>$ A $>$ C.
+\item The nature of the three tasks is as follows:
+    \begin{description}
+      \item [A]  Run for 2ms and then call the OS to do I/O which
+      lasts for 1.667 ms.  Return to Scheduler.
+      \item [B]  run for 1.333ms,  Return to Scheduler.
+      \item [C]  Run forever.
+    \end{description}
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+Four exercises: Diagram the tasks A,B,C as described above
+for these policies:
+\begin{enumerate}
+\item Non-synchronized, non-priority-based Round Robin
+\item Synchronized, non-priority-based Round Robin
+\end{enumerate}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\subsection{Dynamic Scheduling}
+
+<*hn>
+Sometimes it is desireable to make a task stop and start. If it has
+nothing to do, why should it be ``forced" to run every time?  Assume
+that a function is available {\tt halt()} which takes a task out of the
+scheduler's loop.  (We'll see exactly how this is done later).
+
+<*s>
+Why not allow tasks to start and stop?
+
+Assume a function exists {\tt halt() } which removes a task
+
+Now diagram the following tasks:
+
+\begin{description}
+      \item [A] Run for 2ms and then {\tt halt()}.
+      \item [B]  run for 1.0ms, then call the OS to do I/O which
+      lasts for 2.0 ms.  Repeat.
+      \item [C]  Run forever.
+\end{description}
+
+for these policies:
+\begin{enumerate}
+\item Non-synchronized, non-priority-based Round Robin
+\item Synchronized, non-priority-based Round Robin
+\end{enumerate}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\subsection{Delay Functions and Scheduling}
+
+Tasks frequently need to wait for a time interval.
+
+Reasons:
+\begin{itemize}
+  \item To create time-based events (such as Flash an LED for 0.5 sec).
+  \item To wait for something external to happen such as for a device to
+           be ready for more data.
+  \item To free up CPU time for other processes.
+  \item To determine for themselves how often they run:
+\begin{verbatim}
+while(1)
+  {
+  compute;
+  delay(20ms);  // Run every ~20ms.
+  }
+\end{verbatim}
+
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+
+The worst way to do this is a delay loop such as
+\begin{verbatim}
+#define DELAY    22000
+for (i=0; i< DELAY ; i++) ;   // just loop to use up time
+\end{verbatim}
+
+<*hn>
+
+Here we assume that we have figured out that 22000 is the right value to
+use for the time delay we want by trial-and-error or calculation.   The
+worst bad thing about this method is that it doesn't meet the third
+reason, it uses all the CPU time itself.  (There are other problems as
+well). We can define
+the call {\tt OS\_TimeDelay(int delay)} which does the following:
+
+A better method is to let the scheduler help with delays.
+
+<*s> The scheduler can help implement delays.  {\tt OS\_TimeDelay(int delay)}:
+<*>
+\begin{itemize}
+        \item returns to the scheduler
+        \item sets a software counter to {\tt delay}.  (This counter will be
+        decremented every so often by and ISR until {\tt counter == 0}.)
+        \item schedules the next task.
+        \item the task which called {\tt OS\_TimeDelay()} will not
+        be started by the scheduler until {\tt delay } is over.
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+
+\subsection{Pre-emptive Scheduling}
+
+<*hn>
+So far, we have required that tasks return to the scheduler frequently
+so that other tasks get a chance to run in the CPU.  This has two
+problems.  First, we have to code our tasks somewhat artificially.  They
+have to break their job up into chunks and keep track.  Second, we are
+vulnerable if some task doesn't "play fair".
+
+The solution to this is a scheduler that can break in to a running task
+using a regular interrupt such as a clock interrupt.   There are many
+complex issues in having this ability but the value is very great.
+Preemptive schedulers solve this problem.  Whether the task is ready or
+not, the pre-emptive scheduler can stop it and run something else.
+Several types of pre-emptive scheduler are described below.
+
+<*s>
+\subsubsection*{Pre-emptive Scheduler can}
+\begin{itemize}
+
+   \item respond to a clock interrupt during a running task
+   \item save context of the interrupted task
+   \item look at the entire task list
+   \item start another task (or possibly re-start the same task)
+\end{itemize}
+
+<*>
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\subsubsection{Types of pre-emptive schedulers:}
+
+<hn>\begin{itemize}
+
+<hn>        \item
+Pre-emptive Round Robin
+        \begin{itemize}
+                \item Regular OS interrupts (``ticks'').
+                \item Scheduler moves to next task each tick.
+                \item \begin{verbatim}
+Task()
+{
+while{1}
+   { compute ; }
+}
+\end{verbatim}
+        \end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+<hn>     \item
+Priority Based
+        \begin{itemize}
+                \item Each task assigned priority by programmer
+                \item Highest priority task always gets the CPU if ready.
+                \item \begin{verbatim}
+(same)
+\end{verbatim}
+        \end{itemize}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+<hn>        \item
+ Rate Monotonic (RMS)
+        \begin{itemize}
+                \item As above but priorities are assigned based on
+                periodicity.
+                \item High periodicity = high priority.
+                \item Can prove optimality and schedulability (with assumptions).
+                \item \begin{verbatim}
+(same)
+\end{verbatim}
+        \end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+<hn>        \item
+$\mu$Cos-II style Priority Based
+        \begin{itemize}
+                \item Fixed unique priority and task-specific delay.
+                \item Must tweak delay values, $M$,  to avoid starvation.
+                \item \begin{verbatim}
+Task()
+  {
+  compute_some();
+  OSTimeDelay(M);
+  }
+\end{verbatim}
+        \end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+<hn>       \item
+ Priority Based Round Robin
+        \begin{itemize}
+                \item All tasks delay 1 tick
+                \item All tasks execute $< \frac{T}{N}$ where $T$ is the
+                OS tick period and $N$ is the number of tasks.
+                \item  \begin{verbatim}
+Task()
+  {
+  compute_a_little();
+  OSTimeDelay(1);
+  }
+\end{verbatim}
+        \end{itemize}
+
+<hn>\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\subsubsection*{Premptive Scheduling Excercises}
+A) Diagram the tasks A,B,C as described above
+for these policies:
+\begin{enumerate}
+\item Pre-emptive priority-based
+\item Pre-emptive Round Robin (no priorities)
+\end{enumerate}
+
+B) Assume 5 tasks and each task must run in ``chunks" of 3ms and the OS clock is 1ms.
+How could you set up delay values to implement
+round-robin scheduling in $\mu$C/OS-II?
+
+<s>\end{slide}
+\end{document}
+
+
+

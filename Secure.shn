@@ -1,0 +1,307 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%           EE474 Pointers in C
+%
+<stream, c>   % combined into notes pack
+
+<nh>\documentclass{article}
+<s>\documentclass{seminar}
+
+<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
+<s>\pagestyle{headings}
+<s>\slidepagestyle{BHstyle}
+<s>\addtolength\oddsidemargin{3cm}
+<shn>\usepackage{graphicx}
+<shn>\usepackage{hyperref}
+<shn>\usepackage{listings}
+
+<*hn>
+\oddsidemargin 0in
+\evensidemargin 0in
+\textwidth 6.5in
+\textheight 8.7in
+\topmargin 0.2in
+
+
+<*shn>
+\linespread{1.0}
+
+<shn>\begin{document}
+<s>\begin{slide}
+
+<n>\section*{INSTRUCTOR NOTES}
+
+<*>
+
+\begin{center}
+    \section*{Introduction to Secure Communications}
+\end{center}
+
+References: J. Freer, Computer and Communication Networks, 2nd Edition,
+IEEE Press, 1996.  Chapter 11.,  
+Wikipedia.
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1 
+\section{XOR Review}
+
+<*chn>
+At its most basic level, the most common approach to
+encryption of digital data boils down to the exclusive OR operation,
+XOR.    The truth table is:
+
+<*>
+\begin{center}
+Truth Table:
+\begin{tabular}{cc|c}
+$x$  & $y$  &  $x \otimes y$ \\ \hline
+0  & 0   &  0 \\
+0  & 1   &  1 \\
+1  & 0   &  1 \\
+1  & 1   &  0 \\
+\end{tabular}
+\end{center}
+ 
+  
+Two interpretations:
+\begin{itemize}
+        \item ``odd number of ones''
+        \item ``programmable inverter''
+\end{itemize}
+We'll use the second:   ``{\tt a} controls whether or not {\tt b} is inverted."
+<s>\end{slide}
+<s>\begin{slide}
+
+Basic idea:   scramble message by XOR'ing with a random series of
+bits.  Idea as old as WWI, 1917 teletypes  (Vernam).
+
+This is the basis of most encryption systems.  The ``random bits''
+are called the {\it key}.
+
+Let the received data be {\tt a} = {\tt b} $\otimes$ {\tt c}.
+{\tt c} is the key and {\tt b} is the message.  When we receive {\tt a} we need to know if each bit of {\tt c} was
+1 or 0 in order to know the bits of {\tt b}.
+
+In {\tt C} the exclusive OR operation ($\otimes$ above) is represented with $\wedge$.
+
+<s>\end{slide}
+<s>\begin{slide}
+One bit messages are not very interesting.   The following code could use an 8 bit key on
+an 8-bit message:
+\begin{verbatim}
+char a,b,c;
+
+b = 0x33;        // our message
+c = 0xA5;       // the key
+
+a = b ^ c ;     // a is b XOR c
+\end{verbatim}
+What is {\tt c}?
+
+<s>\end{slide}
+<s>\begin{slide}
+<*cnh>
+One way to view this is to realize that for each bit of {\tt c} that is one, the
+corresponding bit of {\tt b} is changed.  If a bit of {\tt c} is zero,  that bit
+in {\tt b} is not changed.   If we think of {\tt b} as the data and {\tt c} as a
+ key, then this is one way that data can be encrypted.  If an attacker gets the
+encrypted data, {\tt a}, s/he has no way to recover the data without knowing
+{\tt c}.   {\tt c=0} is NOT a good key. (Why not?). How can we encrypt many
+bytes instead of just one? One way would be to use a single key as follows:
+<*>
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\begin{verbatim}
+#define BUFSIZE 1000
+
+char a[BUFSIZE],b[BUFSIZE],c;
+int i=0;
+c = 0xA5;       // the key
+
+while (i < BUFSIZE)
+ { a[i] = b[i] ^ c ; i++}
+\end{verbatim}
+<*chn>
+This however is rather weak for two reasons.  First there are
+only 256 possible keys. Second, there are easy statistical methods
+to extract the key from {\tt a}.   A more secure method (but still
+ weak)
+is to use a longer key as follows:
+<*>
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\begin{verbatim}
+#define BUFSIZE 1000
+#define KEYSIZE 5
+
+char a[BUFSIZE],b[BUFSIZE];
+char c[BUFSIZE]={0x12, 0xA3, 0x4F, 0xB9, 0x7C};
+
+int j=0;i=0;
+
+
+while (i < BUFSIZE)
+ {
+ a[i] = b[i] ^ c[i % KEYSIZE] ;    // use MOD operator (%)
+                                   // sequence through the key bytes
+ i++
+ }
+\end{verbatim}
+<*chn>
+Here we are rotating through the key array and using one of the five
+ key bytes on each data byte.
+<*>
+<s>\end{slide}
+<s>\begin{slide}
+
+
+%%%%** Section 1.1
+\subsection{Key issues}
+\begin{itemize}
+	\item Length.  length(key) $\ne$ length(msg).
+        \begin{itemize}
+        	\item Use fixed key length and repeat.
+                \item long keys secure, expensive.
+                \item short keys insecure, convenient.
+         \end{itemize}
+
+         \item Key distribution.  How does the receiver
+         {\tt get } the key?
+
+         \item Key Quality.
+         \begin{itemize}
+                \item short keys are ``bad":   
+<chn>8 bit key has only 256 possibilities to try.
+         	\item Not all keys are created equal.
+                \item Key = {\it all zeros} is a {\bf BAD} key!
+                (also all 1's).
+                \item Need key to have a mix of ones / zeros
+<s> and have a bound on the longest stretch of 1's or 0's.
+ 
+          \end{itemize}
+  \end{itemize}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 2 
+\section{Public Key Systems}
+
+%%%%** Section 2.1
+\subsection{One-way functions}
+
+\begin{itemize}
+	\item A function $f(x)$, for which $y = f(x)$ is easy to 
+compute, but $x = f^{-1}(y)$ is very hard to compute. 
+	\item Based on large prime \#'s.
+	\item Computationally intensive.
+\end{itemize}
+
+One way function example: 
+\[
+y = f(a,b) = a \times b
+\]
+\noindent
+where $a$ and $b$ are large integers.
+
+<*chn>
+Surprisingly this simple function can be one way.   Consider when $a$ and $b$ are 
+large (i.e. 50-100 digits) prime numbers.   Now $y$ is a {\it very} large integer
+but $a$ and $b$ can only be recovered if you can {\it factor} $y$.
+
+
+<*>
+%%%%** Section 2.2
+\subsection{Algorithm}
+Assume existence of a matched pair of one-way functions,
+$f_A(x,k)$ and $f_B(x,k)$.
+
+<s>\end{slide}
+<s>\begin{slide}
+
+Properties:
+\begin{itemize}
+	\item $f_B(f_A(x,k_1),k_2) = x$
+                 where $k_1$, and $k_2$ are a special pair of keys.
+        \item $f_A, f_B$ can be computed.
+        \item $f^{-1}_{A/B}(y,k)$ is unknown.
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 2.3
+\subsection{Use}
+\begin{enumerate}
+	\item Key generator makes pair of keys for each user $i$:
+        $k_{i1}$ (public) and $k_{i2}$ (private).
+
+        \item User $i$ sends key $k_{i1}$ to anyone or makes it public
+        on the web.
+
+        \item If user $j$ sends message $x$ to user $i$:
+        \begin{enumerate}
+        	\item User $j$ sends $y = f_A(x, k_{i1})$ to $i$
+                using $i$'s public key, $k_{i1}$.
+
+                \item User $i$ decodes by: $x = f_B(y, k_{i2})$ using
+                their private key, $k_{i2}$.
+       \end{enumerate}
+ \end{enumerate}
+
+Advantage:  No more key distribution problem!
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 2.4
+\subsection{RSA Method}
+Rivest, Shamir, Adloeman, 1977 MIT.
+
+Most Famous Public Key System
+
+\begin{itemize}
+\item RSA Keys:  200bits
+\item $k_1 = P_1 * P_2$ where $P_1, P_2$ are large prime numbers.
+\item can break code if you can factor $k_1$ into $P_1 \times P_2$.
+\item for $k_1 =$ 200 bits, factoring takes 3.8B years at 1 op$/mu$sec.
+\item Encoding is expensive.
+\begin{itemize}
+	\item Block size 512 bits
+        \item encode 1 block:  $3\times 10^6$ multiplications.
+        \item at 1$/mu$sec/mult.,  3 seconds per 64 bytes = 13hrs / Mbyte!
+        (special hardware considerably faster).
+        \end{itemize}
+\end{itemize}
+
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 3 
+\section{Data Encryption Standard (DES)}
+
+US Government Standard developed by IBM.
+
+\begin{tabular}{cc}
+1977 &  56 bit key \\
+1990 & 112 bit key \\
+\end{tabular}
+
+64 bit block code with single encryption key.
+
+<*chn> Some claimed that the US National Security Agency (NSA) designed weaknesses into
+the DES in the 1970's so that it could have the ability to break it at will.   However
+later research has seemed to reduce this concern. 
+<*> 
+
+
+
+<s>\end{slide}
+
+<shn>\end{document}
+

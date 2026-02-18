@@ -1,0 +1,524 @@
+<stream, c>
+<nh>\documentclass{article}
+<s>\documentclass{seminar}
+<*nhs>
+\usepackage{graphicx}
+\usepackage{graphpap}
+
+<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 472 \hfil \thepage}{Hannaford \hfil \today}
+<s>\pagestyle{headings}
+<s>\slidepagestyle{BHstyle}
+<s>\addtolength\oddsidemargin{3cm}
+
+\title{Micro-C OS/II Overview}
+
+
+<*hn>
+\usepackage{fancyhdr}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%
+%  Set Up Margins
+\input{/users/home1/blake/templates/pagedim.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%         Page format Mods HERE
+%
+%Mod's to page size for this document
+\addtolength\textwidth{0cm}
+\addtolength\oddsidemargin{0cm}
+\addtolength\headsep{0cm}
+\addtolength\textheight{0cm}
+%\linespread{0.894}   % 0.894 = 6 lines per inch, 1 = "single",  1.6 = "double"
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER / FOOTER
+\pagestyle{fancy}
+%%%%%  Page header/footer fields for "NSF Style" proposal
+%%%%%  \section* will be changed with each section
+\lhead{\small\sc EE472}
+\rhead{}
+<chn>\section*{\large\bf Introducing Micro-C OS/II ($\mu$Cos/II)}
+\lfoot{Hannaford, U. of Washington}
+\rfoot{Nov. 17, 2003}
+\cfoot{\thepage}
+%\renewcommand\headrulewidth{1pt}
+%\renewcommand\footrulewidth{1pt}
+
+
+\linespread{1.0}
+
+<*>
+<!c>\begin{document}
+
+
+
+<s>\begin{slide}
+\section*{Introduction to MicroC/OS-II  }
+%%%%** Section 1 
+\section{Overview}
+%%%%** Section 1.1
+\subsection{Information Sources }
+\begin{itemize}
+\item http://www.uCOS-II.com/ \\
+reference card\\
+cool animations \\
+Application notes \\
+Examples of commercial products.
+\item Book: ``MicroC/OS-II, The Real-Time Kernel,'' by
+Jean J. Labrosse, CMP Books, 2nd edition, 2002.
+\end{itemize}
+
+
+
+%%%%** Section 1.2
+\subsection{Characteristics and Features}
+
+Ucos-II is a real time {\it kernel}.
+
+``Operating System'' is more than a kernel.
+
+Kernel supports
+\begin{itemize}
+  \item Scheduler
+  \item Message passing (mailboxes)
+  \item Synchronization (semphores)
+  \item Memory Management
+\end{itemize}
+
+Does not support
+\begin{itemize}
+  \item I/O Devices
+  \item File System
+  \item Networking
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide} 
+Features
+
+\begin{itemize}
+  \item Source Code available (not ``GPL'').
+  \item Free for educational use, license required
+  for commercial use.
+  \item Portable to multiple micro processors.
+  \item ROMable.
+  \item Scalable (only builds what you need)
+  \item Multitasking (up to 56 tasks)
+  \item Preemptive:  64 unique priority levels.
+  Always runs highest priority task.
+  \item Deterministic:  ISRs etc. take known,
+  fixed amount of time.
+  \item Individual stacks for each task. Can
+  be different sizes.
+  \item Services:  mailboxes, queues, semphores,
+  dynamic memory allocation.
+  \item Interrupt management.  Scheduler can
+  check for a task that should be activated after an
+  interrupt.
+  \item Mature.  In use since 1992.  Incorporated
+  into commercial products.
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+
+%%%%** Section 2 
+\section{$\mu$C/OS-II   Tasks and Calls}
+
+%%%%** Section 2.1
+\subsection{Task Priorities}
+
+<*chn>All tasks have a unique priority.
+Low priority numbers
+have the  highest priority.
+Priority numbers 0,1,2,3, are reserved.
+
+There are a
+{\it maximum } of 64 total priority levels, but if you need
+smaller memory useage, the system can be configured for
+fewer.  Thus the lowest priority task is not always 64. Instead
+the OS defines four levels at the bottom:
+
+{\tt OS\_LOWEST\_PRIO, OS\_LOWEST\_PRIO-1, OS\_LOWEST\_PRIO-2, OS\_LOWEST\_PRIO-3 }
+
+(which would be 64, 63 ,62, and 61 in a full system).  The lowest user level priority task is therefore:
+{\tt OS\_LOWEST\_PRIO - 4 }.   The four
+highest priorities are also
+all reserved.
+The maximum number of priorities
+is thus 56.
+
+Only one task may have each priority level so 56 is also the maximum
+number of tasks.  Since task priorities are unique they are also
+used to identify the processes (like the pid in Unix).
+The max number of tasks can be reduced at compile time
+to save memory.
+
+<*s>
+\begin{itemize}
+        \item All tasks have a unique priority.
+        \item Priority values can be used to ID tasks.
+        \item 4 Highest Priority numbers (0,1,2,3) are reserved.
+
+        \item 4 Lowest Priority numbers are reserved:
+               {\tt OS\_LOWEST\_PRIO, OS\_LOWEST\_PRIO-1, OS\_LOWEST\_PRIO-2, OS\_LOWEST\_PRIO-3 }
+
+        \item Lowest Usable Priority available to users:
+               {\tt OS\_LOWEST\_PRIO - 4 }
+        \item Normally {\tt OS\_LOWEST\_PRIO = 64}  but can configure
+        system to fewer tasks for smaller memory use.
+\end{itemize}
+
+<*>
+%%%%** Section 2.2
+\subsection{OS Function Calls (selected)}
+
+<chn> Tables \ref{Ta:FC0} and \ref{Ta:FC1}
+<chn> summarize key function calls in $\mu$C/OS-II.
+
+<s> See Tables from Notes!!   too big for slides.
+
+<*chn>
+%%%%** Table 1 
+\begin{table}
+\begin{center}
+ %p = paragraph, c = center, l = left, r = right
+  \begin{tabular}{|l|p{1.6in}|p{2.75in} |}
+  \hline
+Name   &  Prototype  &  Function \\ \hline
+ OSInit()       & {\tt void OSInit(void) }      & Sets up OS internal data
+                                                  structures. Must be called first. \\ \hline
+ OSStart()      & {\tt void OSStart(void) }     & Begins operation of the scheduler.\\ \hline
+ OSIntEnter()   & {\tt void OSIntEnter(void)}   & Must be called at start of an ISR.
+                                                  Lets OS keep track of number of ISRs. \\ \hline
+ OSIntExit()    & {\tt void OSIntExit(void)}    & Call at end of an ISR
+<hn>                                              {\it before} restoring conext and {\tt IRET}.
+                                                  \\ \hline
+ OSTaskCreate() & {\tt INT8U OSTaskCreate( void (*task)(void *pd), void *pdata, OS\_STK *ptos, INT8U prio) }
+                & Creates a new task.
+                 {\tt task} is a pointer to the task's function,
+                 {\tt pdata} points to optional parameters to the task,
+                 {\tt ptos} is a pointer to the tasks stack top.
+                 {\tt prio} is the task priority.  Note that since each
+                 $\mu$COS-II task must have a unique priority, priority is
+                 sometimes used to as the ``task number'' as well (see
+                 OSTaskDel().
+                   \\ \hline
+OSTaskDel()     & {\tt INT8U OSTaskDel(INT8U prio) }    &
+                Deletes a task. The task is indicated by its priority
+                number so any task can delete any other task.
+                {\tt OS\_PRIO\_SELF} is a predefined constant
+                which a task can use to delete itself if it doesn't know
+                its priority. \\ \hline
+OSTaskDelReq() & {\tt INT8U OSTaskDelReq(INT8U prio) }  &
+                Send a request to a task to delete itself.   If a task is
+                set up for this, it will {\it also} issue a
+                OSTaskDelReq(OS\_PRIO\_SELF) and if that returns
+                OS\_TASK\_DEL\_REQ, then it should delete itself.  \\ \hline
+OSTaskSuspend() & {\tt OSTaskSuspend(INT8U prio)}       &
+                Block the execution of the current task.    \\ \hline
+OSTaskResume()  & {\tt OSTaskResume(INT8U prio)}        &
+                Resume execution of a task which was blocked using
+                OSTaskSuspend()  \\ \hline
+OSTaskChangePrio()& {\tt INT8U OSTaskChangePrio( INT8U oldprio, INT8U newprio)} &
+                Change the priority of a task.  {\tt oldprio } must exist
+                and {\tt newprio } must be free.    \\ \hline
+OSSchedLock()   & {\tt void OSSchedLock(void)} &
+                Stops all task scheduling but not interrupts.
+                Higher priority tasks will no longer take over. \\ \hline
+OSSchedUnlock() & {\tt void OSSchedUnlock(void)} &
+                Resumes task scheduling. \\ \hline
+OSTimeDly()     & {\tt void OSTimeDly(INT16U ticks)} &
+                Delay the calling task by {\tt ticks} clock ticks (i.e. timer0
+                interrupts).  The scheduler will start other tasks during
+                this delay       \\ \hline
+OSTimeDlyHMSM() & {\tt void OSTimeDlyHMSM( INT8U hours, INT8U minutes, INT8U seconds, INT8U milli) }    &
+                Same as ISTimeDly() but uses natural time units.         \\ \hline
+OSTimeDlyResume()       & {\tt INT8U OSTimeDlyResume(INT8U prio) }      &
+                Wakes up a task which has called either of the two functions
+                above.   \\ \hline
+OSTimeGet()     & {\tt INT32U OSTimeGet(void)}  &
+                Returns the current time measured by number of ticks.
+                The result is a 32 bit unsigned integer.  \\ \hline
+
+\end{tabular}
+\caption{Table of Selected $\mu$C/OS-II calls}
+\label{Ta:FC0}
+\end{center}
+\end{table}
+
+%%%%** Table 2 
+\begin{table}
+\begin{center}
+ %p = paragraph, c = center, l = left, r = right
+  \begin{tabular}{|l|p{1.6in}|p{2.75in} |}
+  \hline
+Name   &  Prototype  &  Function \\ \hline
+OS\_ENTER\_CRITICAL()   & {\tt }        &
+                Not actually a function.  This {\it macro} inserts
+                the machine instruction into
+                your code to block all interrupts .      \\ \hline
+OS\_EXIT\_CRITICAL()    & {\tt }        &
+                Not actually a function.  This {\it macro} inserts
+                the machine instruction to enable interrupts. \\ \hline
+OSSemCreate()   & {\tt OS\_EVENT *OSSemCreate( WORD value)}     &
+                Create a new semaphore and initialize it to
+                {\tt value}. Returns a pointer to the semphore
+                (actually an {\it event control block}).  \\ \hline
+OSSemPost()     & {\tt INT8U OSSemPost(OS\_EVENT *pevent }      &
+                Signal the semaphore pointed to by {\tt pevent}.
+                (enables other tasks to continue).   \\ \hline
+OSSemPend()     & {\tt void OSSemPend(OS\_EVENT *pevent, INT16U timeout, INT8U *err }   &
+                Wait for access to resource controlled by semaphore {\tt pevent}.
+                {\tt pevent} must have been previously created by
+                OSSemCreate(). {\tt timeout} is a time value (in ticks)
+                which allows the task to wake up  if the semaphore
+                never becomes available.  If this happens, the
+                function will return {\tt OS\_TIMEOUT}. Do not use inside
+                an ISR.   \\ \hline
+
+ \end{tabular}
+
+\caption{Table of Selected $\mu$C/OS-II calls (cont.)}
+\label{Ta:FC1}
+\end{center}
+\end{table}
+
+
+<*>
+<s>\end{slide}
+
+<s>\begin{slide}
+
+<chn>\newpage
+%%%%** Section 3 
+\section{Code Example}
+<s>\tiny{
+\begin{verbatim}
+//----------------------------------------------------------------------------
+// AUTHOR:    Jered Aasheim
+// CREATED:   February 23, 2001
+// MODIFIED:  February 23, 2001
+// PROJECT:   EE472 Final Project
+// MODULE:    Test Application using uC/OS RTOS
+//
+// Abstract:  The following program demonstrates how to use the uC/OS Real-Time
+//            Operating System to solve a critical section problem.  Using the
+//            uC/OS facilities, two different tasks are created and a binary
+//            semaphore is used to protect a critical section (in this case the
+//            first row on the LCD screen).
+//
+//            Unfortunately, this program only demonstrates a few facilities of
+//            the uC/OS RTOS.  For further examples using uC/OS, refer to
+//            "An Embedded Software Primer" by David E. Simon.
+//
+//            NOTE: In order to use the uC/OS RTOS, you will need to add the
+//                  UCOS.LIB and UCOS.H files to your Paradigm C++ project.
+//
+//----------------------------------------------------------------------------
+
+#include "td40.h"
+#include "ucos.h"
+
+#define STACK_SIZE              1024
+#define WAIT_FOREVER            0
+
+
+#define STARTUP_PRIORITY         0
+#define TASK1_PRIORITY          11
+#define TASK2_PRIORITY          12
+
+UWORD StartUp_Stk[STACK_SIZE];
+UWORD T1_Stk[STACK_SIZE];
+UWORD T2_Stk[STACK_SIZE];
+
+OS_EVENT *pBinSem = NULL;               // Binary semaphore
+
+static UBYTE err = 0;
+
+void SetupTimers(void);
+
+void far StartUpTask(void* data);
+
+void far SimpleTask0(void* data);
+void far SimpleTask1(void* data);
+
+void interrupt far Timer0_ISR(void);
+
+
+
+void main(void)
+{
+   ae_init();
+   lcd_init();
+
+   OSInit();                            // Initialize uC/OS
+
+   //SetupTimers();                     // Configure the TD40 timers.
+   setvect(uCOS, (void interrupt (*)(void))OSCtxSw);
+
+   pBinSem = OSSemCreate(1);            // Initialize the semaphore
+
+   OSTaskCreate(StartUpTask, (void*)0, (void*)&StartUp_Stk[STACK_SIZE-1], STARTUP_PRIORITY);
+
+   OSStart();                           // Start the uC/OS
+}
+
+
+void far StartUpTask(void* data)
+{
+        OS_ENTER_CRITICAL();
+
+   // Install the uC/OS timer ISR
+   setvect(0x0008, (void interrupt (*)(void))OSTickISR);
+   // Install applications timer ISR
+   setvect(0x0081, Timer0_ISR);
+
+   // Initialize Timer0
+   outport(0xFF32, 0x0007);         // Unmask TIMER0 interrupt and set Timer0
+                                                                                        // interrupt to low priority
+
+   outport(0xFF56, 4000);                       // Disable TIMER0
+
+   outport(0xFF52, 10000);          // Initialize TIMER0's count
+
+   outport(0xFF56, 0xE001);         // Enable TIMER0 to generate an interrupt,
+                                    // use maxcount A, don't use prescaled value,
+                                    // use internal clock, continuous operation
+
+        OS_EXIT_CRITICAL();
+
+   OSTaskCreate(SimpleTask0, (void*)'1', (void*)&T1_Stk[STACK_SIZE-1], TASK1_PRIORITY);
+   OSTaskCreate(SimpleTask1, (void*)'2', (void*)&T2_Stk[STACK_SIZE-1], TASK2_PRIORITY);
+   OSTaskDel(OS_PRIO_SELF);
+
+}
+
+
+//----------------------------------------------------------------------------
+// SimpleTask() - demonstrates a simple task that uses semaphores.  In
+//                this case, the LCD screen is the critical section.
+//----------------------------------------------------------------------------
+void far SimpleTask0(void* data)
+{
+   for(;;)
+   {
+      // Get the semaphore (i.e. P())
+      OSSemPend(pBinSem, WAIT_FOREVER, &err);
+
+      // Critical section...
+      lcd_movecursor(0x80);
+      lcd_putstr("Task ");
+      lcd_put((char)data);
+      delay_ms(2000);
+
+      // Give up the semaphore (i.e. V())
+      OSSemPost(pBinSem);
+
+      // Block for 5 ticks - forces a task switch
+      OSTimeDly(5);
+   }
+}
+
+
+void far SimpleTask1(void* data)
+{
+   for(;;)
+   {
+      // Get the semaphore (i.e. P())
+      OSSemPend(pBinSem, WAIT_FOREVER, &err);
+
+      // Critical section...
+      lcd_movecursor(0x80);
+      lcd_putstr("Task ");
+      lcd_put((char)data);
+      delay_ms(2000);
+
+      // Give up the semaphore (i.e. V())
+      OSSemPost(pBinSem);
+
+      // Block for 5 ticks - forces a task switch
+      OSTimeDly(5);
+   }
+}
+
+
+
+//----------------------------------------------------------------------------
+// SetupTimers() - initializes the timers on the TD40 board.
+//                 The uC/OS requires a timer to periodically
+//                 generate an interrupt so that it can schedule
+//                 tasks appropriately.  In most systems, however,
+//                 uC/OS can't just define the ISR for a Timer
+//                 for several reasons:
+//
+//                 1) Defining a timer ISR is platform specific
+//                    and uC/OS is intended to be platform independent.
+//
+//                 2) The application may need to define its own
+//                                                       ISR for the timer.  If uC/OS defines the ISR
+//                    then the application can't define their own
+//                    ISR.
+//
+//                 The solution is simple: have the application
+//                 configure the timer to generate interrupts and
+//                 the uC/OS "timer" ISR.  Then, inside the uC/OS
+//                 ISR a software interrupt is generated (i.e. INT 81)
+//                 which runs the users "timer" ISR.  Using this
+//                 technique, after all is said and done, uC/OS will
+//                 have the required timer interrupt ISR setup correctly
+//                 and the application can define its own timer ISR.
+//
+//                 NOTE: Even if the application doesn't use timer interrupts
+//                       it still must define a "dummy" timer ISR (see below).
+//
+//----------------------------------------------------------------------------
+void SetupTimers(void)
+{
+   // Install the uC/OS "task switch" ISR
+   //setvect(uCOS, (void interrupt (*)(void))OSCtxSw);
+
+   // Install the uC/OS timer ISR
+   setvect(0x0008, (void interrupt (*)(void))OSTickISR);
+
+   // Install applications timer ISR
+   setvect(0x0081, Timer0_ISR);
+
+   // Initialize Timer0
+   outport(0xFF32, 0x0007);               // Unmask TIMER0 interrupt and set Timer0
+                                          // interrupt to low priority
+
+   outport(0xFF56, 4000);                 // Disable TIMER0
+
+   outport(0xFF52, 10000);                // Initialize TIMER0's count
+
+   outport(0xFF56, 0xE001);               // Enable TIMER0 to generate an interrupt,
+                                          // use maxcount A, don't use prescaled value,
+                                          // use internal clock, continuous operation
+}
+
+
+
+//----------------------------------------------------------------------------
+// Timer0_ISR() - "dummy" Timer0 ISR, see SetupTimers() above
+//                for details
+//----------------------------------------------------------------------------
+void far interrupt Timer0_ISR()
+{
+   outport(0xFF22,0x0008);          // Non-specific EOI
+}
+\end{verbatim}
+<s>}    % end of tiny
+
+<s>\end{slide}
+
+
+<shn>\end{document}
+

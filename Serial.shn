@@ -1,0 +1,463 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%           EE474 Hardware and Basic I/O
+%
+<stream, c>   % combined into notes pack
+
+<nh>\documentclass{article}
+<s>\documentclass{seminar}
+
+<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
+<s>\pagestyle{headings}
+<s>\slidepagestyle{BHstyle}
+<s>\addtolength\oddsidemargin{3cm}
+<shn>\usepackage{graphicx}
+<shn>\usepackage{hyperref}
+<shn>\usepackage{listings}
+
+<*hn>
+\oddsidemargin 0in
+\evensidemargin 0in
+\textwidth 6.5in
+\textheight 8.7in
+\topmargin 0.2in
+
+
+\linespread{1.0}     % 1.0 = single space   1.6 = double space
+
+
+<*>
+\title{EE 472:  Serial Communication}
+
+\author{Blake Hannaford\\
+        Department of Electrical \& Computer Engineering \\
+        The University of Washington
+}
+
+\date{\today}
+
+<shn>\begin{document}
+<s>\begin{slide}
+
+
+<c>\section*{\large\bf Serial Communication}
+ 
+<s>\end{slide}
+<s>\begin{slide}
+
+\maketitle
+<n>\subsection*{INSTRUCTOR NOTES}
+
+<*>
+%%%%** Section 1 
+\section{Serial Communication}
+
+Send bits from point A to point B one at a time.
+
+Info Sources:
+{\tt http://www.seetron.com/ser\_an1.htm} \\
+{\tt http://www.taltech.com/TALtech\_web/resources/intro-sc.html }\\
+(on-line 12-Nov-02)
+
+\section*{RS232C}
+
+An international standard for serial communication (~1960s).
+
+Very old but still influential in ~2020 systems.
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1.1
+\subsection{Electrical Signaling}
+
+\begin{tabular}{|l|c|c|}\hline
++2.5V --- +15V  &  logic 0 &  ``space'' \\ \hline
+-2.5V --- -15V  &  logic 1 &  ``mark''  \\ \hline
+\end{tabular}
+
+High voltage {\it margin} gives some immunity to noise.
+
+Also a hassle since many systems don't otherwise
+need +15V, -15V supplies.
+
+Requires special driver chips for +- voltages.
+
+Today some systems use
+
+\begin{itemize}
+        \item +5V logic 0
+        \item  0V logic 1
+\end{itemize}
+
+to save power supply costs.
+
+<s>\end{slide}
+<s>\begin{slide}
+
+%%%%** Section 1.2
+\subsection{Serial Signaling}
+
+{\it Idle} line in ``mark'' state (logic 1, -15V)
+
+\begin{tabular}{|c|c|l|}
+\hline
+Pos.    & Value         & Function      \\ \hline
+0       &  space        & Start Bit     \\ \hline
+1       &  X            & Data 0 (lsb)  \\ \hline
+2       &  X            & Data 1        \\ \hline
+...     &  X            & ...           \\ \hline
+8       &  X            & Data 7 (msb)  \\ \hline
+9       &  X            & Parity*       \\ \hline
+10      &  mark         & Stop Bit 1    \\ \hline
+11      &  mark         & Stop Bit 2*   \\ \hline
+\end{tabular}
+
+\noindent
+{\bf * Note:} Parity and Stop Bit 2 are optional,
+can have 1.5 Stop
+Bits.
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\includegraphics[width=\linewidth]{Serial_figs/rs232_serialbits.png}
+<s>\end{slide}
+<s>\begin{slide}
+
+\subsection{Parity}
+
+\begin{verbatim}
+P = D0 ^ D1 ^ D2 ... ^ D7
+\end{verbatim}
+(XOR of all data bits).
+
+Interpretation of XOR(bits) is
+\begin{itemize}
+   \item "1" if number of ones is ODD 
+   \item "0" if number of ones is EVEN
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+Example: 
+
+\begin{tabular}{|c|c|c|c|}\hline
+D0 & D1 & D2 & XOR(D0,D1,D2) \\ \hline
+0  &  0 & 0  &  0 \\\hline
+0  &  0 & 1  &  1 \\\hline
+0  &  1 & 0  &  1 \\\hline
+0  &  1 & 1  &  0 \\\hline
+1  &  0 & 0  &  1 \\\hline
+1  &  0 & 1  &  1 \\\hline
+1  &  1 & 0  &  0 \\\hline
+1  &  1 & 1  &  1 \\\hline
+\end{tabular}
+
+Check if received correct parity bit. 
+
+<s>\end{slide}
+<s>\begin{slide}
+
+%%%%** Section 1.3
+\subsection{Speed and Timing}
+
+{\bf Baud} is short for Baudot, 19th century
+French telegrapher who invented first fixed length
+alphanumeric code.
+
+{\bf Baud} means number of signal changes on the
+line per second.  Commonly equal to bits per second.
+
+{\bf Example: }  Arduino serial port default: 9600 Baud. (it's actually USB!)
+
+<s>\end{slide}
+<s>\begin{slide}
+
+%%%%** Section 1.4
+\subsection{Synchronization}
+There is no common clock between sender and
+receiver. How does receiver know when to test
+levels?
+
+\noindent
+{\tt A1}: Synchronus mode --- rarely used.  Continuous
+stream of characters.
+
+\noindent
+{\tt A2}: Asynchronus mode --- start bit is known
+to be logic 0.  Falling (rising?) edge triggers
+a local clock in the receiver.
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1.5
+\subsection{Multiplexing}
+Sending information in both directions.  (Stringing 2 telegraph wires was very expensive!)
+
+{\bf Terms:}
+
+{\it Simplex}  One sender and one receiver.
+
+{\it Half Duplex} One side can send at a time.
+
+{\it Full Duplex} Both sides can send at same time.
+
+Typical serial communication today is {\it Full Duplex}.
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1.6
+\subsection{RS232 Wiring}
+
+Minimum 3 wires:
+\begin{itemize}
+        \item TX  (transmit)
+        \item RX  (receive)
+        \item gnd  (V=0 reference)
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+Maximum 23 wires!
+
+\includegraphics[height=2.75in]{Serial_figs/rs232_db25pinout.png}
+{\tiny
+Source(https://www.aggsoft.com/rs232-pinout-cable/}
+{\tiny serial-cable-connections.htm)}
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1.7
+\subsection{Connections}
+Must have:
+
+\noindent
+TX $\to$ RX \\
+RX $\gets$ TX
+
+Cables are easier to make if pins are
+``straight through''. i.e. pin {\it n}
+connects to pin {\tt n}.
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1.8
+\subsection{Connectors}
+23 pin (ancient, un-needed)
+
+9 pin (IBM PC standard)
+
+Two connector wiring types
+
+{\tt DTE:}  pin 2 = RX, pin 3 = TX ``Data Terminal Equipment"
+
+{\tt DCE:}  pin 2 = TX, pin 3 = RX ``Data Communications Equipment"
+
+Thus, {\tt DCE }can talk to {\tt DTE} with
+a ``straight through'' cable.
+
+<s>\end{slide}
+<s>\begin{slide}
+
+{\tt DTE, DCE} are ancient
+names from pre-PC days!!.
+
+Typical 1990's:
+
+PC == {\tt DTE } \\
+modem, printer, etc, == {\tt DCE}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1.9
+\subsection{Multi-Drop}
+
+Can also have more than 2 systems interconnected
+by a {\it serial bus}.
+
+In that case all users transmit and listen to
+same wire.
+
+Must implement protocol to prevent two or more
+users from talking simultaneously.
+
+(like half-duplex)
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1.10
+\subsection{``Null Modem''}
+
+What if you want to connect a {\tt DTE} to
+another {\tt DTE} (such as PC-PC)?
+
+Use a special cable which connects all lines
+``straight through'' {\it except}
+
+pin 2 $\to$ pin 3 {\it and} \\
+pin 3 $\to$ pin 2
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1.11
+\subsection{Flow Control}
+
+Sometimes a slow device cannot handle data as
+fast as sender (even at same baud rate).
+
+Receiver needs a way to stop and start sender.
+
+{\bf Hardware solution:} Additional wires:\\
+{\tt RTS} ``Request to Send".  {\tt DTE}
+sets this to mark to allow data to be sent to
+it by {\tt DCE}. \\
+{\tt CTS} ``Clear to Send". {\tt DCE} sets this
+to mark to allow data to be sent to it by {\tt DTE}.
+
+Hardware flow control can be enabled/disabled.
+
+{\bf Software solution:} Special Control Characters:\\
+{\tt XON} ({\tt ctl Q}) Start Transmitting\\
+{\tt XOFF}({\tt ctl S}) Stop Transmitting
+
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1.12
+\subsection{Flow Control Note}
+
+{\bf Note:}  If you use Hardware Flow control,
+then ``null modem'' cable must also cross the
+{\tt RTS } and {\tt DTS} wires (pins 7,8 on 9-pin
+IBM standard).
+
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 2 
+\section{Error Control}
+%%%%** Section 2.1
+\subsection{Causes}
+Unfortunately, serial communication is subject
+to errors.  Sources:
+
+\begin{itemize}
+        \item Electrical interference
+        \item Long wire lengths
+        \item Ground potential differences between
+        communicating systems.
+        \item Timing errors between sender and
+        receiver clocks (should be within 1\%).
+\end{itemize}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 2.2
+\subsection{Solutions}
+\begin{description}
+ \item[Character Parity] 9th data bit.
+        Very weak and bandwidth hog.
+ \item[Checksum]  Add up a group of bytes.
+        Send sum at end of packet. Compare.
+ \item[Parity] Send parity of some group of
+        bits (rows or colums) in the packet.
+ \item[CRC] Use theory of binary polynomials.
+       Send a code so that combined message
+       is divisible by some known polynomial.
+\end{description}
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 2.3
+\subsection{Packets}
+
+Grouping bytes into packets gives structure
+to the serial communication.   Packet structure
+must be same between software both sides.
+
+Typical Packet:
+
+
+{\tt
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Start &   Type & Length  & ... & Checksum  \\
+\hline
+\end{tabular}
+}
+
+\begin{description}
+        \item[Start] A character which the software can recognize
+        as the start of a packet.   Ideally should not appear anywhere
+        else in packet.
+        \item[Type] Kind of packet.
+        \item[Length] value which tells how long the
+        packet will be.
+        \item[...] some number of data bytes (the payload).
+        \item[Checksum] Checksum computed on previous packet.
+\end{description}
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 2.4
+\subsection{Packet Error Control}
+
+What if a packet is received and the Checksum is wrong?
+
+\noindent
+Normal:
+
+1. Sender sends the packet and {\it saves} the packet.\\
+2. Receiver checks Checksum and {\it acknowledges} receipt of packet.\\
+3. Sender discards packet and sends next packet.
+
+\noindent
+Error:
+
+1. Sender sends and {\it saves} the packet.\\
+2. Receiver detects error and sends {\it negative acknowledge}.\\
+3. goto step 1.
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 2.5
+\subsection{ACK/NAK}
+
+Special short packets:
+
+{\tt ACK} Acknowledge
+{\tt NAK} Negative Acknowledge
+
+{\tt
+\begin{tabular}{|c|c|c|}
+\hline
+Start &   ACK/NAK &  Checksum  \\
+\hline
+\end{tabular}
+}
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 2.6
+\subsection{Protocol Issues}
+
+What Happens If:
+\begin{itemize}
+        \item Transmission is so unreliable that Checksum fails
+                every time?
+        \item {\tt ACK/NAK} packets are subject to errors?
+\end{itemize}
+Do we have to send {\tt ACK/NAK} on receipt of an {\tt ACK/NAK}?
+
+Answers to all these questions must be worked out in a
+protocol spec.
+
+<s>\end{slide}
+<shn>\end{document}
+

@@ -1,0 +1,1167 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%           EE474 Schedulers
+%
+   % combined into notes pack	%<stream, c>
+
+\documentclass{article}	%<nh>
+
+\usepackage{graphicx}	%<shn>
+\usepackage{hyperref}	%<shn>
+\usepackage{listings}	%<shn>
+
+	%<*hn>
+\oddsidemargin 0in
+\evensidemargin 0in
+\textwidth 6.5in
+\textheight 8.7in
+\topmargin 0.2in
+
+
+	%<*shn>
+\linespread{1.0}
+
+
+\begin{document}	%<shn>
+
+	%<*>
+
+\begin{center}
+{\Large Tasks and Schedulers in Real-Time Systems}
+\end{center}
+
+%%%%** Section 1 
+\section{Tasks, Processes, and Threads}
+%%%%** Section 1.1
+\subsection{Processor State / Context}
+
+The CPU of a computer has several state variables.  Once they are
+specified we know the exact state of the CPU.  These include:
+\begin{itemize}
+        \item Program Counter (location in memory of next instruction)
+        \item Value of each CPU register
+        \item Processor Status Flags
+        \item Stack Pointer
+\end{itemize}
+
+
+
+%%%%** Section 1.2
+\subsection{Tasks or Processes}
+
+A {\it Task} or {\it Process} is a unit of code and data which is
+described by one processor state\footnote{AKA ``process context"}  when it is running. 
+
+Example Tasks:
+\begin{itemize}
+    \item Flash an LED for 100ms, repeat every 1.5 seconds.
+    \item Send a byte of data over a communication link whenever a hardware bit indicates
+    the com. link is ready. 
+    \item Every 60 seconds, read an analog voltage from a Thermistor, convert it to a resistance, calibrate to temperature. 
+\end{itemize}
+
+A task is usually implemented in {\tt C} by writing a function.
+
+\subsection{Context Switching:}
+
+A computer must often switch from one task to another (don't we all?) and then back.
+
+To restart a suspended task, we have to be able to {\it restore} its state. 
+
+To restore its state, we have to save it.  
+
+Thus a context switch means
+\begin{enumerate}
+  \item Save context of the processor for the current task.
+  \item Restore previously stored context of new task.
+  \item Start the new task.
+\end{enumerate}
+
+
+\subsection{Types of Tasks:}
+
+%%%%** Section 1.2.1 
+\subsubsection{Periodic Tasks}\label{Periodic}
+\begin{itemize}
+        \item Found in  Hard-Real time applications
+        \item Examples: 1) Control: Every 10 ms., Read sensors $\to$ compute control $\to$ output
+command\\
+          2) Multimedia: Every 22.727$\mu$sec,  Get music sample $\to$ compute DSP filter $\to$ output
+sample to DAC.
+
+        \item Characterized by three attributes:
+                \begin{enumerate}
+                        \item $P$, Period: the regular time interval between runs of this task.
+                        \item $C$, Computing Resources: How much CPU time  does it require
+each time. Obviously $C <= P$. ($C$ may not be the same each time.
+	%<*chn>
+Different code branches in the task may take different amounts of time. Use $C=C_{max}$.
+	%<*>
+                        \item $D$, Deadline: How quickly must the task me completed after it
+is started each time tick. $C < D < P$
+                \end{enumerate}
+         \item Typical Code Structure:
+\begin{verbatim}
+name() {
+   compute for C seconds;
+   return();
+   }
+\end{verbatim}
+\end{itemize}
+
+
+
+
+%%%%** Section 1.2.2 
+\subsubsection{Intermittent Tasks}
+\begin{itemize}
+        \item Found in  all types of applications
+        \item Examples: 1) Send an email every night at 4:00 AM\\
+        2) Save all data when power is going down \\
+        3) Send a message to plant operator when tank runs low.\\
+        4) Calibrate a sensor on startup.
+
+        \item Characterized by two attributes:
+                \begin{enumerate}
+                        \item $C$, Computing Resources: How much CPU time  does it require each time.
+                        \item $D$, Deadline: How quickly must the task be completed after it
+is started. (whenever that happens to be).
+                \end{enumerate}
+         \item Typical Code Structure:
+\begin{verbatim}
+name() {
+   compute for C seconds;
+   if(! done) return();
+   else halt_me();
+   }
+\end{verbatim}
+\end{itemize}
+
+
+%%%%** Section 1.2.3 
+\subsubsection{Background Tasks}
+\begin{itemize}
+        \item A soft real time or non real time task.
+        \item Lower Priority
+        \item Will be accomplished only as CPU time is available when no
+        hard real time tasks are ready.
+        \item Characterized by:
+                \begin{itemize}
+                         \item $C$, Computing Resources: How much CPU time  does
+                         it require each time between scheduler accesses.
+                \end{itemize}
+         \item Typical Code Structure:
+\begin{verbatim}
+name() {
+   compute for C seconds;
+   if(! done) return();
+   else halt_me();
+   }
+\end{verbatim}
+\end{itemize}
+
+
+
+%%%%** Section 1.2.4 
+\subsubsection{Complex Tasks}
+\begin{itemize}
+        \item Found in all types of applications
+        \item Examples: 1) Microsoft Word \hspace{0.15in}     2) Apache Web Server.
+
+        \item Characteristics:
+                \begin{enumerate}
+                        \item Continuous need for CPU time.
+                        \item Frequent requests for I/O which free up the CPU.
+                        \item Waits for user input which free up CPU.
+                \end{enumerate}
+         \item Typical Code Structure:
+\begin{verbatim}
+name() {
+   while(1) {
+      compute for C seconds;
+      request_IO();  // also starts scheduler
+      }
+   }
+\end{verbatim}
+\end{itemize}
+	%<*chn>
+I/O activity frees up the CPU because the task must wait, usually a significant amount of
+time, for the I/O activity on a physical device.  It cannot compute between the time it requests
+the I/O and the time it gets the data or writes the data so now the CPU is free for other tasks.
+	%<*>
+
+%%%%** Section 1.3
+\subsection{Task States}\label{TaskStates}
+Tasks are in one of four states:
+\begin{enumerate}
+        \item {\tt Running} 
+        \item {\tt Ready} to Run (but not running)
+        \item {\tt Waiting}    (for something {\it other} than the CPU.)
+        \item {\tt Inactive}   
+\end{enumerate}
+	%<*chn>
+Only one task can be {\bf Running} at a time (unless we are using a ``multicore" CPU).  
+A task which is waiting for the CPU 
+is {\bf Ready}.  When a task has requested
+I/O or put itself to sleep, it is {\tt Waiting}.
+An {\tt Inactive} task is waiting to be allowed into the schedule.  It is like 
+Microsoft Word when you are NOT running it. 
+
+We'll see later how a task can get into or out of the {\tt Inactive} state.
+
+	%<*>
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
+%
+%%%%** Section 2 
+\section{Threads: Smaller Units of Computation}
+We have talked about:
+\begin{itemize}
+	\item Programs
+	\item Tasks
+	\item Subroutines/Functions\footnote{When I use a slash (/) in a list like this I mean that the two terms are equivalent}
+	\item Processes
+	\item Threads
+\end{itemize}
+Confused yet??
+
+
+With any complex computing system we naturally break it up into {\it units }.
+
+For example in the EE472 lab exercise:  ``tasks"
+Each unit has
+
+\begin{itemize}
+	\item Code/instructions
+	\item Data
+	\item Context/State
+	\item Resources (memory, I/O devices, semaphores)
+\end{itemize}
+
+
+
+
+	%<*chn>
+\begin{center}
+%\vspace{2.5in}
+   \includegraphics[width=3in]{sched_figs/00264.eps}
+\end{center}
+
+
+
+
+A {\it Program or Process} is a unit of computation with all of the above attributes.
+
+A {\it Subroutine or Function} is a unit of comptuation with code, data, and context, but
+no managed resources.
+
+ I am using the term ``managed resources" to mean resources which can be assigned and deassigned	%<*hn>
+by the operating system such as memory or I/O devices.   Of course a function within a program has its
+own memory, but if it requests memory from the OS (for example with {\tt malloc()}, the OS assigns it
+to the program, not to the function within that program.
+
+	%<*>
+
+A {\it Thread} is a unit of computation with code and context, but no private data.  Threads may even
+share code with each other.
+
+Threads are owned by a program/process.
+
+Threads are like pieces within a program which can be scheduled by the OS independently.
+
+
+
+
+	%<*chn>
+\begin{center}
+%\vspace{2.5in}
+   \includegraphics[width=3in]{sched_figs/00265.eps}
+\end{center}
+	%<*>
+
+A complete software system with two processes.   
+Process 1 is a ``normal" single-threaded process.	%<chn>
+Process 2 is a multithreaded process.	%<chn>
+
+Scheduler manages 6 units:  Process 1 and the 5 threads of process 2.	%<chn>
+
+
+
+%%%%** Section 2.1
+\subsection{Thread Context Switching}
+Since threads have a smaller context than programs, context switching is faster.
+
+
+
+\begin{itemize}
+	\item Only save/restore CPU state
+	\item No need to change memory setup
+
+(with programs in systems bigger than the 16-bit 80188, this can be elaborate).	%<chn>
+
+\end{itemize}
+
+
+Why use threads?
+
+An example.
+
+Web server.
+Web server pseudocode:
+\begin{verbatim}
+while(1)  {
+    OS_read_network();      // get incoming request
+    compute;                // figure out what html page to get
+    OS_Disk_I/O();          // read disk file for www page
+    OS_write_network();	    // send page to user
+}
+\end{verbatim}
+
+
+Alternative 1:  Run above as a single process.
+
+Problem:  When process is waiting for network, disk is idle and vice versa.
+
+Alternative 2:   Set up several threads of same code:
+
+Advantage:   Scheduler can start a thread which is done with disk I/O while
+another thread is waiting on network and vice versa.
+
+CPU is used more efficiently and system delivers more pages per second with same hardware performance.
+
+Potential Problem:  more time spent context switching.
+
+
+%%%%** Section 2.2
+\subsection{Types of threads.}
+
+There are lots of possibilities for size of {\it units}.
+
+The more context a thread contains, the ``heavier" it is.
+
+Heavier threads take more time for context switching.
+
+OS designer determines what kind of threads to support --- application programmer gets only one
+option.
+
+
+
+
+%%%%** Section 3 
+\section{RTOS Scheduling Concepts}
+RTOS = Real Time Operating System	%<hcn>
+
+%%%%** Section 3.1
+\subsection{Time}\label{Time}
+
+
+Time is measured by a piece of hardware which records actual
+clock time: a {\it real time clock}:
+We use the terms	%<chn>
+
+``Time Quanta'' ``Time Slice''  ``Ticks''
+
+Let's call the period of time ticks: $T$.
+
+Typically $T < P_{min}$. Sometimes $T << P_{min}$.
+
+	%<*chn>
+Where $P_{min}$ is the shortest period of all tasks in the  system.
+In other words, the operating system measures time in units, $T$, which
+are smaller than the shortest period of any task.
+	%<*>
+
+%%%%** Section 3.2
+\subsection{Soft vs. Hard Real Time}
+
+{\bf Real Time:}  A software system with specific speed or response
+time requirements.
+
+{\bf Soft Real Time:} If the deadlines are not met,
+performance is considered low.
+
+{\bf Hard Real Time:} A computer system in which at least one task must meet
+deadlines in time.  If the deadlines are not met, the system has failed.
+
+{\bf Super Hard Real Time:} Mostly Periodic Tasks:
+Task periods = the OS time tick, task compute times ($C$) and
+deadlines ($D$) are very
+short. $P = D = T, C << P$.
+
+%%%%** Section 3.3
+\subsection{Scheduling}
+
+At each opportunity, OS asks:
+If $N$ tasks are {\bf Ready}, which one should I run?
+
+If you can show that scheduler always can achieve deadlines, 
+the system is ``deterministically schedulable".
+
+
+%%%%** Section 3.4
+\subsection{Scheduling Goals}
+\begin{enumerate}
+\item CPU Utilization:
+\[
+U_{CPU} = 1 - \frac{idle}{period}
+\]
+Tradional measure for mainframes.  100\% is better.
+
+{\bf But} $U_{CPU} ~= 100\%$ is not safe for real-time systems
+
+Goal:   low load - 40\%, high load - 90\%.
+
+\item Throughput: 
+Work units completed per unit time.
+
+\item Turnaround Time:
+Total time from task start to completion (waiting + execution + I/O)
+
+\item Waiting Time: 
+Choose scheduler which minimizes waiting time. 
+
+\item Response Time **
+How quickly system responds to external asynchronus events. 
+\end{enumerate}
+
+
+\section*{Scheduler Types:}
+%%%%** Section 3.4.1 
+\subsubsection{Periodic Schedulers}
+\begin{itemize}	%<chn>
+
+        \item	%<chn>
+Infinite Loop
+        \begin{itemize}
+                \item Most primitive of all
+                \item Also known as Non-preemptive Round Robin.
+                \item \begin{verbatim}
+while(1)
+{
+task1_fcn();
+task2_fcn();
+task3_fcn();
+...
+}
+                \end{verbatim}
+                \item Each task {\bf must} voluntarily return to
+                scheduler quickly
+                \item $C << P$, $P=T$.
+
+\begin{verbatim}
+taskN_fcn()
+{
+compute a little bit;
+return();
+}
+\end{verbatim}
+      \end{itemize}
+
+
+
+        \item	%<chn>
+Synchronized Infinite Loop
+        \begin{itemize}
+                \item the top of the loop waits on a hardware clock.
+                \item \begin{verbatim}
+while(1)
+{
+wait(CLOCK_PULSE);
+task1_fcn();
+task2_fcn();
+task3_fcn();
+...
+}
+                \end{verbatim}
+                \item Each task {\bf must} voluntarily return to
+                scheduler quickly, as above.
+                \item $C << P$, $T=P$.
+        \end{itemize}
+
+\end{itemize}	%<chn>
+
+\subsection{Pre-emption}
+Each function in these schedulers must ``voluntarily" return back to the main loop, 
+and must make sure that it doesn't compute for too much time.   If a task gets
+stuck, it breaks the whole system.  
+
+The fix for this is {\bf preemption} - the ability to break into a running task and 
+stop it. In other words to force a context switch. 
+
+
+	%<*chn>
+The schedulers above are appropriate when all tasks are periodic and hard real-time.
+However, because execution times ($C$) vary, we have to allow  extra time in
+each loop of the non-preemptive round robin schedule (taken up by the ``wait()'' function).
+
+	%<*>
+
+	%<*>
+
+%%%%** Section 4 
+\section{Scheduling Exercises}
+
+
+%%%%** Section 4.1
+\subsection{Overview}
+
+In this section we will conduct a series of in-class exercises.  We will zoom in on exactly how each scheduling method works with a variety of real-time task types.   Our exercises will study the following schedulers (with increasing sophistication):
+\begin{enumerate}
+  \item Our basic {\tt while(1)} loop:  Non-preemptive Round Robin (RR).
+  \item The same loop with synchronization timing loop or timer function: Synchronized Non-premptive RR
+  \item Special hacks to the synchronized non-preemptive RR to enable different task periods. 
+  \item Adding a {\tt sleep(int d)} delay option for tasks: Non-premptive synchronized RR with delays.
+  \item Making the scheduler dynamic: Non-premptive synchronized RR with {\tt halt\_me()} function.
+  \item Handling I/O requests which take time.
+  \item Adding the ability to break into running tasks: {\it Pre-emptive} RR
+  \item Allowing for programmer-set priorities among the tasks: Pre-emptive {\it Priority Based}.
+\end{enumerate}
+
+
+
+\subsubsection*{Diagramming Scheduler Operation}
+	%<*chn>
+To study scheduling, print out a ``Scheduler Diagramming Worksheet"
+ on page \pageref{SchedWorksheet}.	%<chn>
+This chart plots time going down the page and CPU
+processes (tasks) across the page. We can think of the horizontal axis
+as the memory space of the computer. We will put a shaded box in a
+square (or part of a square) when a certain task is running on the CPU.
+For example, when the scheduler is running, we would shade under the
+``OS'' column. We might also have three tasks labeled A, B, C. We would
+shade their columns when they are running. Remember, {\em only one column
+may be shaded in each row}.
+
+Assume that each line represents 333$\mu$s.   Assume that there is
+a system clock which generates timer events every 1,000 $\mu$s.
+To indicate these, make a mark at the left edge of every third
+horizontal line.
+
+Relax a bit about exactness or accuracy when doing this kind of diagramming. 
+It would be impossible to make an {\it exact} diagram without full access to 
+and understanding of the scheduler's code.   The main purpose of these exercises
+is to understand key features and attributes of various schedulers as we
+generate various scenarios and ask ``What would the scheduler do next?".  
+The exact answer will depend very specifically on how the scheduler is 
+implemented,  but we
+can learn better how to think about schedulers by encountering these situations. 
+
+	%<*>
+%%%%** Section 4.1.1 
+\subsubsection{Exercise 1}\label{SchEx1}
+
+\paragraph{Scheduler Type:} Non-synchronized, non-preemptive Round Robin
+\paragraph{Task List and Characteristics:} 
+
+\begin{itemize}
+\item The three tasks are labeled A, B, C
+\item The nature of the three tasks is as follows:
+    \begin{description}
+      \item [A] Periodic. $P = .001$sec, $C = 200\mu$sec, $D =P$.
+      \item [B] Periodic. $P = .002$sec, $C = 200\mu$sec, $D =P$.
+      \item [C] Periodic. $P = .002$sec, $C = 200\mu$sec, $D =P$.
+    \end{description}
+\end{itemize}
+
+
+%%%%** Section 4.1.2 
+\subsubsection{Exercise 2}
+
+\paragraph{Scheduler Type:} Synchronized, non-preemptive Round Robin
+\paragraph{Task List and Characteristics:} 
+	%<*chn>
+\begin{itemize}
+\item Same as Section \ref{SchEx1}
+\end{itemize}
+	%<*>
+
+
+%%%%** Section 4.1.3 
+\subsubsection{Exercise 3}
+
+\paragraph{Scheduler Type:} Diagram the schedule for the following
+         variation on round-robin:
+\begin{verbatim}
+while(1) {
+  wait(CLOCK_PULSE);
+  taskA();
+  taskB();
+  taskC();
+  wait(CLOCK_PULSE);
+  taskA();
+  }
+\end{verbatim} 
+\paragraph{Task List and Characteristics:} 
+	%<*chn>
+\begin{itemize}
+\item Same as Section \ref{SchEx1}
+\end{itemize}
+	%<*>
+
+
+\subsection*{Delay Functions and Scheduling}
+
+Tasks frequently need to wait for a time interval.
+
+Reasons:
+\begin{itemize}
+  \item To create time-based events (such as Flash an LED for 0.5 sec).
+  \item To wait for something external to happen such as for a device to
+           be ready for more data.
+  \item To free up CPU time for other processes.
+  \item To determine for themselves how often they run:
+\begin{verbatim}
+while(1)
+  {
+  compute;
+  sleep(20ms);  // Run every ~20ms.
+  }
+\end{verbatim}
+This task sets its own period, $P$, to 20ms.
+How accurate?
+
+\end{itemize}
+
+
+
+The worst way to do this is a delay loop such as
+\begin{verbatim}
+#define DELAY    22000
+for (i=0; i< DELAY ; i++) ;   // just loop to use up time
+\end{verbatim}
+
+	%<*chn>
+
+Here we assume that we have figured out that 22000 is the right value to
+use for the time delay we want by trial-and-error or calculation.   The
+worst bad thing about this method is that it doesn't meet the third
+reason, it uses all the CPU time itself.  (There are other problems as
+well). We can define
+the call {\tt sleep(int delay)} which does the following:
+ 
+
+	%<*>
+\begin{itemize}
+        \item returns to the scheduler
+        \item sets a software counter to {\tt delay}.  
+        \item schedules the next task.
+        \item the task which called {\tt OS\_TimeDelay()} will be set to 
+         {\tt Waiting} (not started by the scheduler)
+         \item Each tick, decrement {\tt delay} value for each sleeping task. 
+        \item when the {\tt delay } is over, set task to {\tt Ready}
+\end{itemize}
+
+
+%%%%** Section 4.1.4 
+\subsubsection{Exercise 4}
+
+\paragraph{Scheduler Type:} Assume a time delay function: {\tt sleep(int d)} is now available to the tasks 
+within a non-preemptive round robin scheduler.  Tasks take the form:
+\begin{verbatim}
+while(1) {
+  compute for a while;
+  sleep(14);  // 14 ms. is just example.
+  return;
+  }
+\end{verbatim} 
+\paragraph{Task List and Characteristics:} 
+\begin{itemize}
+\item The three tasks are labeled A, B, C
+\item The nature of the three tasks is as follows:
+    \begin{description}
+      \item [A] P=2.0ms, C= 233$\mu$sec, D=1.0ms
+      \item [B] P=4.0ms, C= 233$\mu$sec, D=1.0ms, task pseudocode: 
+\begin{verbatim}
+            taskB(void) {
+            compute for 233 mu sec;
+            sleep(3);
+            return;
+            }
+\end{verbatim}
+      \item [C]  P=1.0ms, C=100$\mu$sec, D=1.0ms  
+    \end{description}
+\end{itemize}
+
+
+
+
+
+
+\subsection*{Dynamic Scheduling}
+
+	%<*chn>
+\paragraph{Starting and Stopping}
+Sometimes it is desireable to make a task stop and start. Recall the task states defined in 
+Section \ref{TaskStates}.  We defined the
+task state {\tt Inactive}, to describe a stopped task.  To implement
+this, assume
+that functions are available: {\tt halt\_me()} which moves a task from
+{\tt Running} to
+{\tt Inactive} states (takes a task out of the
+scheduler's loop).  And {\tt run(task)} which moves a task from {\tt
+Inactive} to {\tt Ready} (puts a task into the
+scheduler loop).
+
+	%<*>
+
+
+%%%%** Section 4.1.5 
+\subsubsection{Exercise 5: Scheduling with {\tt halt\_me()} function}
+
+\paragraph{Scheduler Type:} Assume a halt function ({\tt halt\_me()}) is now available to the tasks within a non-preemptive round robin scheduler.   Tasks now might look like
+\begin{verbatim}
+
+taskA(void *p){
+  static int i=0;
+  compute a while;
+  if(i++ > 2) halt_me();  // turn off after 3 loops
+  return;
+  }
+\end{verbatim} 
+\paragraph{Task List and Characteristics:}  
+	\begin{itemize}
+	\item The three tasks are labeled A, B, C
+	\item The nature of the three tasks is as follows:
+		\begin{description}
+		\item [A] Intermittent:
+		\begin{verbatim}
+		 //  see above
+		\end{verbatim}
+		\item [B] Intermittent:  run for 666ms, then call {\tt sleep()} for 2.0 ms.  Repeat.
+		\item [C] Background:
+		\begin{verbatim}
+		void taskC {
+		compute for 0.233 ms; // work in 233usec chunks
+		return();
+		}
+		\end{verbatim}
+		\end{description} 
+	\end{itemize}
+
+ 
+  
+\subsubsection*{Scheduling with I/O requests} 
+	%<*chn>
+\paragraph{I/O}
+Sometimes tasks in embedded systems do I/O by directly manipulating
+hardware. For example, a task may set some bits on a digital output
+port using the various digital I/O registers in the microcontroller.  These types of operation  take
+very little time so they can be appropriate for periodic hard real time tasks.
+
+
+On the other hand, more sophisticated devices such as  disk drives or network
+interfaces require complex driver
+software and importantly take significant time to respond to commands.
+This type of I/O is typically supported by an embedded operating system
+which handles all I/O requests through subroutine calls.  Since tasks
+using these devices will have to wait a long time for them to respond, the scheduler
+is invoked after I/O requests.  If a task is waiting for I/O, the
+scheduler will try to run another task until the I/O is complete.
+From a scheduler's point of view, I/O requests are a lot like {\tt sleep(int d)} except {\tt d} is not known in advance (we will specify {\tt d} for schedule diagramming excercises or exam problems). 
+	%<*>
+
+
+
+
+%%%%** Section 4.1.8 
+\subsubsection{Exercise 6. I/O Delays} 
+
+\paragraph{Scheduler Type:} Assume an I/O function: {\tt OS\_request\_IO(int device)} is now available to the tasks within a non-preemptive round robin scheduler.   Tasks now might look like
+\begin{verbatim}
+taskA(void *p){
+  int device = HARD_DRIVE_0;
+  compute a while;
+  OS_request_IO(device);
+  return;
+  }
+\end{verbatim} 
+
+
+\paragraph{Task List and Characteristics:}
+ Diagram the schedule for the following tasks:
+        \begin{description}
+                \item[A] $P=1.0ms, C=0.233ms, D=0.5ms$
+                \item[B] Complex task:
+        \end{description}
+\begin{verbatim}
+            void taskB(){ 
+            compute for 0.233ms;
+            I/O Request lasting for 3ms;
+            //( much longer for physical I/O devs.)
+            }
+\end{verbatim} 
+
+
+ 
+
+\subsubsection*{Exercise 6a: Contention}
+
+\paragraph{Scheduler Type:} Synchronized Non-preemptive RR.
+\paragraph{Task List and Characteristics:}  
+            \begin{description}
+              \item [A] Periodic. $P = 2$msec, $C = 233\mu$sec, $D =P$.
+              \item [B] Periodic. $P = 2$msec, $C = 656\mu$sec, $D =P$.
+              \item [C] Periodic. $P = 2$msec, $C = 233\mu$sec, $D =P$.
+        \end{description}
+       Who starts when 3 tasks are ready? 
+
+\subsubsection*{Exercise 6b}
+
+\paragraph{Scheduler Type:} Synchronized Non-preemptive RR.
+\paragraph{Task List and Characteristics:}  
+            \begin{description}
+                \item[A:] Periodic.  $P = 2$msec, $C = 233\mu$sec,
+                           $D =500\mu$sec.
+                \item[B:] Complex:
+\begin{verbatim}
+while(1){
+  compute for 1.5ms;
+  Request I/O lasting 0.667ms;
+  }
+\end{verbatim}
+              \end{description}
+ 
+
+
+
+
+
+ 
+\subsubsection*{Foreground/Background}
+\begin{itemize}
+        \item A mix of hard real-time periodic tasks with
+        Soft real time or non real time intermittent and complex background tasks.
+        \item ``Foreground" --- the hard real time tasks
+        \item ``Background" --- the soft/non real time tasks
+        \item Example: Factory Automation Controller:
+        \begin{itemize}
+                \item  Real time control system (periodic, hard
+real-time, forground)
+                \item  Hourly production report generator (intermittent, soft-real time, background)
+                \item  Inventory Database Update (complex, non-realtime, background)
+        \end{itemize}
+\end{itemize}
+
+
+
+\subsubsection{Exercise 7: Foreground/Background}
+\paragraph{Scheduler Type:} Non-preemptive RR
+\paragraph{Task List and Characteristics:}
+\begin{description} 
+                \item[A:] Periodic.  $P = 2$msec, $C = 233\mu$sec,
+                           $D =500\mu$sec.
+\begin{verbatim}
+while(1){
+  compute for 0.233ms;
+  sleep(1);
+  return;
+  }
+\end{verbatim}
+                \item[B:] Complex (background): 
+\begin{verbatim}
+while(1){
+  compute for 0.233ms;
+  return;
+  }
+\end{verbatim}
+
+\end{description} 
+
+
+
+
+
+%%%%** Section 5 
+\section{Pre-emptive Scheduling}
+
+	%<*chn>
+So far, we have required that tasks return to the scheduler frequently
+so that other tasks get a chance to run in the CPU.  This has two
+problems.  First, we have to code our tasks somewhat artificially.  They
+have to break their job up into chunks and keep track.  Second, we are
+vulnerable if some task doesn't ``play fair".
+
+The solution to this is a scheduler that can break in to a running task
+using a regular interrupt such as a clock interrupt.   There are many
+complex issues in having this ability but the value is very great.
+Preemptive schedulers solve this problem.  While a task is running, 
+the pre-emptive scheduler can stop it and run something else.
+
+This idea changes how we can write tasks --- for the better! We no longer have to divide our work into bite-size chunks which can fit into a small part of the OS tick and then keep returning.  Instead, we just pretend that we are the only task needing the CPU:
+	%<*>
+
+	%<*>
+\begin{verbatim}
+while(1){
+  compute;
+  }
+\end{verbatim}
+The scheduler will now take care of breaking our work into small chunks.  If we have nothing to do, we can use the {\tt sleep()} function to release time to other tasks that we do not need.	%<chn>
+
+\begin{verbatim}
+while(1){
+  compute;
+  sleep(100);
+  }
+\end{verbatim}
+	%<*chn>
+In this case, we do our whole job, and then we wait for 100ms.   We can use this creatively to manage time easily. For example, consider a task to generate two 10ms pulses, 26ms apart, followed by 200ms, then repeat the pulses.   We could write this:
+
+	%<*>
+\begin{verbatim}
+while(1){
+  Output(PIN, 1) ;   // set the first pulse
+  sleep(10);
+  Output(PIN, 0) ; 
+  sleep(26);
+  Output(PIN, 1) ;   // set the second pulse
+  sleep(10);
+  Output(PIN, 0) ; 
+  sleep(200);
+  }
+\end{verbatim}
+
+
+\subsubsection*{Scheduler Types}
+Several types of pre-emptive schedulers are described below.
+
+
+%%%%** Section 5.0.1 
+\subsubsection*{Types of pre-emptive schedulers:}
+
+\begin{itemize}	%<chn>
+
+        \item	%<chn>
+Pre-emptive Round Robin
+        \begin{itemize}
+                \item Regular OS interrupts (``ticks'').
+                \item Scheduler moves to next task each tick.
+                \item \begin{verbatim}
+Task()
+{
+while{1}
+   { compute ; }
+}
+\end{verbatim}
+        \end{itemize}
+
+
+     \item	%<chn>
+Priority Based
+        \begin{itemize}
+                \item Each task assigned priority by programmer
+                \item Highest priority task always gets the CPU if
+ready.                \item \begin{verbatim}
+(same)
+\end{verbatim}
+        \end{itemize}
+
+
+
+        \item	%<chn>
+ Rate Monotonic (RMS)
+        \begin{itemize}
+                \item As above but priorities are assigned based on
+                period, $P$.
+                \item Short period = high priority.
+                \item Can prove optimality and schedulability (with
+assumptions).      
+                \item \begin{verbatim}
+(same)
+\end{verbatim}
+        \end{itemize}
+
+
+RMS Schedulability:
+
+$C_i = $ execution time of task $i$.
+
+$P_i = $ period of task $i$.
+
+$n = $ number of tasks.
+
+if 
+
+\[
+\sum^{n-1}_{i=0}\frac{C_i}{P_i} \leq n(2^{1/n}-1)
+\]
+the system {\bf is} schedulable using RMS.
+
+Assumption:  All tasks pre-emptable 100\% of the time.
+
+        \item 	%<chn>
+Priority Based: How to avoid {\tt starvation}
+
+\begin{quotation}
+{\bf starvation}: The case in scheduling where one or more tasks get no CPU time but needs it.
+\end{quotation}
+
+        \begin{itemize}
+                \item Fixed {\it unique} priority, task-specific delay.
+                \item Must tweak delay values, $M_i$,  to avoid
+starvation.                \item \begin{verbatim}
+Task()
+  {
+  compute_some();
+  OSTimeDelay(Mi);
+  }
+\end{verbatim}
+        \end{itemize}
+
+
+       \item	%<chn>
+ Priority Based Round Robin: when each task must run each OS tick.  (because of fast requirements).
+        \begin{itemize}
+                \item All tasks delay 1 tick
+                \item All tasks execute $< \frac{T}{N}$ where $T$ is the
+                OS tick period and $N$ is the number of tasks.
+                \item  \begin{verbatim}
+Task()
+  {
+  compute_a_little();
+  OSTimeDelay(1);
+  }
+\end{verbatim}
+        \end{itemize}
+
+ \item	%<chn>
+FreeRTOS Style Priority-Based. 
+             \begin{itemize}
+                \item 7 priority levels
+		\item RR within each level.
+              \end{itemize}
+
+\end{itemize}	%<chn>
+
+
+%%%%** Section 5.0.2 
+\subsubsection*{Preemptive Scheduling Exercises}
+
+\subsubsection{Exercise 8: Preemptive Priority Based Scheduling}
+
+\paragraph{Scheduler Type:} Preemptive Priority Based. Priority order: A=2, B=1, C=3. (1= highest)
+\paragraph{Task List and Characteristics:}  
+            \begin{description} 
+    \item [A] Intermittent: Run for 2ms and then {\tt halt\_me()}.
+    \item [B] Complex:  run for 1.0ms, then call the OS to do I/O which
+      lasts for 2.0 ms.  Repeat.
+    \item [C] Background: Run forever.
+\end{description}
+
+
+\subsubsection{Exercise 9: Preemptive Round Robin Scheduling}
+
+\paragraph{Scheduler Type:} Preemptive RR (no priorities)
+\paragraph{Task List and Characteristics:}  
+            \begin{description} 
+    \item [A] Intermittent: Run for 2ms and then {\tt halt\_me()}.
+    \item [B] Complex:  run for 1.0ms, then call the OS to do I/O which
+      lasts for 2.0 ms.  Repeat.
+    \item [C] Background: Run forever.
+\end{description}
+  
+
+
+
+\subsubsection{Exercise 10: Pre-emptive RR Scheduling}
+
+\paragraph{Scheduler Type:} Preemptive RR (no priorities)
+\paragraph{Task List and Characteristics:}  
+            \begin{description} 
+               \item 5 tasks. For each one P = 20ms, C=3ms, D=20ms. 
+  	       \item OS time tick is 1ms.
+            \end{description}
+
+How can you set up priorities (each task gets a different priority) and delay values to meet their schedules?
+ 
+
+
+%%%%** Section 6 
+\section{Scheduling Summary}
+
+
+\begin{tabular}{|p{1.75in}|p{1.75in}|}
+\hline
+Issue                   & Scheduling Concepts    \\ \hline
+How often will each task run? & Task types; Round Robin ; delay functions      \\ \hline
+Which task runs next?         & Task State; Round Robin; Priority Schemes   \\\hline
+How do tasks give up CPU?       & {\tt return()/yield()} ; Request I/O ;
+                                       interrupts/preemption\\\hline
+What if task doesn't need to run all the time?
+                                & {\tt  dynamic scheduling ; halt\_me()/start(task)} \\\hline
+How can we meet deadlines {\bf and} make full use of CPU?
+                                & Background Tasks \\\hline
+\end{tabular}
+
+
+
+%%%%** Section 7 
+\section{RTOS Types}
+
+{\tt
+\begin{tabular}{|l|c|c|c|}
+\hline
+Type            & $C$               & $D$           & Scheduling        \\
+\hline``Super HRT''   &  $\ll P$    & P             & Trivial           \\ \hline
+``Hard RT''     &  $(1 \sim 5)T$        & $(10 \sim 20)T$        & Complex      \\ \hline
+``Soft RT''     &  $(10 \sim 20)T$       & $\sim100T$    & Complex          \\ \hline
+Non RT          &   X               & X             & Trivial           \\ \hline
+\end{tabular}
+}
+
+Where $P,C,D,T$ are defined in sections \ref{Periodic} and \ref{Time}.	%<hn>
+
+
+ 	%<*chn>
+%%%%** Section 8 
+\section{Scheduler Diagramming}
+Print out multiple copies of the Scheduler Diagramming Worksheet on the next page. 
+We will use them in class to practice analysis of scheduling situations. 
+
+We will use each line in the worksheet to represent 333 $\mu$sec.  Thus every three lines
+is one millisecond (our usual operating system time tick).   Color in each column when
+its task should be running. 
+
+\newpage
+\section{\large\bf Scheduler Diagramming Worksheet} 
+\label{SchedWorksheet}
+\renewcommand\arraystretch{1.8}% Vertical Row size, 1.0 is for standard spacing)
+\begin{tabular}{|p{1in}|p{0.3in}|p{1in}|p{1in}|p{1in}|}
+\hline
+OS      &  & A & B & C \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+        &  &   &   &   \\ \hline
+\end{tabular} 
+\end{document}	%<shn>
+
+
+
