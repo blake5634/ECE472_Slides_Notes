@@ -1,0 +1,5 @@
+# Generated files from coursetex / .shn preprocessor
+*.c.tex
+*.n.tex
+*.s.tex
+*.h.tex
