@@ -59,8 +59,8 @@ Registers are an array of D flip-flops which can store a collection of bits.
 An n bit register has n inputs, n outputs, and one clock line.
 
 \begin{center}
-<chn>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00156.eps}}{*\#*\#Guess by Claude.ai: Diagram of an n-bit register as an array of D flip-flops with n data inputs, n outputs, and a shared clock line}   \\
-<s>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00156.eps}}{*\#*\#Guess by Claude.ai: Diagram of an n-bit register as an array of D flip-flops with n data inputs, n outputs, and a shared clock line}   \\
+<chn>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00156.eps}}{ Diagram of an n-bit register as an array of D flip-flops with n data inputs, n outputs, and a shared clock line. One such flip-flop is magnified to show Clock and D inputs as well as Q and Q-bar outputs.}   \\
+<s>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00156.eps}}{Diagram of an n-bit register as an array of D flip-flops with n data inputs, n outputs, and a shared clock line. One such flip-flop is magnified to show Clock and D inputs as well as Q and Q-bar outputs.}   \\
 
 \end{center}
 
@@ -74,8 +74,8 @@ A bus is a parallel bi-directional data path
 Multiple devices can send and receive on one bus
 
 \begin{center}
-<chn>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00155.eps}}{*\#*\#Guess by Claude.ai: Diagram of a computer bus showing parallel address, data, and control lines connecting the CPU to memory and I/O devices}   \\
-<s>   \pdftooltip{\includegraphics[width=\textwidth]{hwio_figs/00155.eps}}{*\#*\#Guess by Claude.ai: Diagram of a computer bus showing parallel address, data, and control lines connecting the CPU to memory and I/O devices}   \\
+<chn>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00155.eps}}{ Diagram of a computer bus showing parallel address, data, and control lines connecting the CPU to memory and I/O devices}   \\
+<s>   \pdftooltip{\includegraphics[width=\textwidth]{hwio_figs/00155.eps}}{ Diagram of a computer bus showing parallel address, data, and control lines connecting the CPU to memory and I/O devices}   \\
 \end{center}
 
 Address: N bits which specify {\it which location}.
@@ -112,8 +112,8 @@ Control bus is gated by ADDR comparator
 Device register is strobed by CTL pulse only if addresses match.
 
 \begin{center}
-<chn>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00157.eps}}{*\#*\#Guess by Claude.ai: Diagram of bus address comparator logic gating the control bus so that a device register is strobed only when the bus address matches the device address}   \\
-<s>   \pdftooltip{\includegraphics[width=\textwidth]{hwio_figs/00157.eps}}{*\#*\#Guess by Claude.ai: Diagram of bus address comparator logic gating the control bus so that a device register is strobed only when the bus address matches the device address}   \\
+<chn>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00157.eps}}{  Diagram of a simple 3-bit address bus comparator   gating the control bus so that a device register is strobed only when the bus address matches the device address.}   \\
+<s>   \pdftooltip{\includegraphics[width=\textwidth]{hwio_figs/00157.eps}}{ Diagram of a simple 3-bit address bus comparator   gating the control bus so that a device register is strobed only when the bus address matches the device address.}   \\
 \end{center}
 
 
@@ -127,8 +127,8 @@ Below is a simple notation for showing timing relationships of signals on
 busses.
 
 \begin{center}
-<chn>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00158.eps}}{*\#*\#Guess by Claude.ai: Bus timing diagram showing notation for signal timing relationships on address, data, and control lines}   \\
-<s>   \pdftooltip{\includegraphics[width=\textwidth]{hwio_figs/00158.eps}}{*\#*\#Guess by Claude.ai: Bus timing diagram showing notation for signal timing relationships on address, data, and control lines}   \\
+<chn>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00158.eps}}{ Bus timing diagram showing notation for signal timing relationships on address, data, and control lines. Shown are ``logic 1'' (horizontal line), Positive and negative pulses, Changing of multiple lines (X shape between high and low signals), and transition to a High impedance state (line in middle between 1 and 0.)}   \\
+<s>   \pdftooltip{\includegraphics[width=\textwidth]{hwio_figs/00158.eps}}Bus timing diagram showing notation for signal timing relationships on address, data, and control lines. Shown are ``logic 1'' (horizontal line), Positive and negative pulses, Changing of multiple lines (X shape between high and low signals), and transition to a High impedance state (line in middle between 1 and 0.)}   \\
 
 \end{center}
 
@@ -138,8 +138,8 @@ same wire?
 Solution:  Tri-state logic.
 
 \begin{center}
-<chn>   \pdftooltip{\includegraphics[height=2.0in]{hwio_figs/00159.eps}}{*\#*\#Guess by Claude.ai: Diagram of a tri-state logic gate with three output states: Logic 1, Logic 0, and high-impedance (switch OFF), used to share a bus among multiple devices}   \\
-<s>   \pdftooltip{\includegraphics[height=1.5in]{hwio_figs/00159.eps}}{*\#*\#Guess by Claude.ai: Diagram of a tri-state logic gate with three output states: Logic 1, Logic 0, and high-impedance (switch OFF), used to share a bus among multiple devices}   \\
+<chn>   \pdftooltip{\includegraphics[height=2.0in]{hwio_figs/00159.eps}}{ Diagram of a tri-state logic gate with three output states: Logic 1, Logic 0, and high-impedance (switch OFF), used to share a bus among multiple devices}   \\
+<s>   \pdftooltip{\includegraphics[height=1.5in]{hwio_figs/00159.eps}}{ Diagram of a tri-state logic gate with three output states: Logic 1, Logic 0, and high-impedance (switch OFF), used to share a bus among multiple devices}   \\
 \end{center}
 States:  { Logic 1, Logic 0, switch OFF }
 
@@ -156,8 +156,8 @@ any time!
 Write Cycle
 
 \begin{center}
-<chn>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00160.eps}}{*\#*\#Guess by Claude.ai: Bus timing diagram for a write cycle showing the sequence of address, data, and control signals}   \\
-<s>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00160.eps}}{*\#*\#Guess by Claude.ai: Bus timing diagram for a write cycle showing the sequence of address, data, and control signals}   \\
+<chn>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00160.eps}}{  Bus timing diagram for a write cycle showing the sequence of address, data, and control signals}   \\
+<s>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00160.eps}}{ Bus timing diagram for a write cycle showing the sequence of address, data, and control signals}   \\
 
 \end{center}
 
@@ -180,8 +180,8 @@ Read Cycle
 \subsection{Microprocessor: Register View}
 
 \begin{center}
-<chn>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00162.eps}}{*\#*\#Guess by Claude.ai: Block diagram of microprocessor internal registers including ALU, Program Counter (PC), Instruction Register (IR), Address Register (ADDR), General Purpose Registers, ALU argument registers, result register, and FLAGS}   \\
-<s>   \pdftooltip{\includegraphics[height=2.75in]{hwio_figs/00162.eps}}{*\#*\#Guess by Claude.ai: Block diagram of microprocessor internal registers including ALU, Program Counter (PC), Instruction Register (IR), Address Register (ADDR), General Purpose Registers, ALU argument registers, result register, and FLAGS}   \\
+<chn>   \pdftooltip{\includegraphics[height=3.5in]{hwio_figs/00162.eps}}{ Block diagram of microprocessor internal registers including ALU, Program Counter (PC), Instruction Register (IR), Address Register (ADDR), General Purpose Registers, ALU argument registers, result register, and FLAGS}   \\
+<s>   \pdftooltip{\includegraphics[height=2.75in]{hwio_figs/00162.eps}}{ Block diagram of microprocessor internal registers including ALU, Program Counter (PC), Instruction Register (IR), Address Register (ADDR), General Purpose Registers, ALU argument registers, result register, and FLAGS}   \\
 
 \end{center}
 
@@ -238,8 +238,8 @@ Each instruction is typically between one and eight bytes.
 
 Examples:
 \begin{center}
-<chn>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00163.eps}}{*\#*\#Guess by Claude.ai: Examples of machine language instruction formats showing opcode and operand fields in binary representation}   \\
-<s>   \pdftooltip{\includegraphics[height=3in]{hwio_figs/00163.eps}}{*\#*\#Guess by Claude.ai: Examples of machine language instruction formats showing opcode and operand fields in binary representation}   \\
+<chn>   \pdftooltip{\includegraphics[height=2.5in]{hwio_figs/00163.eps}}{ Examples of machine language instruction formats showing opcode and operand fields in binary representation}   \\
+<s>   \pdftooltip{\includegraphics[height=3in]{hwio_figs/00163.eps}}{ Examples of machine language instruction formats showing opcode and operand fields in binary representation}   \\
 
 \end{center}
 

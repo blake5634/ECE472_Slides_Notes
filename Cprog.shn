@@ -363,11 +363,12 @@ Reasons:
 <s>\end{slide}
 <s>\begin{slide}
 
-    \pdftooltip{\includegraphics[width=4.5in]{cprog_figs/includes_multi_protos.png}}{*\#*\#Guess by Claude.ai: Diagram showing a single .h header file providing identical function prototype declarations to multiple .c source files, eliminating duplicate declarations}
+    \pdftooltip{\includegraphics[width=4.5in]{cprog_figs/includes_multi_protos.png}}{Diagram showing a single .h header file providing identical function prototype declarations to multiple .c source files, eliminating duplicate declarations}
     
-    A single {\tt .h} file introduces the exact same function prototypes
-    and data declarations into multiple files without having to maintain 
-    separate identical copies in multiple files. 
+    A single {\tt .h} file introduces the exact same {\it} function prototypes.
+    and data {\it declarations} into multiple files without having to maintain
+    separate identical copies in multiple files.   Variable {\it definitions}
+    and function {\it definitions} belong in .c files.
     
 <s>\end{slide}
 <s>\begin{slide}
@@ -447,8 +448,9 @@ C pre-processor can turn on-off  blocks of code before compilation.
 %%%%** Section 3.3
 \subsection{C pre-processor overview}
 
-<s>\pdftooltip{\includegraphics[width=4.0in]{cprog_figs/c-building.png}}{*\#*\#Guess by Claude.ai: Flowchart of the C build process showing preprocessor applying \#include and \#define directives, compiler generating .o object files, and linker combining object files and libraries into an executable}
-<chn>\pdftooltip{\includegraphics[width=5.5in]{cprog_figs/c-building.png}}{*\#*\#Guess by Claude.ai: Flowchart of the C build process showing preprocessor applying \#include and \#define directives, compiler generating .o object files, and linker combining object files and libraries into an executable}
+<s>\pdftooltip{\includegraphics[width=4.0in]{cprog_figs/c-building.png}}{ Flowchart of the C build process showing preprocessor applying \#include and \#define directives, compiler generating .o object files, and linker combining object files and libraries into an executable.  A switch symbol depicts the \#ifdef directive which can ``turn on'' and ``turn off'' blocks of code until \#endif is encountered. }
+
+<chn>\pdftooltip{\includegraphics[width=5.5in]{cprog_figs/c-building.png}}{Flowchart of the C build process showing preprocessor applying \#include and \#define directives, compiler generating .o object files, and linker combining object files and libraries into an executable. A switch symbol depicts the \#ifdef directive which can ``turn on'' and ``turn off'' blocks of code until \#endif is encountered. }
     
 <*>
 

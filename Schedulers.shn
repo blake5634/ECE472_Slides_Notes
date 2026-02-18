@@ -290,11 +290,11 @@ Each unit has
 <*chn>
 \begin{center}
 %\vspace{2.5in}
-   \pdftooltip{\includegraphics[width=3in]{sched_figs/00264.eps}}{*\#*\#Guess by Claude.ai: Diagram illustrating the four attributes of a process or program: code, data, context/state, and managed resources}
+   \pdftooltip{\includegraphics[width=3in]{sched_figs/00264.eps}}{A Venn-like diagram depicting a software system.   A large circle is the system, a smaller circle inside is a ``Process".  Within the Process are a stack of smaller  circles which are ``Threads''.}
 \end{center}
 
 <s>\scalebox{1.0}{
-<s>\pdftooltip{\includegraphics{sched_figs/00264.eps}}{*\#*\#Guess by Claude.ai: Diagram illustrating the four attributes of a process or program: code, data, context/state, and managed resources} }
+<s>\pdftooltip{\includegraphics{sched_figs/00264.eps}}{A Venn-like diagram depicting a software system.   A large circle is the system, a smaller circle inside is a ``Process".  Within the Process are a stack of smaller  circles which are ``Threads''.} }
 
 
 <s>\end{slide}
@@ -302,10 +302,10 @@ Each unit has
 
 A {\it Program or Process} is a unit of computation with all of the above attributes.
 
-A {\it Subroutine or Function} is a unit of comptuation with code, data, and context, but
+A {\it Subroutine or Function} is a unit of computation with code, data, and context, but
 no managed resources.
 
-<*hn> I am using the term ``managed resources" to mean resources which can be assigned and deassigned
+<*hn> I am using the term ``managed resources" to mean resources which can be assigned and de-assigned
 by the operating system such as memory or I/O devices.   Of course a function within a program has its
 own memory, but if it requests memory from the OS (for example with {\tt malloc()}, the OS assigns it
 to the program, not to the function within that program.
@@ -327,10 +327,10 @@ Threads are like pieces within a program which can be scheduled by the OS indepe
 <*chn>
 \begin{center}
 %\vspace{2.5in}
-   \pdftooltip{\includegraphics[width=3in]{sched_figs/00265.eps}}{*\#*\#Guess by Claude.ai: Diagram comparing programs, subroutines/functions, and threads by their attributes: code, private data, context, and managed resources}
+   \pdftooltip{\includegraphics[width=3in]{sched_figs/00265.eps}}{Memory layout of  code, private data, in two threads.  The first Process (``Process 1'') is non-threaded. It is a rectangle divided into Code and Data sections.  Another rectangle (``Process 2'') depicts a Threaded process.   In place of the code block is several thin rectangles labeled ``Threads''. The Data section looks just like that of Process 1.}
 \end{center}
 <*>
-<s>  \scalebox{1.0}{  \pdftooltip{\includegraphics{sched_figs/00265.eps}}{*\#*\#Guess by Claude.ai: Diagram comparing programs, subroutines/functions, and threads by their attributes: code, private data, context, and managed resources} }
+<s>  \scalebox{1.0}{  \pdftooltip{\includegraphics{sched_figs/00265.eps}}{Memory layout of  code, private data, in two threads.  The first Process (``Process 1'') is non-threaded. It is a rectangle divided into Code and Data sections.  Another rectangle (``Process 2'') depicts a Threaded process.   In place of the code block is several thin rectangles labeled ``Threads''. The Data section looks just like that of Process 1.} }
 
 A complete software system with two processes.   
 <s>Process 1: normal, Process 2: threaded
