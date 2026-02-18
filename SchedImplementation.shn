@@ -11,8 +11,18 @@
 <s>\pagestyle{headings}
 <s>\slidepagestyle{BHstyle}
 <s>\addtolength\oddsidemargin{3cm}
+<shn>\usepackage[T1]{fontenc}
+<shn>\usepackage[utf8]{inputenc}
+<shn>\usepackage[english]{babel}
 <shn>\usepackage{graphicx}
-<shn>\usepackage{hyperref}
+<shn>\usepackage[pdftex,
+<shn>    pdftitle={ECE 474: Scheduler Implementation},
+<shn>    pdfauthor={Blake Hannaford, University of Washington},
+<shn>    pdflang={en-US},
+<shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
+<shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
+<shn>    hidelinks,
+<shn>    unicode]{hyperref}
 <shn>\usepackage{listings}
 
 <*hn>
