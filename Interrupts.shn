@@ -27,6 +27,7 @@
     urlcolor=blue,
     citecolor=blue,
 <shn>    unicode]{hyperref}
+<shn>\usepackage{pdfcomment}
 <shn>\usepackage{listings}
 
 <*hn>
@@ -142,7 +143,7 @@ into CPU registers.  IR is restored last.
 
 %%%%** Section 1.5
 \subsection{The Stack}
-\includegraphics[width=2in]{misc_figs/traystack.png}\\
+\pdftooltip{\includegraphics[width=2in]{misc_figs/traystack.png}}{*\#*\#Guess by Claude.ai: Photo of a spring-loaded cafeteria tray stack, used as a physical analogy for the hardware stack data structure (push and pop operations)}\\
 \noindent
 Did your school cafeteria have one of these?\vspace{0.2in}
 

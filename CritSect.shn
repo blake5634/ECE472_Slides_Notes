@@ -27,6 +27,7 @@
     urlcolor=blue,
     citecolor=blue,
 <shn>    unicode]{hyperref}
+<shn>\usepackage{pdfcomment}
 <shn>\usepackage{listings}
 
 <*hn>
@@ -678,7 +679,7 @@ Task A, C $\to$ Buffer $\to$ {\tt semaphore S}
 \hspace{0.5in}``priority inversion mars JPL"
 
 \begin{center}
-\includegraphics[width=2in]{misc_figs/pathfinder.png}
+\pdftooltip{\includegraphics[width=2in]{misc_figs/pathfinder.png}}{*\#*\#Guess by Claude.ai: Photo or rendering of the NASA Mars Pathfinder rover, illustrating the real-world priority inversion bug that caused system resets during the 1997 Mars mission}
 \end{center}
  
 

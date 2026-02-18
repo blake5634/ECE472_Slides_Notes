@@ -27,6 +27,7 @@
     urlcolor=blue,
     citecolor=blue,
 <shn>    unicode]{hyperref}
+<shn>\usepackage{pdfcomment}
 <shn>\usepackage{listings}
 
 <*hn>
@@ -134,7 +135,7 @@ Bits.
 <s>\end{slide}
 <s>\begin{slide}
 
-\includegraphics[width=\linewidth]{Serial_figs/rs232_serialbits.png}
+\pdftooltip{\includegraphics[width=\linewidth]{Serial_figs/rs232_serialbits.png}}{*\#*\#Guess by Claude.ai: Timing diagram of an RS-232 serial bit frame showing start bit, 8 data bits, optional parity bit, and stop bit(s) with voltage levels over time}
 <s>\end{slide}
 <s>\begin{slide}
 
@@ -234,7 +235,7 @@ Minimum 3 wires:
 <s>\begin{slide}
 Maximum 23 wires!
 
-\includegraphics[height=2.75in]{Serial_figs/rs232_db25pinout.png}
+\pdftooltip{\includegraphics[height=2.75in]{Serial_figs/rs232_db25pinout.png}}{*\#*\#Guess by Claude.ai: Diagram of the DB-25 connector pinout for RS-232 serial interface showing all 25 pin numbers and their signal assignments}
 {\tiny
 Source(https://www.aggsoft.com/rs232-pinout-cable/}
 {\tiny serial-cable-connections.htm)}

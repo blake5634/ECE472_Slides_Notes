@@ -27,6 +27,7 @@
     urlcolor=blue,
     citecolor=blue,
 <shn>    unicode]{hyperref}
+<shn>\usepackage{pdfcomment}
 <shn>\usepackage{listings}
 
 <*hn>
@@ -289,11 +290,11 @@ Each unit has
 <*chn>
 \begin{center}
 %\vspace{2.5in}
-   \includegraphics[width=3in]{sched_figs/00264.eps}
+   \pdftooltip{\includegraphics[width=3in]{sched_figs/00264.eps}}{*\#*\#Guess by Claude.ai: Diagram illustrating the four attributes of a process or program: code, data, context/state, and managed resources}
 \end{center}
 
 <s>\scalebox{1.0}{
-<s>\includegraphics{sched_figs/00264.eps} }
+<s>\pdftooltip{\includegraphics{sched_figs/00264.eps}}{*\#*\#Guess by Claude.ai: Diagram illustrating the four attributes of a process or program: code, data, context/state, and managed resources} }
 
 
 <s>\end{slide}
@@ -326,10 +327,10 @@ Threads are like pieces within a program which can be scheduled by the OS indepe
 <*chn>
 \begin{center}
 %\vspace{2.5in}
-   \includegraphics[width=3in]{sched_figs/00265.eps}
+   \pdftooltip{\includegraphics[width=3in]{sched_figs/00265.eps}}{*\#*\#Guess by Claude.ai: Diagram comparing programs, subroutines/functions, and threads by their attributes: code, private data, context, and managed resources}
 \end{center}
 <*>
-<s>  \scalebox{1.0}{  \includegraphics{sched_figs/00265.eps} }
+<s>  \scalebox{1.0}{  \pdftooltip{\includegraphics{sched_figs/00265.eps}}{*\#*\#Guess by Claude.ai: Diagram comparing programs, subroutines/functions, and threads by their attributes: code, private data, context, and managed resources} }
 
 A complete software system with two processes.   
 <s>Process 1: normal, Process 2: threaded

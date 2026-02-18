@@ -26,6 +26,7 @@
     urlcolor=blue,
     citecolor=blue,
 <shn>    unicode]{hyperref}
+<shn>\usepackage{pdfcomment}
 <shn>\usepackage{listings}
 
 <*hn>
@@ -362,7 +363,7 @@ Reasons:
 <s>\end{slide}
 <s>\begin{slide}
 
-    \includegraphics[width=4.5in]{cprog_figs/includes_multi_protos.png}
+    \pdftooltip{\includegraphics[width=4.5in]{cprog_figs/includes_multi_protos.png}}{*\#*\#Guess by Claude.ai: Diagram showing a single .h header file providing identical function prototype declarations to multiple .c source files, eliminating duplicate declarations}
     
     A single {\tt .h} file introduces the exact same function prototypes
     and data declarations into multiple files without having to maintain 
@@ -446,8 +447,8 @@ C pre-processor can turn on-off  blocks of code before compilation.
 %%%%** Section 3.3
 \subsection{C pre-processor overview}
 
-<s>\includegraphics[width=4.0in]{cprog_figs/c-building.png}
-<chn>\includegraphics[width=5.5in]{cprog_figs/c-building.png}
+<s>\pdftooltip{\includegraphics[width=4.0in]{cprog_figs/c-building.png}}{*\#*\#Guess by Claude.ai: Flowchart of the C build process showing preprocessor applying \#include and \#define directives, compiler generating .o object files, and linker combining object files and libraries into an executable}
+<chn>\pdftooltip{\includegraphics[width=5.5in]{cprog_figs/c-building.png}}{*\#*\#Guess by Claude.ai: Flowchart of the C build process showing preprocessor applying \#include and \#define directives, compiler generating .o object files, and linker combining object files and libraries into an executable}
     
 <*>
 

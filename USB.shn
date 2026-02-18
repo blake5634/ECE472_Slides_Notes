@@ -27,6 +27,7 @@
     urlcolor=blue,
     citecolor=blue,
 <shn>    unicode]{hyperref}
+<shn>\usepackage{pdfcomment}
 <shn>\usepackage{listings}
 
 <*hn>
@@ -97,10 +98,10 @@ Source:  Official USB 1.1 Specification.
  
 <*chn>
 \begin{center}
-   \includegraphics[width=4in]{usb_figs/00076.eps}
+   \pdftooltip{\includegraphics[width=4in]{usb_figs/00076.eps}}{*\#*\#Guess by Claude.ai: USB architecture diagram (Figure 4-1) showing a tree topology with a host at the root, hubs as intermediate nodes, and function devices (peripherals) as leaves}
 \end{center}
 
-<s>  \scalebox{.15}{  \includegraphics{usb_figs/00076.eps} }\\
+<s>  \scalebox{.15}{  \pdftooltip{\includegraphics{usb_figs/00076.eps}}{*\#*\#Guess by Claude.ai: USB architecture diagram (Figure 4-1) showing a tree topology with a host at the root, hubs as intermediate nodes, and function devices (peripherals) as leaves} }\\
 <*>
 (Figure 4-1, page 16)
 
@@ -120,8 +121,8 @@ Functions in a single package.
 %<hn>\scalebox{0.15} {
 %<s>\scalebox{0.45} { 
 \begin{center}
-<chn>   \includegraphics[height=3.5in]{usb_figs/00077.eps} \\
-<s>    \includegraphics[height=2.5in]{usb_figs/00077.eps} \\
+<chn>   \pdftooltip{\includegraphics[height=3.5in]{usb_figs/00077.eps}}{*\#*\#Guess by Claude.ai: USB compound device diagram (Figure 4-4) showing a hub and one or more function peripherals integrated in a single physical package} \\
+<s>    \pdftooltip{\includegraphics[height=2.5in]{usb_figs/00077.eps}}{*\#*\#Guess by Claude.ai: USB compound device diagram (Figure 4-4) showing a hub and one or more function peripherals integrated in a single physical package} \\
 (Figure 4-4, page 23)
 \end{center}
 
@@ -460,13 +461,13 @@ devices plugged in.
 \subsection{Voltage Levels and Rise Times:}
 <*chn>
 \begin{center}
-   \includegraphics[height=2in]{usb_figs/00078.eps}   \\
+   \pdftooltip{\includegraphics[height=2in]{usb_figs/00078.eps}}{*\#*\#Guess by Claude.ai: USB electrical signal voltage level diagram (Figure 7-1) showing driver output thresholds (VOL, VOH) and receiver input thresholds (VIL, VIH)}   \\
 (Figure 7-1, page 107)
 \end{center}
 
 
 %<s>\vspace{-2in}
-<s>  \scalebox{.15}{  \includegraphics{usb_figs/00078.eps} }\\
+<s>  \scalebox{.15}{  \pdftooltip{\includegraphics{usb_figs/00078.eps}}{*\#*\#Guess by Claude.ai: USB electrical signal voltage level diagram (Figure 7-1) showing driver output thresholds (VOL, VOH) and receiver input thresholds (VIL, VIH)} }\\
 
 
 <s>\end{slide}
@@ -492,7 +493,7 @@ Worst case inputs: [-1.0V --- +4.6V]
 \subsection{Differential Drive} 
 <s> \scalebox{0.15}{
 <chn>\scalebox{0.15}{
-    \includegraphics{usb_figs/00079.eps}
+    \pdftooltip{\includegraphics{usb_figs/00079.eps}}{*\#*\#Guess by Claude.ai: USB differential drive circuit diagram (Figure 7-2) showing D+ and D- signal lines driven differentially to eliminate common-mode noise, with output enable (OE) control}
    }
 
 (Fig 7-2 page 108)
