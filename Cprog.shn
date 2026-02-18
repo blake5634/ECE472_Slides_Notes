@@ -21,7 +21,7 @@
 <shn>    pdflang={en-US},
 <shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
 <shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-<shn>    hidelinks,
+<shn>    colorlinks=true,
 <shn>    unicode]{hyperref}
 <shn>\usepackage{listings}
 
