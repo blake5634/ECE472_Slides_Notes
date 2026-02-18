@@ -15,6 +15,9 @@
     pdfsubject={ECE 474 Embedded Microcomputer Systems},
     pdfkeywords={embedded systems, microcontrollers, ECE 474},
     colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
     unicode]{hyperref}
 
 <s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 472 \hfil \thepage}{Hannaford \hfil \today}

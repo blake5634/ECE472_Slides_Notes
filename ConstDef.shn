@@ -24,6 +24,9 @@
 <shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
 <shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
 <shn>    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
 <shn>    unicode]{hyperref}
 <shn>\usepackage{listings}
 
