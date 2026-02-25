@@ -4,6 +4,7 @@
 %
 %
 <stream, c>   % combined into notes pack
+<stream, x>   % off for all streams.
 
 <nh>\documentclass{article}
 <s>\documentclass{seminar}
@@ -12,22 +13,8 @@
 <s>\pagestyle{headings}
 <s>\slidepagestyle{BHstyle}
 <s>\addtolength\oddsidemargin{3cm}
-<shn>\usepackage[T1]{fontenc}
-<shn>\usepackage{lmodern}
-<shn>\usepackage[utf8]{inputenc}
-<shn>\usepackage[english]{babel}
 <shn>\usepackage{graphicx}
-<shn>\usepackage[pdftex,
-<shn>    pdftitle={ECE 474: C Constants and Preprocessor Directives},
-<shn>    pdfauthor={Blake Hannaford, University of Washington},
-<shn>    pdflang={en-US},
-<shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
-<shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-<shn>    colorlinks=true,
-    linkcolor=blue,
-    urlcolor=blue,
-    citecolor=blue,
-<shn>    unicode]{hyperref}
+<shn>\usepackage{hyperref}
 <shn>\usepackage{listings}
 
 <*hn>
@@ -37,6 +24,39 @@
 \textheight 8.7in
 \topmargin 0.2in
 
+\usepackage{fancyhdr}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%
+%  Set Up Margins
+\input{templates/pagedim.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%         Page format Mods HERE
+%
+%Mod's to page size for this document
+\addtolength\textwidth{0cm}
+\addtolength\oddsidemargin{0cm}
+\addtolength\headsep{0cm}
+\addtolength\textheight{0cm}
+%\linespread{0.894}   % 0.894 = 6 lines per inch, 1 = "single",  1.6 = "double"
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER / FOOTER
+\pagestyle{fancy}
+%%%%%  Page header/footer fields for "NSF Style" proposal
+%%%%%  \chead will be changed with each section
+\lhead{\small\sc EE474}
+\rhead{}
+<chn>\chead{\large\bf Lecture Notes}
+\lfoot{Hannaford, U. of Washington}
+\rfoot{\today}
+\cfoot{\thepage}
+%\renewcommand\headrulewidth{1pt}
+%\renewcommand\footrulewidth{1pt}
 
 <*shn>
 
@@ -46,12 +66,13 @@
 <shn>\begin{document}
 <*>
 <s>\begin{slide}
-\section*{{\tt C} Constants, Defines and Integers \footnote{
- B. Kernigan and D. Ritchie, ``The C Programming Language,,''
- 2nd Edition, Prentice Hall, 1988.  \\
+\section*{{\tt C} Constants, Defines and Integers}
+
+{\bf See:}
+ B. Kernigan and D. Ritchie, ``The C Programming Language,''
+ 2nd Edition, Prentice Hall, 1988.  \\[.24in]
  Daniel W. Lewis, Fundamentals of
- Embedded Software, {\it Where C and Assembly Meet}, Prentice Hall, 2002.}
- }
+ Embedded Software, {\it Where C and Assembly Meet}, Prentice Hall, 2002.
 
 <s>\end{slide}
 <s>\begin{slide}
@@ -72,37 +93,43 @@ each HEX character maps to a specific bit pattern.
 
 
 <chn>\vspace{0.2in}
+
+<s>\end{slide}
+<s>\begin{slide}
+
 <*>
-\begin{tabular}{|c|c|r|}
-\hline
+
+\begin{tabular}{|c|c|r|}\hline
 bits  &  HEX & Octal \\ \hline
 0000  &  0   & 0     \\ \hline
 0001  &  1   & 1     \\ \hline
-0010  &  2   & 2     \\ \hline
-...   &  ...    & ...      \\ \hline
+% 0010  &  2   & 2     \\ \hline
+...   &  ... & ...   \\ \hline
 0111  &  7   & 7     \\ \hline
 1000  &  8   & 10     \\ \hline
 1001  &  9   & 11     \\ \hline
 1010  &  A   & 12     \\ \hline
-1011  &  B   & 13     \\ \hline
-
+% 1011  &  B   & 13     \\ \hline
 ...   & ...  & ...   \\ \hline
-1111  &  F   & 17     \\
-\hline
+1111  &  F   & 17     \\\hline
 \end{tabular}
 
 <chn>\vspace{0.2in}
 
+<*>
 Hex Place value: To convert {\tt 0xD2FB} to decimal:
 
 <hn>\vspace{0.2in}
 \begin{tabular}{|c|c|c|c|}
 \hline
-D       &       2       &       F       &       B \\ \hline
+D & 2 &F&B\\\hline
+4th place       &    3rd place      &    2nd place     &    1st place\\ \hline
 $2^{12}$        &       $2^8$   &       $2^4$   &       $2^0$ \\ \hline
 4096    &       256     &       16      &       1 \\ \hline
         &               &               &          \\ \hline
 \end{tabular}
+
+Multiply each hex digit by its place value, then add.
 <hn>\vspace{0.2in}
 
 <*chn>

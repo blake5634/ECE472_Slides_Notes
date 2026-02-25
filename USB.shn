@@ -11,23 +11,8 @@
 <s>\pagestyle{headings}
 <s>\slidepagestyle{BHstyle}
 <s>\addtolength\oddsidemargin{3cm}
-<shn>\usepackage[T1]{fontenc}
-<shn>\usepackage{lmodern}
-<shn>\usepackage[utf8]{inputenc}
-<shn>\usepackage[english]{babel}
 <shn>\usepackage{graphicx}
-<shn>\usepackage[pdftex,
-<shn>    pdftitle={ECE 474: Introduction to USB},
-<shn>    pdfauthor={Blake Hannaford, University of Washington},
-<shn>    pdflang={en-US},
-<shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
-<shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-<shn>    colorlinks=true,
-    linkcolor=blue,
-    urlcolor=blue,
-    citecolor=blue,
-<shn>    unicode]{hyperref}
-<shn>\usepackage{pdfcomment}
+<shn>\usepackage{hyperref}
 <shn>\usepackage{listings}
 
 <*hn>
@@ -96,13 +81,16 @@ Source:  Official USB 1.1 Specification.
 %%%%** Section 1.3
 \subsection{Architecture}
  
-<*chn>
-\begin{center}
-   \pdftooltip{\includegraphics[width=4in]{usb_figs/00076.eps}}{*\#*\#Guess by Claude.ai: USB architecture diagram (Figure 4-1) showing a tree topology with a host at the root, hubs as intermediate nodes, and function devices (peripherals) as leaves}
+<*>
+\begin{center}  %% Architecture pyramid of the USB
+<chn> \includegraphics[width=4in]{usb_figs/00076.eps}\\
+<s>   \includegraphics[width=2in]{usb_figs/00076.eps}
 \end{center}
 
-<s>  \scalebox{.15}{  \pdftooltip{\includegraphics{usb_figs/00076.eps}}{*\#*\#Guess by Claude.ai: USB architecture diagram (Figure 4-1) showing a tree topology with a host at the root, hubs as intermediate nodes, and function devices (peripherals) as leaves} }\\
+
+
 <*>
+
 (Figure 4-1, page 16)
 
 ``Function'' --- a USB peripheral device\\
@@ -115,14 +103,16 @@ A function can have one or more ``endpoints''
 ``Compound Device'' --- a HUB and one or more
 Functions in a single package.
 
-%<s>\end{slide}
-%<s>\begin{slide}
+<s>\end{slide}
+<s>\begin{slide}
+
+
 \subsection*{Compound Device}
-%<hn>\scalebox{0.15} {
-%<s>\scalebox{0.45} { 
+
+
 \begin{center}
-<chn>   \pdftooltip{\includegraphics[height=3.5in]{usb_figs/00077.eps}}{*\#*\#Guess by Claude.ai: USB compound device diagram (Figure 4-4) showing a hub and one or more function peripherals integrated in a single physical package} \\
-<s>    \pdftooltip{\includegraphics[height=2.5in]{usb_figs/00077.eps}}{*\#*\#Guess by Claude.ai: USB compound device diagram (Figure 4-4) showing a hub and one or more function peripherals integrated in a single physical package} \\
+<chn>   \includegraphics[height=3.5in]{usb_figs/00077.eps} \\
+<s>    \includegraphics[height=2.5in]{usb_figs/00077.eps} \\
 (Figure 4-4, page 23)
 \end{center}
 
@@ -144,10 +134,8 @@ Each frame time the Host transmits a ``Start of Frame"
 %%%%** Section 2.1.1 
 \subsubsection{SOF packet structure}
 
-\begin{tabular}{|c|c|c|c|}
-\hline
-SYNC  & PID & Frame Number (11bits) & CRC (5bits) \\
-\hline
+\begin{tabular}{|c|c|c|c|}\hline
+SYNC  & PID & Frame Number (11bits) & CRC (5bits) \\\hline
 \end{tabular}
 
 Frame Number rolls over.
@@ -157,10 +145,8 @@ Frame Number rolls over.
 {\bf ALL} packets have a packet ID (PID)
 
 
-\begin{tabular}{|c|c| }
-\hline
-PID (4 bits) & $\overline{\mathrm {PID}}$ (4 bits)\\
-\hline
+\begin{tabular}{|c|c|}\hline
+PID (4 bits) & $\overline{\mathrm {PID}}$ (4 bits)\\\hline
 \end{tabular}
 
 
@@ -168,8 +154,7 @@ The 4-bit PID is repeated, complemented, inside the PID
 byte for error detection.
 
 32 PID values including: \hspace{0.25in}
-\begin{tabular}{|c|c|}
-\hline
+\begin{tabular}{|c|c|}\hline
 Type	& Code \\ \hline
 ACK	& 0010 \\ \hline
 NAK	& 1010 \\ \hline
@@ -187,28 +172,22 @@ DATA1	& 1011 \\ \hline
 
 \begin{enumerate}
      \item Host sends ``token packet''  \\
-     \begin{tabular}{|c|c|c|c|}
-       \hline
-        PID  &  ADDR (7 bits)  & Endpoint (4 bits) & CRC (5 bits)\\
-       \hline
+     \begin{tabular}{|c|c|c|c|}\hline
+        PID  &  ADDR (7 bits)  & Endpoint (4 bits) & CRC (5 bits)\\\hline
      \end{tabular}
 
      PID: {\tt OUT (0001)} = host asks endpoint to receive data.\\
      {\tt IN (1001)} = host asks endpoint to send data.
 
      \item source sends data packet to destination\\
-     \begin{tabular}{|c|c|c|}
-       \hline
-        PID  & DATA (0-1023 bytes)  &  CRC (16 bits)\\
-       \hline
+     \begin{tabular}{|c|c|c|}\hline
+        PID  & DATA (0-1023 bytes)  &  CRC (16 bits)\\\hline
      \end{tabular}
 
 
      \item destination sends handshake packet (ACK/NAK) \\
-    \begin{tabular}{|c|}
-       \hline
-        PID  \\
-       \hline
+    \begin{tabular}{|c|}\hline
+        PID  \\\hline
      \end{tabular}
 
 \end{enumerate}
@@ -273,10 +252,8 @@ Max packet size is 8, 16, 32, or 64 bytes.
 
 Packet Overhead 
 
-\begin{tabular}{|c|c|c|c| }
-\hline
-SYNC (3)  & PID (3) & Endpoint & CRC (3)   \\
-\hline
+\begin{tabular}{|c|c|c|c| }\hline
+SYNC (3)  & PID (3) & Endpoint & CRC (3)   \\\hline
 \end{tabular}
 
 Counts () indicate total for three transactions:
@@ -285,10 +262,8 @@ Counts () indicate total for three transactions:
 	\item Poll (host to function)
 	\item Data (either direction) \\
 	
-\begin{tabular}{|c|c|c|c|}
-\hline
-SYNC    & PID   & Data & CRC (2)   \\
-\hline
+\begin{tabular}{|c|c|c|c|}\hline
+SYNC    & PID   & Data & CRC (2)   \\\hline
 \end{tabular}
 
 	\item {\tt ACK/NAK}
@@ -332,10 +307,8 @@ Endpoint specifies packet size when it is configured.
 
 Packet overhead:
 
-\begin{tabular}{|c|c|c|c| }
-\hline
-SYNC (2)  & PID (2) & Endpoint & CRC (3)   \\
-\hline
+\begin{tabular}{|c|c|c|c| }\hline
+SYNC (2)  & PID (2) & Endpoint & CRC (3)   \\\hline
 \end{tabular}
 
 Total overhead, 8 bytes packet header, 1 byte delay between
@@ -385,16 +358,13 @@ Devices must support endpoint 0 for Default Control Pipe.
 
 %%%%** Section 2.5
 \subsection{Speed}
-\begin{tabular}{|l|c|c|r|}
-\hline
-Type	&  Payload Size	& Frame Utilization & Max bytes/sec \\ \hline
-\hline
+\begin{tabular}{|l|c|c|r|}\hline
+Type	&  Payload Size	& Frame Utilization & Max bytes/sec \\ \hline\hline
 Bulk	&  16		& 2\%		    & 816,000	    \\ \hline
 Bulk	&  64		& 5\%		    & 1,216,000    \\ \hline
 Interrupt & 4		& 1\%		    & 352,000    \\ \hline
 Isochronus & 16		& 2\%		    & 960,000    \\ \hline
 Isochronus & 512	& 35\%		    & 1,024,000 \\ \hline
-
 \end{tabular}
 
 {\bf Notes:}
@@ -461,13 +431,13 @@ devices plugged in.
 \subsection{Voltage Levels and Rise Times:}
 <*chn>
 \begin{center}
-   \pdftooltip{\includegraphics[height=2in]{usb_figs/00078.eps}}{*\#*\#Guess by Claude.ai: USB electrical signal voltage level diagram (Figure 7-1) showing driver output thresholds (VOL, VOH) and receiver input thresholds (VIL, VIH)}   \\
+   \includegraphics[height=2in]{usb_figs/00078.eps}   \\
 (Figure 7-1, page 107)
 \end{center}
 
 
 %<s>\vspace{-2in}
-<s>  \scalebox{.15}{  \pdftooltip{\includegraphics{usb_figs/00078.eps}}{*\#*\#Guess by Claude.ai: USB electrical signal voltage level diagram (Figure 7-1) showing driver output thresholds (VOL, VOH) and receiver input thresholds (VIL, VIH)} }\\
+<s>  \scalebox{.15}{  \includegraphics{usb_figs/00078.eps} }\\
 
 
 <s>\end{slide}
@@ -493,7 +463,7 @@ Worst case inputs: [-1.0V --- +4.6V]
 \subsection{Differential Drive} 
 <s> \scalebox{0.15}{
 <chn>\scalebox{0.15}{
-    \pdftooltip{\includegraphics{usb_figs/00079.eps}}{*\#*\#Guess by Claude.ai: USB differential drive circuit diagram (Figure 7-2) showing D+ and D- signal lines driven differentially to eliminate common-mode noise, with output enable (OE) control}
+    \includegraphics{usb_figs/00079.eps}
    }
 
 (Fig 7-2 page 108)

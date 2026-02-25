@@ -11,23 +11,8 @@
 <s>\pagestyle{headings}
 <s>\slidepagestyle{BHstyle}
 <s>\addtolength\oddsidemargin{3cm}
-<shn>\usepackage[T1]{fontenc}
-<shn>\usepackage{lmodern}
-<shn>\usepackage[utf8]{inputenc}
-<shn>\usepackage[english]{babel}
 <shn>\usepackage{graphicx}
-<shn>\usepackage[pdftex,
-<shn>    pdftitle={ECE 474: Interrupts},
-<shn>    pdfauthor={Blake Hannaford, University of Washington},
-<shn>    pdflang={en-US},
-<shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
-<shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-<shn>    colorlinks=true,
-    linkcolor=blue,
-    urlcolor=blue,
-    citecolor=blue,
-<shn>    unicode]{hyperref}
-<shn>\usepackage{pdfcomment}
+<shn>\usepackage{hyperref}
 <shn>\usepackage{listings}
 
 <*hn>
@@ -143,7 +128,7 @@ into CPU registers.  IR is restored last.
 
 %%%%** Section 1.5
 \subsection{The Stack}
-\pdftooltip{\includegraphics[width=2in]{misc_figs/traystack.png}}{*\#*\#Guess by Claude.ai: Photo of a spring-loaded cafeteria tray stack, used as a physical analogy for the hardware stack data structure (push and pop operations)}\\
+\includegraphics[width=2in]{misc_figs/traystack.png}\\
 \noindent
 Did your school cafeteria have one of these?\vspace{0.2in}
 

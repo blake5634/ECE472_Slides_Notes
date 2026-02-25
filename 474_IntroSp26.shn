@@ -4,7 +4,6 @@
 %
 %
 <stream, c>   % combined into notes pack
-
 <hn>\documentclass{article}
 <s>\documentclass{seminar}
 %   Seminar class is *ancient*   need to install sudo apt install texlive-pstricks 
@@ -13,23 +12,10 @@
 <s>\pagestyle{headings}
 <s>\slidepagestyle{BHstyle}
 <s>\addtolength\oddsidemargin{3cm}
-<shn>\usepackage[T1]{fontenc}
-<shn>\usepackage{lmodern}
-<shn>\usepackage[utf8]{inputenc}
-<shn>\usepackage[english]{babel}
 <shn>\usepackage{graphicx}
-<shn>\usepackage[pdftex,
-<shn>    pdftitle={ECE 474: Course Introduction},
-<shn>    pdfauthor={Blake Hannaford, University of Washington},
-<shn>    pdflang={en-US},
-<shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
-<shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-<shn>    colorlinks=true,
-    linkcolor=blue,
-    urlcolor=blue,
-    citecolor=blue,
-<shn>    unicode]{hyperref}
-<shn>\usepackage{pdfcomment}
+<shn>\usepackage{hyperref}
+<shn>\usepackage{listings}
+
 
 <*hn>
 \oddsidemargin 0in
@@ -47,7 +33,7 @@
 <s>\begin{slide}
 
 <*>
-\section{Introduction to ECE/CSE 474   Winter 2022}
+\section*{Introduction to ECE/CSE 474   Spring 2026}
 
 
 Blake Hannaford, Professor of Electrical \& Computer Engineering\\
@@ -57,8 +43,8 @@ University of Washington\\
 {\tt blake@uw.edu}
 
 
-\subsection{Important Note}
-This document is for reference only. Consult online pages for Official Policies.  In case of conflicts between this doc and Canvas, Canvas rules. 
+\subsection*{Important Note}
+This document is for reference only. Consult online pages for Official Policies.  In case of conflicts between this doc and Online Versions, Online rules.
 
 
 <s>\end{slide}
@@ -66,9 +52,9 @@ This document is for reference only. Consult online pages for Official Policies.
 
 \subsection{TAs: } 
 \begin{itemize}
-    \item James Guo {\tt jamesguo@uw.edu}
-    \item Rouwei Chen {\tt rweic@uw.edu}
-    \item Connor Lowe {\tt connorlowe90@gmail.com} (undergrad TA)
+    \item  Alperen Cuci {\tt  cuci@uw.edu}
+    \item  Ishika Kanakath  {\tt  ikanak@uw.edu}
+    \item Lucas Ritzdorf  {\tt  ritzdorf@uw.edu}
 \end{itemize}
 
 
@@ -76,36 +62,30 @@ This document is for reference only. Consult online pages for Official Policies.
 <s>\begin{slide}
 
 \subsection{Class Format } 
-{\bf Week 1: } ONLINE (Zoom link on Canvas)
 
-\noindent
-{\bf Weeks 2-10: }  Flipped w/ in-person lecture and labs.
 
-Class and Lab time (mandatory)
-Tue \& Thu 3:30-5:20 
-
-We will split the class into 4 Sections and rotate the sections through in-person Lecture and Lab activities 
-during the scheduled class periods. 
-
-The current plan and schedule for this is linked below:
-
-\href{https://docs.google.com/document/d/1A8oC3ewd6Q8TIoT6QboHHqFP_86O5W6CQmI3ssmzw74/edit}{Class Time Plan W22}
+\href{https://docs.google.com/spreadsheets/d/16EKCsbianN9MxyGyvhjx5A7XP5cWTcK8c6I8fwjFqso}{Class Time Plan Sp26}
 
 <s>\end{slide}
 <s>\begin{slide}
 
 \subsection{Labs: }
 
-Four lab exercises using the Arduino Mega Board (ATMEGA 2560 ARM-based CPU).   Lab kits will be signed out from
+Four lab exercises + Project
+using the Course Hardware Platform (Spr26: ESP32-C3 Dev board 1).
+Lab kits will be signed out from
 ECE stores.
 
 Lab 1 is individual work.
 
 Labs 2-4 are in a two-person team. 
 
+A design oriented Lab project in a two-person team.
+
 Each lab exercise will require a report to be turned in and also an in-person, in-lab demo with TA or instructor.
 
-Both team members must be able to answer questions about the entire lab project. 
+Both team members must be able to answer written or oral
+questions about the entire lab project.
 
 <s>\end{slide}
 <s>\begin{slide}
@@ -113,15 +93,15 @@ Both team members must be able to answer questions about the entire lab project.
 
 \section{Canvas Strategy}
 For easier updating and compatibility, most information about the course will be in a 
-\href{https://drive.google.com/drive/u/1/folders/1fiYQZ4aIYyq9MIifMRhXioKQF0ENuCZ5}{Google Drive Folder} 
+\href{https://drive.google.com/drive/folders/1rBIyCbCrFNSuD6t70sQlF_oDXax7UrRu?usp=drive_link}{Google Drive Folder}
 accessible to all students.   The Syllabus including detailed week-by-week 
 assignments is in a 
-\href{https://docs.google.com/spreadsheets/d/1pLo5GvlvPP_WHET6sbK7IhZyR_x2ABR-7OutT0kR_mc/edit?usp=sharing} {Google Sheets Spreadsheet}.   
+\href{https://docs.google.com/spreadsheets/d/16EKCsbianN9MxyGyvhjx5A7XP5cWTcK8c6I8fwjFqso/edit?gid=0#gid=0} {Google Sheets Spreadsheet}.
 The spreadsheet contains the following important {\bf tabs}:
 \begin{enumerate}
     \item Weekly course schedule including topics, readings, assignments, videos.
     \item Resources page.  Sources of information for completing your assignments.
-    \item Grading scheme. 
+    \item Grading scheme: How points you get on assignments translate to your grade.
 \end{enumerate}
  
 <s>\end{slide}
@@ -132,13 +112,12 @@ The spreadsheet contains the following important {\bf tabs}:
  J.K. Peckol. ``Embedded Systems: A Contemporary Design Tool",
 pre-publication draft, June 2006.   
 
-Distributed on Canvas as a free 
+Distributed in Drive as free \href{https://drive.google.com/file/d/12-hadf3HYavI7C8lP2hGyRWdtywFiX86/view?usp=sharing}{PDFs (.zip)}
 PDF. 
 
 <*chn>
 This textbook has very good explanations of some of the more difficult concepts in
-474.  It is most useful for the important concepts which will be taught but which
-will appear only on exams and NOT in the lab.
+474.  It is most useful for the important concepts which will be taught but which will appear only on exams and NOT in the lab.
 I will not assign end-of-chapter exercises from the book.
 
 <s>\end{slide}
@@ -177,7 +156,7 @@ Era             &       Technology        & Cost \\ \hline
 1990's          &       Cellphone         & \$500  \\ \hline
 2000's          &       Microcontroller   & \$50  \\ \hline
 2010's          &       Microcontroller   & \$5   \\ \hline
-2020's          &       \href{https://jaycarlson.net/microcontrollers/}{Microcontroller}   & \$1   \\ \hline
+2020's          &       \href{https://www.wch.cn/products/CH32V003.html}{WCH CH32V003}   & \$0.10  \\ \hline
 \end{tabular}
 \end{center}
 
@@ -214,7 +193,9 @@ Era             &       Technology        & Cost \\ \hline
              and coordination of resources shared between multiple tasks.
 %         \item Fundamentals of TCP/IP Network Communication. 
         \item Bit-level I/O to hardware devices.
-        \item Use of a minimalist real-time kernel.
+        \item Use of the FreeRTOS real-time kernel.
+        \item Integration, test, and performance characterization of
+        embedded real time systems in the lab.
 \end{itemize}
 
 
@@ -235,14 +216,14 @@ Era             &       Technology        & Cost \\ \hline
 \section{Course Schedule}
 
 (see Lecture Schedule in the 
-\href{https://docs.google.com/spreadsheets/d/1pLo5GvlvPP_WHET6sbK7IhZyR_x2ABR-7OutT0kR_mc/edit#gid=0}
+\href{https://docs.google.com/spreadsheets/d/16EKCsbianN9MxyGyvhjx5A7XP5cWTcK8c6I8fwjFqso/edit?gid=0#gid=0}
 {Course Syllabus Spreadsheet})
 
 \section{Learning Modes}
 
 {\large EE 474 is like climbing a mountain. ... }
 
-The following 7 factors (in priority order) will contribute most to
+The following 8 factors (in priority order) will contribute most to
 your success in EE474.
 
 <s>\end{slide}
@@ -251,12 +232,13 @@ your success in EE474.
 \begin{enumerate}
         \item Mastering the advanced C concepts in the two individual C programming assignments (using your laptop/PC, 
         weeks 1 and 2).
-        \item Managing your time working on the 4 lab assignments.
+        \item Managing your time working on the 4 lab assignments and Project.
         \item Working effectively as a team on the lab (using inter-personal skills).
         \item Good communication skills (in terms of lab reports).
         \item Paying attention to lectures and studying for exams.
         \item Asking questions when you are stuck.
         \item Reading
+        \item AI: consider using Claude Code.
 \end{enumerate}
 
 <s>\end{slide}
@@ -264,23 +246,24 @@ your success in EE474.
 \noindent
 A recent student reflection (24-Mar-2021) (excuse language!):
 
-<hnc>\pdftooltip{\includegraphics[width=5.5in]{RedditFollowAdviceUW.png}}{*\#*\#Guess by Claude.ai: Screenshot of a Reddit post from a UW student advising future students to follow course advice and seek help early}
-<s>\pdftooltip{\includegraphics[width=3.5in]{RedditFollowAdviceUW.png}}{*\#*\#Guess by Claude.ai: Screenshot of a Reddit post from a UW student advising future students to follow course advice and seek help early}
+<hnc>\includegraphics[width=5.5in]{RedditFollowAdviceUW.png}
+<s>  \includegraphics[width=3.5in]{RedditFollowAdviceUW.png}
 <*>
 <s>\end{slide}
 <s>\begin{slide}
 \section{Labs}
 \begin{itemize}
-  \item All ECE474 labs build on each other to create a software prototype.
+  \item The 4 ECE474 labs grow in complexity to reach all learning objectives.
 %   \item This year by the end of the quarter you will create the software for a
 % heart assist device: ``Left Ventricular Assist Device" (LVAD).
 %   \item The system will simulate actual operation as closely as possible.
 %   \item We will implement features such as pulse generation, pulse frequency measurement, closed-loop motor speed control, and network communication.
   \item We will implement more and more tasks, building the complexity and 
   efficiency of the real-time code. 
-  \item We will squeeze more and more performance out of the ATMega2560 chip 
+  \item We will squeeze more and more performance out of the target chip
   by adding tasks as the quarter goes on.
   \item We will continue to maintain hard real time performance.
+  \item Challenge yourself with extensions in the final project.
 \end{itemize}
 
 <s>\end{slide}
@@ -333,17 +316,17 @@ We will work with you to get your group on track ({\it done it many times in the
 
 <*>
 2 Agents
-\pdftooltip{\includegraphics[width=2.0in]{intro_figs/00282.eps}}{*\#*\#Guess by Claude.ai: Diagram showing 2 agents (nodes) connected by 2 bidirectional arrows representing all pairwise interactions}
+\includegraphics[width=2.0in]{intro_figs/00282.eps}
 2 interactions
 
 
 3 Agents
-\pdftooltip{\includegraphics[width=2.0in]{intro_figs/00283.eps}}{*\#*\#Guess by Claude.ai: Diagram showing 3 agents (nodes) connected by 6 bidirectional arrows representing all pairwise interactions}
+ \includegraphics[width=2.0in]{intro_figs/00283.eps}
 6 interactions
 
 
 4 Agents
-\pdftooltip{\includegraphics[width=2.0in]{intro_figs/00284.eps}}{*\#*\#Guess by Claude.ai: Diagram showing 4 agents (nodes) connected by 12 bidirectional arrows representing all pairwise interactions}
+ \includegraphics[width=2.0in]{intro_figs/00284.eps}
 12 interactions
 
 
@@ -364,22 +347,15 @@ What is the general expression for number of interactions between $n$ agents?
 % Labs are described in detail in the Lab Manual (30-50 pages of PDF)
 % which is available for download on the web page.
 Labs are described in detail in the 
-\href{https://docs.google.com/document/d/1ULLzhaaIIeD6ySu6mXbT2wZu7wzkd9dZKkvZofGXWs8/edit#heading=h.68vsikdjc41g}
-{Lab Overview Document} (shared Google Doc).
+\href{https://docs.google.com/document/d/1IcLFcsp0ti-HkzAMCtYAiWgMv6bOe6bCLgkvMtd3GrQ/edit?tab=t.0}{Lab Overview Document} (shared Google Doc).
 
 Lab Topics (approximate):
 
 \begin{enumerate}
-        \item  \href{https://docs.google.com/document/d/1DQ9JsBArX5uNF2Xucx8Yr5b_1XILnoBMomMEy5P2Gtw/edit#heading=h.d1aum9o4zk2}
-        {Lab 1:} 
-        Introduction to the Arduino Mega board and the Arduino Integrated Development Environment (IDE).  
-         Basic digital I/O ... flash an LED and make a tone!.
-
-        \item \href{https://docs.google.com/document/d/1QeszjbWLRIiqPYHZaRnVp_mX6mWyiPInaMaexHDunfc/edit#heading=h.d1aum9o4zk2}{Lab 2:} Hardware Digital I/O and output timing. 
-	    
-	    \item FreeRTOS real-time operating system. 
-	    
-%         \item Basic Authentication, WWW output, full application functionality. 
+    \item Development Env. Setup, flash and LED
+    \item Precision timing, reading sensors, closing loops.
+    \item Priority based scheduling, I/O to a device, Wireless comms.
+    \item Advanced scheduling (writing your own scheduler), dual-core computing with synchronization.
 \end{enumerate}
  
 <s>\end{slide}
@@ -408,34 +384,7 @@ We will expect {\it in-depth} answers from the
     and {\it specific though less detailed} answers
     from the other team member.
 
-<s>\end{slide}
-<s>\begin{slide}
-    
-\subsubsection{Demos (virtual backup plan in case of UW mandated shutdown)}
-
-Online sessions in which you demonstrate correct operation
-of your system.  Lab 1 demo must be interactive and individual as
-a 1:1 Zoom with a member of the ECE474 staff.   
-
-For subsequent labs, both team members must be present for demo.  
-Online vs Video recorded demo requirements will be announced.
-\begin{itemize}
-\item {\bf Online: }  A Zoom between both team members and a TA or Prof.  
-    \begin{itemize}
-        \item Camera must show the Arduino hardware performing lab functions. Video must show the entire hardware system and LEDs or displays.
-        \item Audio must transmit required tones from speaker (if applicable). 
-    \end{itemize}
-\item {\bf Video} Student team will submit a video of no more than 10 minutes
-demonstrating all required lab elements. 
-    \begin{itemize}
-        \item Camera must show the Arduino hardware performing lab functions. Video must show the entire hardware system and LEDs or displays.
-        \item Audio must transmit required tones from speaker (if applicable).
-        \item 
-        \item {\bf Pro Tip:} superimpose text on the video listing the lab part
-        number during each part of the demo.  (Optional, but TA's will love you).
-    \end{itemize}
-\end{itemize}
-
+For Spring 26 there will be a written quiz on each lab taken individually by each student.
 
 <s>\end{slide}
 <s>\begin{slide}
@@ -443,13 +392,13 @@ demonstrating all required lab elements.
 \subsection{Reports}
 
 You must follow the 
-\href{https://docs.google.com/document/d/1ULLzhaaIIeD6ySu6mXbT2wZu7wzkd9dZKkvZofGXWs8/edit#heading=h.kn22uqjivvbw}
-{Detailed Report Format for Winter 2022.}
+\href{https://docs.google.com/document/d/1a-G5heHn4gk4DUuw4Ba_OGAsuUDE9uxu-FcwIUA29lg/edit?usp=drive_link}
+{Detailed Report Format for Spring 26.}
 
-Reports must be turned in (PDF only) according to the Canvas due date.
-Late work will be subject to a penalty of 25\% per day. 
+Reports must be turned in (PDF only) according to the \href{https://docs.google.com/spreadsheets/d/16EKCsbianN9MxyGyvhjx5A7XP5cWTcK8c6I8fwjFqso/edit?gid=0#gid=0}{Schedule due date.}
+Late work will be subject to a penalty of 25\% per day.
 
-Assignment-specific requirements for the reports may be given in the Lab Assignment.
+Assignment-specific requirements for the reports may be given in the Lab Assignment and override these instructions.
 
 <s>\end{slide}
 <s>\begin{slide}
@@ -460,7 +409,8 @@ Responsible for:
 \begin{itemize}
         \item Text Readings from textbook.
         \item Lecture notes:  on-line material for your convenience.
-        \item You are responsible for all presented lecture material whether it
+        \item You are responsible for all presented lecture material
+        whether it
         is on-line or not.
         \item {\bf Canvas and 474 Drive Folder}:
         You are responsible for all information posted by students or instructors.
@@ -468,7 +418,7 @@ Responsible for:
 
 <*chn>
 You are responsible for the assigned readings in the text and for all
-material on Canvas.    Text readings should
+material in Canvas or the \href{https://drive.google.com/drive/folders/1rBIyCbCrFNSuD6t70sQlF_oDXax7UrRu?usp=drive_link}{Drive}.    Text readings should
 be completed {\it before} the lecture listed in the schedule.
 Lecture notes (pdf files) are provided for your use to maximize your retention
  of lecture material but you are responsible for all lecture material whether
@@ -480,7 +430,7 @@ Lecture notes (pdf files) are provided for your use to maximize your retention
 <s>\begin{slide}
 
 \section{Our Role}
-One of the most important learing modes in EE474 is your direct interactions
+One of the most important learning modes in EE474 is your direct interactions
 with the Instructor and TA's.
 When you get stuck, try hard to fix the problem, but then come to us.
 We will get you going again even if we don't know all answers right away.
@@ -495,6 +445,7 @@ We will get you going again even if we don't know all answers right away.
 In EE474, we expect that you will cite the source for
 any information you borrow, quote, paraphrase, copy or otherwise use directly.
 {\bf It is an instance of academic misconduct if you fail to do this.}
+
 The UW College of Engineering establishes the procedures and penalties for
 Academic Misconduct:
 
@@ -512,6 +463,62 @@ Purdue University has a useful tutorial how to understand and avoid plagiarism.
 
 <s>\end{slide}
 <s>\begin{slide}
+\subsection{AI Policies:}
+\begin{itemize}
+    \item AI may be used for any assignment.
+    \item Every code function must contain a 3-digit ``AI-acknowlegement''  in its header comment as
+    described below.
+\end{itemize}
+
+\paragraph{AI acknowledgement coding: }
+The ``474 AI code'' consisists of the name of your chosen AI tool (e.g. ChatGPT, Claude Code, etc) followed by 3 single digits. Each digit represents
+a percent of AI effort.  For example if AI did 90-100\% of the work,
+code it as "9", 50\% as "5", etc.   The three digits stand for the three
+phases:  Writing, Testing or bug detection, and Debugging.   Of course this only needs to be approximate
+and it does it does not affect your grade (unless you leave it off).
+
+<*>
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+If the effort is:\vspace{0.2in}
+
+\begin{tabular}{c|c}
+AI work  & digit code\\\hline
+0-10\% AI  & 0\\
+11-20\% AI & 1\\
+\dots &\dots\\
+90-100\% AI & 9
+\end{tabular}\vspace{0.2in}
+
+Examples:\vspace{0.2in}
+
+\begin{tabular}{l|c|c|c|l}
+Agent Name & Writing & Testing & Debugging & Description \\\hline
+Claude.ai& 9&9&9 & AI did everything! \\
+ChatGPT  & 0&0&0 & No AI was used at all\\
+CoPilot  & 5&5&5 & approximately 50/50 AI + human\\
+\end{tabular}
+
+\vspace{0.2in}
+Format your code as a compact string like:  {\bf Claude-436}
+\vspace{0.2in}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+
+<*hnc>
+{\bf Example: }   Yuhui coded a real-time task for a 474 Lab.  She dumped a paragraph from the assignment into
+ChatGPT but didn't like the result so she wrote her own prompt.  Then she changed 2 out of 10 lines
+to improve the generated code. So AI wrote 8/10 lines (score 8), but Yuhui gets some credit for writing an
+effective prompt.  Let's score this one a 6.  Because the code function was to read and process data from a wired up sensor on the ESP32, it could only be tested in actual hardware so she did all the testing (``0'' for the Testing category).  While trying to debug the code, she didn't understand an error message so she pasted it into GPT along with the code.  GPT figured out the bug from these and AI fixed the code which then worked. Maybe this is a ``6''.
+
+
+Therefore her AI-acknowledgment for this module is {\tt ``ChatGPT-606''}.
+
 
 \subsection{Policies specific our assignments:}
 \begin{itemize}
@@ -529,24 +536,24 @@ to the exam.  The cheat sheet may not contain photocopied material.
 <s>\end{slide}
 <s>\begin{slide}
 
-\section{ Grading System, Winter 2022}
+\section{ Grading System, Spring 26}
 \begin{itemize}
         \item ``Flat'' point system.
         \item 450 total points.
         \item Point breakdown is given in the third tab of the 
-        \href{https://docs.google.com/spreadsheets/d/1pLo5GvlvPP_WHET6sbK7IhZyR_x2ABR-7OutT0kR_mc/edit#gid=870260692}
+        \href{https://docs.google.com/spreadsheets/d/16EKCsbianN9MxyGyvhjx5A7XP5cWTcK8c6I8fwjFqso/edit?gid=870260692#gid=870260692}
         {Course Syllabus Sheet} 
 
         \item Grade will be obtained by dividing your total by 100.
         \item Team members receive same Lab grade (except lab 1).
-        \item Each lab's grade is computed based on Demo and Report.
+        \item Each lab's grade is computed based on Demo, Code, and Report.
 %         \item At end of term, students will rate the lab performance of each team-mate.
         \item In exceptional cases a student's lab grade may be adjusted
               up or down relative to their teammates.
-        \item Individual final grades still vary because of performance on 
-        individual performance on C-coding assignments, quizes, and exams.\vspace{0.5in}
+        \item Individual final grades still differ from your lab mate because of
+        individual performance on C-coding assignments, quizes, and exams.\vspace{0.35in}
         
-        \item At end of term, at the discretion of the instructor, the class mean
+        \item {\bf Note: } At end of term, at the discretion of the instructor, the class mean
         may be adjusted by adding {\bf or} subtracting an offset from all students in
               the class.  The purpose of this uniform offset adjustment is to ensure
               that the class average properly reflects overall class learning, overcoming
@@ -560,7 +567,7 @@ to the exam.  The cheat sheet may not contain photocopied material.
 \section{Other Important Policies and Inclusion}
 It is our sincere desire to create a comfortable, welcoming and safe environment for all enrolled students. 
 
-\subsection{Religious Accomodations}
+\subsection{Religious Accommodations}
 This course will make accommodations to the religious observations of any student according to the UW Religious accommodation policy https://registrar.washington.edu/staff and faculty/religious-accommodations-policy/
 Please request your religious accommodations within the first two weeks.
 
@@ -614,14 +621,14 @@ I support the policy and practice of the University of Washington to create incl
 Disability Resources for Students at UW Seattle: email: uwdrs@uw.edu phone: 206-543-8924.
 
 <s>\end{slide}
-<s>\begin{slide}
-\subsection{Zoom Recordings}
-Some parts of this course will run synchronously at your scheduled class time or other announced times via Zoom. These Zoom class sessions may be recorded. The recording will capture the presenter’s audio, video, and computer screen. Student audio and video will be recorded if they share their computer audio and video during the recorded session. The recordings will only be accessible to students enrolled in the course to review materials. These recordings will not be shared with or accessible to the public.  The University and Zoom have FERPA-compliant agreements in place to protect the security and privacy of UW Zoom accounts.
-Students who do not wish to be recorded should:
-Change their Zoom screen name to hide any personal identifying information like their name or UW Net ID; and
-Not share their computer audio or video during their Zoom sessions
-
-<s>\end{slide}
+% <s>\begin{slide}
+% \subsection{Zoom Recordings}
+% Some parts of this course will run synchronously at your scheduled class time or other announced times via Zoom. These Zoom class sessions may be recorded. The recording will capture the presenter’s audio, video, and computer screen. Student audio and video will be recorded if they share their computer audio and video during the recorded session. The recordings will only be accessible to students enrolled in the course to review materials. These recordings will not be shared with or accessible to the public.  The University and Zoom have FERPA-compliant agreements in place to protect the security and privacy of UW Zoom accounts.
+% Students who do not wish to be recorded should:
+% Change their Zoom screen name to hide any personal identifying information like their name or UW Net ID; and
+% Not share their computer audio or video during their Zoom sessions
+%
+% <s>\end{slide}
 <s>\begin{slide}
 <s>\subsection{Q\&A}
 

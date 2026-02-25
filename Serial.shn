@@ -11,23 +11,8 @@
 <s>\pagestyle{headings}
 <s>\slidepagestyle{BHstyle}
 <s>\addtolength\oddsidemargin{3cm}
-<shn>\usepackage[T1]{fontenc}
-<shn>\usepackage{lmodern}
-<shn>\usepackage[utf8]{inputenc}
-<shn>\usepackage[english]{babel}
 <shn>\usepackage{graphicx}
-<shn>\usepackage[pdftex,
-<shn>    pdftitle={ECE 474: Serial Communication},
-<shn>    pdfauthor={Blake Hannaford, University of Washington},
-<shn>    pdflang={en-US},
-<shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
-<shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-<shn>    colorlinks=true,
-    linkcolor=blue,
-    urlcolor=blue,
-    citecolor=blue,
-<shn>    unicode]{hyperref}
-<shn>\usepackage{pdfcomment}
+<shn>\usepackage{hyperref}
 <shn>\usepackage{listings}
 
 <*hn>
@@ -42,7 +27,7 @@
 
 
 <*>
-\title{EE 472:  Serial Communication}
+\title{EE 474:  Serial Communication}
 
 \author{Blake Hannaford\\
         Department of Electrical \& Computer Engineering \\
@@ -135,7 +120,7 @@ Bits.
 <s>\end{slide}
 <s>\begin{slide}
 
-\pdftooltip{\includegraphics[width=\linewidth]{Serial_figs/rs232_serialbits.png}}{*\#*\#Guess by Claude.ai: Timing diagram of an RS-232 serial bit frame showing start bit, 8 data bits, optional parity bit, and stop bit(s) with voltage levels over time}
+\includegraphics[width=\linewidth]{Serial_figs/rs232_serialbits.png}
 <s>\end{slide}
 <s>\begin{slide}
 
@@ -235,7 +220,7 @@ Minimum 3 wires:
 <s>\begin{slide}
 Maximum 23 wires!
 
-\pdftooltip{\includegraphics[height=2.75in]{Serial_figs/rs232_db25pinout.png}}{*\#*\#Guess by Claude.ai: Diagram of the DB-25 connector pinout for RS-232 serial interface showing all 25 pin numbers and their signal assignments}
+\includegraphics[height=2.75in]{Serial_figs/rs232_db25pinout.png}
 {\tiny
 Source(https://www.aggsoft.com/rs232-pinout-cable/}
 {\tiny serial-cable-connections.htm)}

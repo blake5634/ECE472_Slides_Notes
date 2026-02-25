@@ -1,0 +1,193 @@
+How to Build a Scheduler:
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\subsection*{Part I   Using function pointers to start a task}
+
+Throught the course we are using the terms ``task" and ``function" almost interchangably.    This is because we implement our tasks with C functions. 
+How can we manipulate these functions so that they do not nescessarily execute in a fixed order?  We learned that the syntax:
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\begin{verbatim}
+ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+\end{verbatim}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+would set up a pointer to a function.   With function pointers we can write code that can start an arbitrary function.   for example:
+
+\begin{verbatim}
+
+void start_function( (void)functionPTR )
+  {
+     functionPTR();
+  }
+
+\end{verbatim}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+Now our basic scheduler could be written:
+
+\bv
+while(1)
+  {
+  start_function( taskA);
+  start_function( taskB);
+  start_function( taskC);
+  time_delay();
+ }
+\ev
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\subsection*{Part II   Keeping lists of functions }
+
+For our scheduler to be smarter than the basic {\tt while(1)} loop,. we need to be able to put functions into lists.   That way we can keep track of which functions are ready, 
+waiting, and inactive.    One approach would be a single list of tasks, with a corresponding array of integers to determine which state the task is in. 
+Although logically OK. This approach is not preferred at this point, because the scheduler will have to do a lot of looking through the list to find which tasks are in a certain state.  
+
+<s>\end{slide}
+<s>\begin{slide}
+
+We can create an array of function pointers as follows:
+
+\bv
+#define  NUMBER_OF_FUNCTIONS     10
+
+(XXXXXXXXXXX)  list_of_functions[NUMBER_OF_FUNCTIONS]
+\ev
+
+<s>\end{slide}
+<s>\begin{slide}
+
+In the example above we created an  array which could hold 10 functions. 
+
+Here then is some pseudocode for a main program and scheduler function:
+
+\bv
+//function prototypes for tasks
+void taskA(void *p);
+void taskB(void *p);
+...
+
+// function prototype for scheduler
+void scheduler();
+
+
+#define NTASKS     4
+
+//lets make the task list global
+void (*readytasks[NTASKS]) (void *p);       // an array of function pointers, each one has a void* parameter.
+
+main()
+   {
+  void *vp;
+   // initialize array of pointers to tasks
+  readytasks[0] = taskA;
+  readytasks[1] = taskB;
+  ...
+  readytasks[3]= NULL;                       // NULL signals the last task in the list. 
+
+ // now start scheduler
+  while(1) {
+      scheduler();
+      time_delay();
+     }
+ } // end of main
+
+\ev
+
+<s>\end{slide}
+<s>\begin{slide}
+
+Here, we have set up an array to contain pointers to the task as a global variable (so that it will be visible to both main and the scheduler function (not shown). 
+Then, inside {\tt main()}, we have initialized each element of the array to point to one of our tasks.   The scheduler function will do the following (pseudocode)
+
+/bv
+scheduler() {
+  if(readytasks[task_index] == NULL && task_index != 0)  task_index=0;
+  if(readytasks[task_index] == NULL && task_index == 0)   {
+             // figure out something to do because there are no tasks to run!
+             }
+  start_function(readytasks[task_index]);
+  task_index++;
+  return;
+ }
+/ev
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\subsection*{part III  Manipulating the Task Lists}
+
+So far, we have just made a more complicated form of our basic {\tt while(1) } loop scheduler.  Now let's allow tasks to halt themselves by calling a function called
+{\tt halt_me()}.   
+First, we need to generate a second list for the tasks which might be halted.     Let's call it {\tt haltedtasks[]}.   Now, the scheduler can work as before, but when 
+a task calls {\tt halt_me()}, the following things have to happen:
+\bv
+halt_me() {
+   * identify which task is currently running  (i.e. look at task_index)
+   * copy the function pointer from readytasks[task_index] to the haltedtasks array
+   * move the remaining tasks up in readytasks[] to fill the empty hole and copy NULL into the last element.
+   * increment the index of the haltedtasks array.
+  return;
+  }
+\ev
+
+<s>\end{slide}
+<s>\begin{slide}
+
+When {\tt halt_me} returns to the task, the task should {\tt return} and then it will not be started again by the scheduler since the current task has been deleted from 
+{\tt readytasks}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\subsection*{Sleep}
+  Now let's try to set up a {\tt Sleep(int d)} function which can let our tasks
+go to sleep for {\tt d} msec.   For reasons we can go into later, we need to implement sleep in a slightly awkward way.  A function which wants to sleep will have to
+look like:
+
+\bv
+task_c(p) {
+   compute for a while;
+   sleep(10);
+   return;
+   }
+\ev
+We will impose the requirement that the new {\tt sleep(d)} function will not put the task to sleep until it has {\tt return}ed.    How would the scheduler work now?
+As above, we need to generate a new list for tasks which are waiting for time delays.   Lets call it {\tt waitingtasks[]}.   Then we also have to make an array for 
+the time delays for each wainting task.    When a function calls {\tt sleep(d)} the following things should happen
+
+\bv
+sleep(int d) {
+  * copy function pointer from readytasks[task_index] to the waitingtasks[] array. 
+  * clean up readytasks[] as in halt_me();
+  * copy the d into the delays array with the same index as the function pointer has in waitingtasks[]
+  }
+\ev
+
+Now the scheduler must keep track of waiting times for any tasks which are sleeping and perhaps wake them up  by moving them back to the readytasks array.
+Let's add some pseudocode to the bottom of the scheduler function above:
+\bv
+...
+* for each element of waitingtasks which is not NULL:
+      decrement the delay value d.
+      if d==0, move the function pointer to the end of the readytasks[] array
+                  and remove it from waitingtasks.
+// end of scheduler
+  return;
+}
+\ev
+
+
+  

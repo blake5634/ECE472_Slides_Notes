@@ -6,28 +6,10 @@
 <nh>\documentclass{article}
 <s>\documentclass{seminar}
 
-<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
-<s>\pagestyle{headings}
-<s>\slidepagestyle{BHstyle}
-<s>\addtolength\oddsidemargin{3cm}
-<shn>\usepackage[T1]{fontenc}
-<shn>\usepackage{lmodern}
-<shn>\usepackage[utf8]{inputenc}
-<shn>\usepackage[english]{babel}
-<shn>\usepackage{graphicx}
-<shn>\usepackage[pdftex,
-<shn>    pdftitle={ECE 474: Structure and Compilation of C Programs},
-<shn>    pdfauthor={Blake Hannaford, University of Washington},
-<shn>    pdflang={en-US},
-<shn>    pdfsubject={ECE 474 Embedded Microcomputer Systems},
-<shn>    pdfkeywords={embedded systems, microcontrollers, ECE 474},
-<shn>    colorlinks=true,
-    linkcolor=blue,
-    urlcolor=blue,
-    citecolor=blue,
-<shn>    unicode]{hyperref}
-<shn>\usepackage{pdfcomment}
-<shn>\usepackage{listings}
+<*nhs>
+\usepackage{graphicx}
+\usepackage{graphpap}
+\usepackage{listings}
 
 <*hn>
 \oddsidemargin 0in
@@ -36,26 +18,31 @@
 \textheight 8.7in
 \topmargin 0.2in
 
+<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 472 \hfil\thepage}{Hannaford \hfil \today}
+<s>\pagestyle{headings}<s>\slidepagestyle{BHstyle}
+<s>\addtolength \oddsidemargin{3cm}
 
-<*shn>
-\linespread{1.0}
+<*hn>
+\usepackage{fancyhdr}
 
-\begin{document}
+<shn>\begin{document}
 
 
 <*>
 <s>\begin{slide}
 
-<*>
+<*s>
 
 \begin{center}
 {\Large Structure and Compilation of C-Programs}
 \end{center}
 
-<*>
 <s>\end{slide}
 <s>\begin{slide}
-\section{Types}
+
+
+<*>\section{Types}
+<*chn>
 On the most basic level, the type of a variable identifies how many
 bits it has, and how we interpret its bits.   A classic example is
 the difference between the types {\tt uint8\_t} and {\tt char}.  Both
@@ -63,13 +50,21 @@ of these types have lengths of 8 bits (1 byte).
 If our 8 bits in memory contain
 for example
 
+<*>
 \vspace{0.1in}\begin{center}
 \begin{tabular}{|c|c|c|c|c|c|c|c|}
 \hline
 0&1&1&0&0&0&0&1\\\hline
 \end{tabular}\end{center}
 \vspace{0.1in}
+<*s>
+An 8-bit long block of memory set to 011000001.
 
+Could be declared {\tt uint8\_t}: meaning 97
+
+Could be declared {\tt char}: meaning 'a'
+
+<*chn>
 then if the 8-bit block is declared {\tt uint8\_t} they will mean 97
 but if the 8-bit block  is declared {\tt char}
 they will mean `a'.  In computer memory {\it everything} is just
@@ -96,8 +91,16 @@ In embedded systems that often won't do.  For example, you
 may have to write code to control a timer inside your chip.
 If its control register is 16 bits wide, you need to be able
 to work with 16-bit integers.  This is why the more specific
-types like {\tt unint16\_t} exist.  Generally if the number
-of bits isn't right there in the type name its not a good
+types like {\tt uint16\_t} exist.
+
+The abbreviated name {\tt uint16\_t} means ``unsigned 16-bit integer type''.
+``Unsigned'' means that the 16 bits are interpreted as integers between
+0 and $2^{16}-1$ as opposed to between $-2^{15}$ and $+(2^{15}-1)$\footnote{
+Please see \href{https://en.wikipedia.org/wiki/Two's_complement}{Wikepedia/Two's complement}
+for the details on encoding negative integers in binary}.
+
+Generally if the number
+of bits isn not right there in the type name, it's not a good
 idea to assume you know how many bits are in that type.
 <*>
 
@@ -129,50 +132,40 @@ There's a lot of repetition or similarity between declarations
 and definitions, so we'll define them carefully since you need to
 use both.
 
-<*chn>
+<*schn>
 \subsection{Variable declarations}
 
 \begin{itemize}
   \item Simplest:   {\tt type name;}  \\
-  {\tt type} defines the variable as {\tt float, int} etc.  In
-  embedded programming we use a lot of specialized types such as
-  {\tt unint16\_t}  which means ``unsigned 16-bit integer type''.
+<chn>  {\tt type} defines the variable as {\tt float, int} etc.  In embedded programming we use a lot of specialized types such as  {\tt unint16\_t}  which means ``unsigned 16-bit integer type''.
   \item Advanced:  {\tt [extern][volatile] type name [= value];}\\
-  in this form we have qualifiers (brackets, `[]' mean an optional
-  qualifier, don't type them in your code):
+<chn>  in this form we have qualifiers (brackets, `[]' mean an optional  qualifier, don't type them in your code):
   \begin{itemize}
     \item {\tt[extern]:} the definition of this variable will be
     found in a different file in the same build.
     \item {\tt [volatile]:} this is a special qualifier for real-time
-    and embedded systems.   It tells the compiler this variable could
-    change value without warning in the middle of code execution.  This
-    can happen when code is interrupted by an interrupt.   Compilers try
-    to optimize performance with various tricks that would break without
-    {\tt volatile}.  It's rare, but we definitely need it for interrupt
-    driven coding.
-    \item For example:\\
-    {\tt extern int x;}\\
-    means an integer named {\tt x}
-    which is not defined in this file (extern) but will be defined
-    in another .c file.
+    and embedded systems.
+<chn> It tells the compiler this variable could change value without warning in the middle of code execution.  This can happen when code is interrupted by an interrupt.   Compilers try to optimize performance with various tricks that would break without {\tt volatile}.  It's rare, but we definitely need it for interrupt driven coding. \item For example:\\ {\tt extern int x;}\\ means an integer named {\tt x} which is not defined in this file (extern) but will be defined in another .c file.
   \end{itemize}
 \end{itemize}
+
+
+<s>\end{slide}
+<s>\begin{slide}
 
 \subsection{Function declarations (also known as ``Function Prototypes'')}
 \begin{itemize}
   \item Simplest:   {\tt type name(arg1type, arg2type,...);}  \\
   for example:\\
   {\tt float hypotenuse(float a, float b);}\\
-  note we don't code the function in the declaration, we are just
-  telling the compiler what it needs to know when it comes up in
-  .c files.  It is ok to have no arguments.
+<chn>  note we don't code the function in the declaration, we are just telling the compiler what it needs to know when it comes up in .c files.  It is ok to have no arguments.
   \item Advanced: {\tt [static][extern] type name(arg1type, arg2type,...);}  \\
-  {\tt static} means that this function will only be used within
-  the current file. {\tt extern} has the same meaning for function
-  declarations as for variable.
+<chn>{\tt static} means that this function will only be used within the current file. {\tt extern} has the same meaning for function declarations as for variable.
 \end{itemize}
 
 
+<s>\end{slide}
+<s>\begin{slide}
 
 \subsection{Variable Definitions}
 \begin{itemize}
@@ -181,16 +174,13 @@ use both.
   it to any value.  Fun fact, this may put random bits into your
   variable at the start of some code.
   \item Safer: {\tt type name= 0;}\\
-  In the definition you can assign its initial value which may
-  be safer for the logic of your program.   This form is equivalent
-  to\\
-  {\tt type name;}\\
-  {\tt name = 0;}\\
-  Only the second line is actual running code the first line only
-  allocates memory and defines the location for the object in memory.
+<chn>In the definition you can assign its initial value which may be safer for the logic of your program.   This form is equivalent to\\ {\tt type name;}\\ {\tt name = 0;}\\
+<chn>Only the second line is actual running code the first line only allocates memory and defines the location for the object in memory.
 \end{itemize}
 
 
+<s>\end{slide}
+<s>\begin{slide}
 \subsection{Function definitions}
 \begin{itemize}
   \item Simplest:  {\tt type name(arg1type arg1name, arg2type arg2name,...); \{function code here\}} \\
@@ -363,12 +353,11 @@ Reasons:
 <s>\end{slide}
 <s>\begin{slide}
 
-    \pdftooltip{\includegraphics[width=4.5in]{cprog_figs/includes_multi_protos.png}}{Diagram showing a single .h header file providing identical function prototype declarations to multiple .c source files, eliminating duplicate declarations}
+    \includegraphics[width=4.5in]{cprog_figs/includes_multi_protos.png}
     
-    A single {\tt .h} file introduces the exact same {\it} function prototypes.
-    and data {\it declarations} into multiple files without having to maintain
-    separate identical copies in multiple files.   Variable {\it definitions}
-    and function {\it definitions} belong in .c files.
+    A single {\tt .h} file introduces the exact same function prototypes
+    and data declarations into multiple files without having to maintain 
+    separate identical copies in multiple files. 
     
 <s>\end{slide}
 <s>\begin{slide}
@@ -448,11 +437,10 @@ C pre-processor can turn on-off  blocks of code before compilation.
 %%%%** Section 3.3
 \subsection{C pre-processor overview}
 
-<s>\pdftooltip{\includegraphics[width=4.0in]{cprog_figs/c-building.png}}{ Flowchart of the C build process showing preprocessor applying \#include and \#define directives, compiler generating .o object files, and linker combining object files and libraries into an executable.  A switch symbol depicts the \#ifdef directive which can ``turn on'' and ``turn off'' blocks of code until \#endif is encountered. }
-
-<chn>\pdftooltip{\includegraphics[width=5.5in]{cprog_figs/c-building.png}}{Flowchart of the C build process showing preprocessor applying \#include and \#define directives, compiler generating .o object files, and linker combining object files and libraries into an executable. A switch symbol depicts the \#ifdef directive which can ``turn on'' and ``turn off'' blocks of code until \#endif is encountered. }
+<s>\includegraphics[width=4.0in]{cprog_figs/c-building.png}
+<chn>\includegraphics[width=5.5in]{cprog_figs/c-building.png}
     
-<*>
+<*chn>
 
 The C pre-processor applies some convenience features to your code before 
 compilation.  Specifically, the {\tt \#ifdef} macro can turn on and off C-code

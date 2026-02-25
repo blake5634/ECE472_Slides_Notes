@@ -1,0 +1,28 @@
+#$!/bin/bash
+# Generate slide source files
+coursetex -out s ConstDef.shn
+coursetex -out s Cprog.shn
+coursetex -out s CritSect.shn
+coursetex -out s FreeRTOS.shn
+coursetex -out s Hardware_IO.shn
+coursetex -out s Interrupts.shn
+coursetex -out s Pointers.shn
+coursetex -out s SchedImplementation.shn
+coursetex -out s Secure.shn
+coursetex -out s Serial.shn
+coursetex -out s USB.shn
+coursetex -out s 474_IntroSp26.shn
+
+
+# process all slide source files
+pdflatex ConstDef.s.tex
+pdflatex Cprog.s.tex
+pdflatex CritSect.s.tex
+pdflatex FreeRTOS.s.tex
+pdflatex Hardware_IO.s.tex
+pdflatex Interrupts.s.tex
+pdflatex Pointers.s.tex
+pdflatex SchedImplementation.s.tex
+pdflatex Serial.s.tex
+pdflatex USB.s.tex
+pdflatex 474_Intro*.s.tex

@@ -1,0 +1,415 @@
+<stream, c>
+<nh>\documentclass{article}
+<s>\documentclass{seminar}
+<*nhs>
+\usepackage{graphicx}
+\usepackage{graphpap}
+\usepackage{hyperref}
+
+
+<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
+<s>\pagestyle{headings}
+<s>\slidepagestyle{BHstyle}
+<s>\addtolength\oddsidemargin{3cm}
+
+\title{FreeRTOS Overview}
+
+
+<*hn>
+\usepackage{fancyhdr}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%
+%  Set Up Margins
+\input{/users/home1/blake/templates/pagedim.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%         Page format Mods HERE
+%
+%Mod's to page size for this document
+\addtolength\textwidth{0cm}
+\addtolength\oddsidemargin{0cm}
+\addtolength\headsep{0cm}
+\addtolength\textheight{0cm}
+%\linespread{0.894}   % 0.894 = 6 lines per inch, 1 = "single",  1.6 = "double"
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER / FOOTER
+\pagestyle{fancy}
+%%%%%  Page header/footer fields for "NSF Style" proposal
+%%%%%  \chead will be changed with each section
+\lhead{\small\sc EE474}
+\rhead{}
+<chn>\chead{\large\bf Introduction to FreeRTOS}
+\lfoot{Hannaford, U. of Washington}
+\rfoot{\today}
+\cfoot{\thepage}
+%\renewcommand\headrulewidth{1pt}
+%\renewcommand\footrulewidth{1pt}
+
+
+\linespread{1.0}
+
+<*>
+<!c>\begin{document}
+
+
+
+<s>\begin{slide}
+\section*{Introduction to FreeRTOS  }
+%%%%** Section 1 
+\section{Overview}
+%%%%** Section 1.1
+\subsection{Information Sources }
+\begin{itemize}
+\item  {\tt http://freertos.org}
+\item  
+\end{itemize}
+
+
+
+%%%%** Section 1.2
+\subsection{Characteristics and Features}
+
+FreeRTOS is a real time {\it kernel}.
+
+``Operating System'' is more than a kernel.
+
+Kernel supports
+\begin{itemize}
+  \item Scheduler
+  \item Message passing (mailboxes)
+  \item Synchronization (semaphores)
+  \item Memory Management
+\end{itemize}
+
+Does not support
+\begin{itemize}
+  \item I/O Devices
+  \item File System
+  \item Networking
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide} 
+Features
+
+\begin{itemize}
+  \item Source Code available (license: "modified GPL").
+  \item Free for educational use and commercial use. % Commercial support packages are available and a closed source version is available.
+  \item Portable to multiple micro processors.
+  \item ROMable.
+  \item Scalable (only builds what you need)
+  \item Multitasking (up to 56 tasks)
+  \item Preemptive:  Flexible number of priority levels. Multiple tasks can have same priority.
+  \item Individual stacks for each task. Can
+  be different sizes.
+  \item Services:   queues, semphores, recursive mutexes.
+  dynamic memory allocation. 
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+<*>
+\section{FreeRTOS History}
+
+\href{https://en.wikipedia.org/wiki/FreeRTOS}{(source wikipedia)}
+\begin{itemize}
+\item Originally developed by an individual, Richard Barry, starting in 2003.
+\item His company was Real Time Engineers Ltd.
+\item Acquired by Amazon (AWS) in 2017.
+\item License terms are now MIT license (still open source).
+\end{itemize}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+%%%%** Section 2 
+\section{FreeRTOS   Tasks and Calls}
+
+\subsection{Sleep}
+
+{\tt void Sleep(int timems)}
+
+Code for {\tt Sleep()}
+\begin{verbatim}
+void Sleep( int timems )
+{
+  vTaskDelay( timems / portTICK_RATE_MS );
+}
+\end{verbatim}
+
+Thus {\tt Sleep()} is just a new name for {\tt vTaskDelay()}.
+
+
+
+<s>\end{slide}
+<s>\begin{slide}
+\subsection{Why Sleep is important.}
+
+In a priority based scheduler, need to allow lower priority tasks to run:
+
+\begin{verbatim}
+void ExampleTask(void *p)
+{
+      while( 1 )
+  {
+    Led_SetState( 0 ); // turn the LED off
+    Sleep( 900 ); // leave it off for 900 milliseconds
+    Led_SetState( 1 ); // turn the LED on
+    Sleep( 10 ); // leave it on for 10 milliseconds
+  }
+}
+\end{verbatim}
+
+Sleep does {\bf two} things:
+
+\begin{enumerate}
+  \item Makes the LED flash with proper on and off durations. 
+  \item Allows FreeRTOS to give CPU to {\bf other} tasks.
+\end{enumerate}
+
+
+%%%%** Section 2.1
+\subsection{Task Priorities}
+ 
+\{0-7\}
+
+High priority numbers have the  highest priority. 
+ 
+%%%%** Section 2.2
+\subsection{OS Function Calls (selected)}
+
+<chn> Tables \ref{Ta:FC0} and \ref{Ta:FC1}
+<chn> summarize key function calls in $\mu$C/OS-II.
+
+<s> See Tables from Notes!!   too big for slides.
+
+<*chn>
+%%%%** Table 1 
+\begin{table}
+\begin{center}
+ %p = paragraph, c = center, l = left, r = right
+  \begin{tabular}{|l|p{1.2in}|p{1.6in}|p{2.25in} |}
+  \hline
+Make             &  FreeRTOS             &                                        &          \\
+Name             &  Name                 & Prototype                              &  Function \\ \hline
+{\tt Sleep()}    & {\tt vTaskDelay()}    & {\tt void Sleep(int timems)}           &  Delay task for {\tt timems} milliseconds. \\
+\hline
+{\tt TaskCreate()} &
+{\tt xTaskCreate()} &
+{\tt void* TaskCreate  	(  	void(taskCode)(void *)   	,
+		char *  	name,
+		int  	stackDepth,
+		void *  	parameters,
+		int  	priority	 
+	) }	&
+Create a task, specify its name, stack size, and priority.  Pass it a single void pointer parameter. \\
+\hline
+{\tt TaskYield()} &
+{\tt TaskYIELD()} &
+{\tt void TaskYield(void)} &
+Tell scheduler that this task has nothing to do at this moment but will need to get back to work as soon as possible. \\
+\hline
+{\tt TaskDelete()} &
+{\tt vTaskDelete()} &
+{\tt void TaskDelete( void* task ) } &
+Delete this task from the schedule.  It will no longer run. \\
+\hline
+{\tt SemaphoreCreate()} &
+{\tt vSemaphoreCreate Binary()} &
+{\tt void* SemaphoreCreate()} &
+ Create a binary semaphore. Returns a void pointer to the new semaphore.\\
+\hline
+{\tt SemaphoreTake() } &
+{\tt xSemaphoreTake()} &
+{\tt int SemaphoreTake(void* semaphore, int blockTime} &
+``Take" (pend) the semaphore.  Return 1.  if waited past blockTime, return 0.\\
+\hline
+{\tt SemaphoreGive() } &
+{\tt xSemaphoreGive()} &
+{\tt int SemaphoreGive(void* semaphore)} &
+ Release (post) a semaphore.  Return 1.  If error (such as no such semaphore) return 0.  \\
+\hline
+% {\tt } &
+% {\tt } &
+% {\tt } &
+%    \\ 
+\end{tabular}
+\caption{Table of Selected Make Library RTOS calls}
+\label{Ta:FC0}
+\end{center}
+\end{table}
+ 
+<*>
+<s>\end{slide}
+<s>\begin{slide}
+
+<chn>\newpage
+%%%%** Section 3 
+\section{Code Example}
+<s>\tiny{
+\begin{verbatim} /*
+	make.c
+	
+	make.c is the main project file.  The Run( ) task gets called on bootup, so stick any initialization stuff in there.
+	In Heavy, by default we set the USB, OSC, and Network systems active, but you don't need to if you aren't using them.
+	Furthermore, only register the OSC subsystems you need - by default, we register all of them.
+*/
+
+#include "config.h"
+
+// include all the libraries we're using
+#include "appled.h"
+#include "dipswitch.h" 
+#include "digitalout.h"
+#include "digitalin.h"      
+
+
+ 
+// EE474 Include Files
+ 
+ //  if there are any EE474 includes you could put them here
+
+
+
+#define   PIO_PA02          AT91C_PIO_PA2
+#define   PIO_PA03          AT91C_PIO_PA3
+#define   PIO_PA04          AT91C_PIO_PA4
+#define   PIO_PA06          AT91C_PIO_PA6
+
+#define   WIRE_BLUE         PIO_PA02
+#define   WIRE_BLACK        PIO_PA03
+#define   WIRE_RED          PIO_PA06
+#define   WIRE_WHITE        PIO_PA04
+
+
+#define   EE474_OUTPUT         1
+#define   EE474_INPUT          0
+// Local function/task prototypes 
+      // a prototype for each of the task functions (and other functions you write)
+ 
+void display(int, int, int, int);
+void error(int,int,int,int); 
+int pio_474_bit_setup (unsigned int, int);  // function prototype
+void BlinkTask( void* parameters );  
+void ToneTask(void* parameters );
+void IOSetup(void* p);
+
+// task pointers as needed 
+      // declare a void pointer for each task you would like to refer to later.
+void *blinktask, *tonetask, *iosetuptask;
+
+void Run( ) // this task gets called as soon as we boot up.
+{
+ 
+// Create some tasks. 
+   blinktask     = TaskCreate( BlinkTask,   "Blink",  400, 0, 1 );
+   if(blinktask == NULL) error(1,1,1,1);
+
+   iosetuptask   = TaskCreate( IOSetup,   "IOSetup",  400, 0, 2 ); 
+   if(iosetuptask == NULL) error(1,1,1,0);
+
+// Show you got here.
+   display(1,0,1,0);             // set initial pattern on the LEDs 
+ 
+}
+
+
+void IOSetup(void* p)
+  {
+   pio_474_bit_setup(WIRE_RED,   EE474_OUTPUT);     // set up bit "DIGITAL OUT 3" for output
+   tonetask      = TaskCreate( Tone,   "Tone",  400, 0, 2 ); 
+      if(tonetask == NULL) error(1,1,0,1);
+   TaskDelete(iosetuptask);  // delete yourself!
+  }
+
+
+void ToneTask(void* p)
+  {
+  while(1)        //   Should make a 250Hz tone on speaker
+      {
+      *AT91C_PIOA_SODR  = WIRE_RED;    // set red wire high
+      Sleep(2);   
+      *AT91C_PIOA_CODR  = WIRE_RED;    //  clear red wire.
+      Sleep(2);
+      }
+  }
+
+
+ 
+// A very simple task...a good starting point for programming experiments.
+// If you do anything more exciting than blink the LED in this task, however,
+// you may need to increase the stack allocated to it above.
+void BlinkTask( void* p )
+{
+ (void)p;
+  Led_SetState( 1 );
+  Sleep( 1000 );
+
+  while ( true )
+  {
+    Led_SetState( 0 );
+    Sleep( 950 );
+    Led_SetState( 1 );
+    Sleep( 50); 
+  }
+}
+
+
+int   pio_474_bit_setup( unsigned int bit,  int input_or_output)
+  {
+  //Allow the PIO to control this bit
+  *AT91C_PIOA_PER  = bit;            //AT91C_PIOA_PER is addr of PER register
+  if(input_or_output == EE474_OUTPUT)
+       {
+       // Enable the bit as an output
+       *AT91C_PIOA_OER  = bit ;
+       }
+   else
+      {
+       // Enable the bit as an input / disable as output
+       *AT91C_PIOA_ODR  = bit ;
+      }
+  return(0);
+  }
+
+//  set status of the 4 LEDs on the Make Applications Board
+void display(int a, int b, int c, int d)
+  { 
+  AppLed_SetState(0,d);
+  AppLed_SetState(1,c);
+  AppLed_SetState(2,b);
+  AppLed_SetState(3,a);
+  }
+
+
+
+//  Any task can go here to display a flashing code and lock the system
+//     (note that error() is not a task by itself, just a part of the task
+//      which calls it.)
+void error(int a, int b, int c, int d)
+  {
+      //vTaskSuspendAll(); // direct RTOS call to stop all other tasks.
+  while(1) { 
+  display(a,b,c,d);
+ Sleep(800);        ///* if vTaskSuspendAll() is used, execution halts here. .
+  display(0,0,0,0);
+ Sleep(200);
+      }  
+  }
+\end{verbatim}
+<s>}    % end of tiny
+
+<s>\end{slide}
+
+
+<shn>\end{document}
+
