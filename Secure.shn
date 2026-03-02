@@ -26,17 +26,13 @@
 
 <*shn>
 \linespread{1.0}
-
-<shn>\begin{document}
+\begin{document}
 <s>\begin{slide}
 
-<n>\section*{INSTRUCTOR NOTES}
 
-<*>
-
-\begin{center}
-    \section*{Introduction to Secure Communications}
-\end{center}
+<s>\begin{center}
+\section*{Introduction to Secure Communications}
+<s>\end{center}
 
 References: J. Freer, Computer and Communication Networks, 2nd Edition,
 IEEE Press, 1996.  Chapter 11.,  

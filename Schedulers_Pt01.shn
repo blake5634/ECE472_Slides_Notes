@@ -1,0 +1,571 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%           EE474 Schedulers
+%
+<stream, c>   % combined into notes pack
+
+<nh>\documentclass{article}
+<s>\documentclass{seminar}
+
+<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
+<s>\pagestyle{headings}
+<s>\slidepagestyle{BHstyle}
+<s>\addtolength\oddsidemargin{3cm}
+<shn>\usepackage{graphicx}
+<shn>\usepackage{hyperref}
+<s>\hypersetup{hypertexnames=false}
+<shn>\usepackage{listings}
+
+<*hn>
+\oddsidemargin 0in
+\evensidemargin 0in
+\textwidth 6.5in
+\textheight 8.7in
+\topmargin 0.2in
+
+
+<*shn>
+\linespread{1.0}
+
+
+<shn>\begin{document}
+
+<*>
+<*s>\begin{slide}
+
+\begin{center}
+{\Large Tasks and Schedulers in Real-Time Systems: Part 1}
+\end{center}
+
+<*>
+%%%%** Section 1 
+\section{Tasks, Processes, and Threads}
+%%%%** Section 1.1
+\subsection{Processor State / Context}
+
+The CPU of a computer has several state variables.  Once they are
+specified we know the exact state of the CPU.  These include:
+\begin{itemize}
+        \item Program Counter (location in memory of next instruction)
+        \item Value of each CPU register
+        \item Processor Status Flags
+        \item Stack Pointer
+\end{itemize}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+%%%%** Section 1.2
+\subsection{Tasks or Processes}
+
+A {\it Task} or {\it Process} is a unit of code and data which is
+described by one processor state\footnote{AKA ``process context"}  when it is running. 
+
+Example Tasks:
+\begin{itemize}
+    \item Flash an LED for 100ms, repeat every 1.5 seconds.
+    \item Send a byte of data over a communication link whenever a hardware bit indicates
+    the com. link is ready.
+    \item Every 60 seconds, read an analog voltage from a Thermistor, convert it to a resistance, calibrate to temperature. 
+\end{itemize}
+
+A task is usually implemented in {\tt C} by writing a function.
+
+<s>\end{slide}
+<s>\begin{slide}
+\subsection{Context Switching:}
+
+A computer must often switch from one task to another (don't we all?) and then back.
+
+To restart a suspended task, we have to be able to {\it restore} its state. 
+
+To restore its state, we have to save it.  
+
+Thus a context switch means
+\begin{enumerate}
+  \item Save context of the processor for the current task.
+  \item Restore previously stored context of new task.
+  \item Start the new task.
+\end{enumerate}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+\subsection{Types of Tasks:}
+
+%%%%** Section 1.2.1 
+\subsubsection{Periodic Tasks}\label{Periodic}
+\begin{itemize}
+        \item Found in  Hard-Real time applications
+        \item Examples: 1) Control: Every 10 ms., Read sensors $\to$ compute control $\to$ output
+command\\
+          2) Multimedia: Every 22.727$\mu$sec,  Get music sample $\to$ compute DSP filter $\to$ output
+sample to DAC.
+
+        \item Characterized by three attributes:
+                \begin{enumerate}
+                        \item $P$, Period: the regular time interval between runs of this task.
+                        \item $C$, Computing Resources: How much CPU time  does it require
+each time. Obviously $C <= P$. ($C$ may not be the same each time.
+<*chn>
+Different code branches in the task may take different amounts of time. Use $C=C_{max}$.
+<*>
+                        \item $D$, Deadline: How quickly must the task me completed after it
+is started each time tick. $C < D < P$
+                \end{enumerate}
+         \item Typical Code Structure:
+\begin{verbatim}
+name() {
+   compute for C seconds;
+   return();
+   }
+\end{verbatim}
+\end{itemize}
+
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+%%%%** Section 1.2.2 
+\subsubsection{Intermittent Tasks}
+\begin{itemize}
+        \item Found in  all types of applications
+        \item Examples: 1) Send an email every night at 4:00 AM\\
+        2) Save all data when power is going down \\
+        3) Send a message to plant operator when tank runs low.\\
+        4) Calibrate a sensor on startup.
+
+        \item Characterized by two attributes:
+                \begin{enumerate}
+                        \item $C$, Computing Resources: How much CPU time  does it require each time.
+                        \item $D$, Deadline: How quickly must the task be completed after it
+is started. (whenever that happens to be).
+                \end{enumerate}
+         \item Typical Code Structure:
+\begin{verbatim}
+name() {
+   compute for C seconds;
+   if(! done) return();
+   else halt_me();
+   }
+\end{verbatim}
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+%%%%** Section 1.2.3 
+\subsubsection{Background Tasks}
+\begin{itemize}
+        \item A soft real time or non real time task.
+        \item Lower Priority
+        \item Will be accomplished only as CPU time is available when no
+        hard real time tasks are ready.
+        \item Characterized by:
+                \begin{itemize}
+                         \item $C$, Computing Resources: How much CPU time  does
+                         it require each time between scheduler accesses.
+                \end{itemize}
+         \item Typical Code Structure:
+\begin{verbatim}
+name() {
+   compute for C seconds;
+   if(! done) return();
+   else halt_me();
+   }
+\end{verbatim}
+\end{itemize}
+
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1.2.4 
+\subsubsection{Complex Tasks}
+\begin{itemize}
+        \item Found in all types of applications
+        \item Examples: 1) Microsoft Word \hspace{0.15in}     2) Apache Web Server.
+
+        \item Characteristics:
+                \begin{enumerate}
+                        \item Continuous need for CPU time.
+                        \item Frequent requests for I/O which free up the CPU.
+                        \item Waits for user input which free up CPU.
+                \end{enumerate}
+         \item Typical Code Structure:
+\begin{verbatim}
+name() {
+   while(1) {
+      compute for C seconds;
+      request_IO();  // also starts scheduler
+      }
+   }
+\end{verbatim}
+\end{itemize}
+<*chn>
+I/O activity frees up the CPU because the task must wait, usually a significant amount of
+time, for the I/O activity on a physical device.  It cannot compute between the time it requests
+the I/O and the time it gets the data or writes the data so now the CPU is free for other tasks.
+<*>
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1.3
+\subsection{Task States}\label{TaskStates}
+Tasks are in one of four states:
+\begin{enumerate}
+        \item {\tt Running} 
+        \item {\tt Ready} to Run (but not running)
+        \item {\tt Waiting}    (for something {\it other} than the CPU.)
+        \item {\tt Inactive}   
+\end{enumerate}
+<*chn>
+Only one task can be {\bf Running} at a time (unless we are using a ``multicore" CPU).  
+A task which is waiting for the CPU 
+is {\bf Ready}.  When a task has requested
+I/O or put itself to sleep, it is {\tt Waiting}.
+An {\tt Inactive} task is waiting to be allowed into the schedule.  It is like 
+Microsoft Word when you are NOT running it. 
+
+We'll see later how a task can get into or out of the {\tt Inactive} state.
+
+<*>
+<s>\end{slide}
+<s>\begin{slide}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
+%
+%%%%** Section 2 
+\section{Threads: Smaller Units of Computation}
+We have talked about:
+\begin{itemize}
+	\item Programs
+	\item Tasks
+	\item Subroutines/Functions\footnote{When I use a slash (/) in a list like this I mean that the two terms are equivalent}
+	\item Processes
+	\item Threads
+\end{itemize}
+Confused yet??
+
+
+<s>\end{slide}
+<s>\begin{slide}
+With any complex computing system we naturally break it up into {\it units }.
+
+For example in the EE474 lab exercise:  ``tasks"
+<s>\end{slide}
+<s>\begin{slide}
+Each unit has
+
+\begin{itemize}
+	\item Code/instructions
+	\item Data
+	\item Context/State
+	\item Resources (memory, I/O devices, semaphores)
+\end{itemize}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+
+<*chn>
+\begin{center}
+%\vspace{2.5in}
+   \includegraphics[width=3in]{sched_figs/00264.eps}
+\end{center}
+
+<s>\scalebox{1.0}{
+<s>\includegraphics{sched_figs/00264.eps} }
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+A {\it Program or Process} is a unit of computation with all of the above attributes.
+
+A {\it Subroutine or Function} is a unit of computation with code, data, and context, but
+no managed resources.
+
+<*hn> I am using the term ``managed resources" to mean resources which can be assigned and de-assigned
+by the operating system such as memory or I/O devices.   Of course a function within a program has its
+own memory, but if it requests memory from the OS (for example with {\tt malloc()}, the OS assigns it
+to the program, not to the function within that program.
+
+<*>
+
+A {\it Thread} is a unit of computation with code and context, but no private data.  Threads may even
+share code with each other.
+
+Threads are owned by a program/process.
+
+Threads are like pieces within a program which can be scheduled by the OS independently.
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+
+<*chn>
+\begin{center}
+%\vspace{2.5in}
+   \includegraphics[width=3in]{sched_figs/00265.eps}
+\end{center}
+<*>
+<s>  \scalebox{1.0}{  \includegraphics{sched_figs/00265.eps} }
+
+A complete software system with two processes.   
+<s>Process 1: normal, Process 2: threaded
+<chn>Process 1 is a ``normal" single-threaded process.
+<chn>Process 2 is a multithreaded process.
+
+<chn>Scheduler manages 6 units:  Process 1 and the 5 threads of process 2.
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+%%%%** Section 2.1
+\subsection{Thread Context Switching}
+Since threads have a smaller context than programs, context switching is faster.
+
+
+
+\begin{itemize}
+	\item Only save/restore CPU state
+	\item No need to change memory setup
+
+<chn>(with programs in systems bigger than the 16-bit 80188, this can be elaborate).
+
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+Why use threads?
+
+An example.
+
+Web server.
+<s>\end{slide}
+<s>\begin{slide}
+Web server pseudocode:
+\begin{verbatim}
+while(1)  {
+    OS_read_network();      // get incoming request
+    compute;                // figure out what html page to get
+    OS_Disk_I/O();          // read disk file for www page
+    OS_write_network();	    // send page to user
+}
+\end{verbatim}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+Alternative 1:  Run above as a single process.
+
+Problem:  When process is waiting for network, disk is idle and vice versa.
+<s>\end{slide}
+<s>\begin{slide}
+
+Alternative 2:   Set up several threads of same code:
+
+Advantage:   Scheduler can start a thread which is done with disk I/O while
+another thread is waiting on network and vice versa.
+
+CPU is used more efficiently and system delivers more pages per second with same hardware performance.
+
+Potential Problem:  more time spent context switching.
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 2.2
+\subsection{Types of threads.}
+
+There are lots of possibilities for size of {\it units}.
+
+The more context a thread contains, the ``heavier" it is.
+
+Heavier threads take more time for context switching.
+
+OS designer determines what kind of threads to support --- application programmer gets only one
+option.
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+
+%%%%** Section 3 
+\section{RTOS Scheduling Concepts}
+<hcn>RTOS = Real Time Operating System
+
+%%%%** Section 3.1
+\subsection{Time}\label{Time}
+
+
+Time is measured by a piece of hardware which records actual
+clock time: a {\it real time clock}:
+<chn>We use the terms
+
+``Time Quanta'' ``Time Slice''  ``Ticks''
+
+Let's call the period of time ticks: $T$.
+
+Typically $T < P_{min}$. Sometimes $T << P_{min}$.
+
+<*chn>
+Where $P_{min}$ is the shortest period of all tasks in the  system.
+In other words, the operating system measures time in units, $T$, which
+are smaller than the shortest period of any task.
+<*>
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 3.2
+\subsection{Soft vs. Hard Real Time}
+
+{\bf Real Time:}  A software system with specific speed or response
+time requirements.
+
+{\bf Soft Real Time:} If the deadlines are not met,
+performance is considered low.
+
+{\bf Hard Real Time:} A computer system in which at least one task must meet
+deadlines in time.  If the deadlines are not met, the system has failed.
+
+{\bf Super Hard Real Time:} Mostly Periodic Tasks:
+Task periods = the OS time tick, task compute times ($C$) and
+deadlines ($D$) are very
+short. $P = D = T, C << P$.
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 3.3
+\subsection{Scheduling}
+
+At each opportunity, OS asks:
+If $N$ tasks are {\bf Ready}, which one should I run?
+
+If you can show that scheduler always can achieve deadlines, 
+the system is ``deterministically schedulable".
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 3.4
+\subsection{Scheduling Goals}
+\begin{enumerate}
+\item CPU Utilization:
+\[
+U_{CPU} = 1 - \frac{idle}{period}
+\]
+Tradional measure for mainframes.  100\% is better.
+
+{\bf But} $U_{CPU} ~= 100\%$ is not safe for real-time systems
+
+Goal:   low load - 40\%, high load - 90\%.
+
+\item Throughput: 
+Work units completed per unit time.
+
+\item Turnaround Time:
+Total time from task start to completion (waiting + execution + I/O)
+
+\item Waiting Time: 
+Choose scheduler which minimizes waiting time. 
+
+\item Response Time **
+How quickly system responds to external asynchronus events. 
+\end{enumerate}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+\section*{Scheduler Types:}
+%%%%** Section 3.4.1 
+\subsection{Periodic Schedulers}
+<chn>\begin{itemize}
+
+<chn>        \item
+Infinite Loop
+        \begin{itemize}
+                \item Most primitive of all
+                \item Also known as Non-preemptive Round Robin.
+                \item \begin{verbatim}
+while(1)
+{
+task1_fcn();
+task2_fcn();
+task3_fcn();
+...
+}
+                \end{verbatim}
+                \item Each task {\bf must} voluntarily return to
+                scheduler quickly
+                \item $C << P$, $P=T$.
+
+\begin{verbatim}
+taskN_fcn()
+{
+compute a little bit;
+return();
+}
+\end{verbatim}
+      \end{itemize}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+<chn>        \item
+Synchronized Infinite Loop
+        \begin{itemize}
+                \item the top of the loop waits on a hardware clock.
+                \item \begin{verbatim}
+while(1)
+{
+wait(CLOCK_PULSE);
+task1_fcn();
+task2_fcn();
+task3_fcn();
+...
+}
+                \end{verbatim}
+                \item Each task {\bf must} voluntarily return to
+                scheduler quickly, as above.
+                \item $C << P$, $T=P$.
+        \end{itemize}
+
+<chn>\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+\subsection{Pre-emption}
+Each function in these schedulers must ``voluntarily" return back to the main loop, 
+and must make sure that it doesn't compute for too much time.   If a task gets
+stuck, it breaks the whole system.  
+
+The fix for this is {\bf preemption} - the ability to break into a running task and 
+stop it. In other words to force a context switch. 
+
+
+<*chn>
+The schedulers above are appropriate when all tasks are periodic and hard real-time.
+However, because execution times ($C$) vary, we have to allow  extra time in
+each loop of the non-preemptive round robin schedule (taken up by the ``wait()'' function).
+
+<*>
+
+<s>\end{slide}
+<*>
+<s>\end{document}
+
+
+

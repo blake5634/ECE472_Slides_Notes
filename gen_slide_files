@@ -8,7 +8,8 @@ coursetex -out s Hardware_IO.shn
 coursetex -out s Interrupts.shn
 coursetex -out s Pointers.shn
 coursetex -out s SchedImplementation.shn
-coursetex -out s Schedulers.shn
+coursetex -out s Schedulers_Pt01.shn
+coursetex -out s Schedulers_Pt02.shn
 coursetex -out s Secure.shn
 coursetex -out s Serial.shn
 coursetex -out s USB.shn
@@ -24,7 +25,8 @@ pdflatex Hardware_IO.s.tex
 pdflatex Interrupts.s.tex
 pdflatex Pointers.s.tex
 pdflatex SchedImplementation.s.tex
-pdflatex Schedulers.s.tex
+pdflatex Schedulers_Pt01.s.tex
+pdflatex Schedulers_Pt02.s.tex
 pdflatex Secure.s.tex
 pdflatex Serial.s.tex
 pdflatex USB.s.tex

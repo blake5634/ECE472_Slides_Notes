@@ -1,0 +1,468 @@
+<stream, c>                   % generate a striped down version (of h) for collection into larger doc
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Not used since 2022 -- TODO: move into course notes and course
+%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+<nh>\documentclass{article}
+<s>\documentclass{seminar}
+<*nhs>
+\usepackage{graphicx}
+\usepackage{graphpap}
+
+<s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 472 \hfil\thepage}{Hannaford \hfil \today}
+<s>\pagestyle{headings}<s>\slidepagestyle{BHstyle}
+<s>\addtolength \oddsidemargin{3cm}
+
+<*hn>
+\usepackage{fancyhdr}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%
+%  Set Up Margins
+\input{templates/pagedim.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%         Page format Mods HERE
+%
+%Mod's to page size for this document
+\addtolength\textwidth{0cm}
+\addtolength\oddsidemargin{0cm}
+\addtolength\headsep{0cm}
+\addtolength\textheight{0cm}
+%\linespread{0.894}   % 0.894 = 6 lines per inch, 1 = "single",  1.6 = "double"
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER / FOOTER
+\pagestyle{fancy}
+%%%%%  Page header/footer fields for "NSF Style" proposal
+%%%%%  \chead will be changed with each section
+\lhead{\small\sc EE472}
+\rhead{}
+<chn>\chead{\large\bf TCP/IP Communication}
+\lfoot{Hannaford, U. of Washington}
+\rfoot{\today}
+\cfoot{\thepage}
+%\renewcommand\headrulewidth{1pt}
+%\renewcommand\footrulewidth{1pt}
+
+
+\linespread{1.0}        % single space   1.6 = double space
+
+<*shn>
+
+\title{EE 472:  Introduction to Tcp/IP Communication and sockets}
+
+\author{     Blake Hannaford\\
+        Department of Electrical Engineering \\
+        The University of Washington
+}
+
+\date{\today}
+
+
+<shn>\begin{document}
+<s>\begin{slide}
+
+\maketitle
+
+<*cshn>
+Source:     Wikipedia 
+
+<s>\end{slide}
+<s>\begin{slide}
+
+%%%%** Section 1 
+\section{The OSI Network Protocol Stack} 
+OSI = ``Open Systems Interconnect"  A {\bf model} of network organization in seven layers of abstraction. 
+
+There are two similar modeling systems:  OSI and TCP/IP.   We will use the slightly more general OSI layer to give the overview and then specialize to TCP/IP. 
+
+There is something of a religious war between the two.
+
+<s>\end{slide}
+<s>\begin{slide}
+
+
+The seven OSI  layers are:
+ 
+\begin{enumerate}
+\item Physical Layer
+\item Data Link Layer
+\item Network Layer
+\item Transport Layer
+\item Session Layer
+\item Presentation Layer
+\item Application Layer
+\end{enumerate}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+%%%%** Section 1.1
+\subsection{Physical and Application Layers}
+
+Easiest to understand are (1) and (7):
+
+\begin{itemize}
+  \item  (1) Physical Layer:  Cat-5 cable, network jack, ethernet card. 
+  \item  (7) Application Layer; Firefox, Chat client, BitTorrent etc.
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+What about the others?:
+
+<s>\end{slide}
+<s>\begin{slide}
+
+%%%%** Section 1.2
+\subsection{ (2) Data Link Layer}
+
+Group bits into Frames and move frames of  data from one node to another across a single physical link.  Detect and correct bit errors in the link. 
+
+Examples:
+\begin{itemize}
+  \item ethernet
+  \item 802.11 wireless
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1.3
+\subsection{ (3) Network Layer}
+End-to-end data delivery.  String together point-to-point links as necessary to get data from one end to another. 
+
+Examples:
+\begin{itemize}
+  \item Address Resolution Prototcol (ARP)
+  \item Connectionless Internet Protocol (IP)
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1.4
+\subsection{ (4) Transport Layer}
+Distribute data from the network layer among various applications on the same node.  
+Assign socket numbers to each stream so that data is multiplexed on to the network.
+Provide end-to-end error checking and re-transmission (optional).   Provide flow control so that links and computers are not overloaded.
+
+Examples:
+\begin{itemize}
+  \item UDP (used in address resolution protocol)
+  \item TCP (used for web browsing, email, chat, etc)
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1.5
+\subsection{ (5) Session Layer}
+
+Establish semi-permanent dialogs between end-user applications.   Not used by all applications.  Not part of Tcp/Ip model. 
+
+Examples:
+\begin{itemize}
+  \item  Appletalk
+  \item  RPC (Remote Procedure Call)
+  \item  SSH/SCP (Secure Shell/Secure Copy) between hosts.
+\end{itemize}
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 1.6
+\subsection{ (6) Presentation Layer}
+Work on the data itself.
+
+Examples:
+\begin{itemize}
+  \item Encryption/Decryption
+  \item Compression / Decompression
+  \item Character Set conversion
+\end{itemize}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+<s>\end{slide}
+<s>\begin{slide}
+
+%%%%** Section 2 
+\section{Tcp/Ip Internet Model}
+
+
+Four layers.
+
+There is a {\bf rough} mapping to OSI layers:
+
+\begin{enumerate}
+  \item Link Layer  (OSI 1,2)
+  \item Internet Layer (OSI 3)
+  \item Transport Layer (OSI 4) 
+  \item Application Layer (OSI 5,6,7)
+\end{enumerate}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 2.1
+\subsection{Link Layer}
+
+\begin{itemize}
+  \item  Physical layer
+  \item  Node to node transmission 
+\end{itemize}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 2.2
+\subsection{Internet Layer}
+
+\begin{itemize}
+  \item  Bridging different (sub)networks
+  \item  source computer to destination computer routing
+\end{itemize}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 2.3
+\subsection{Transport Layer}
+
+\begin{itemize}
+  \item End-to-end transfer, identification of ports.
+  \item Application to application routing.
+  \item Error control / retransmission
+  \item Flow control
+  \item TCP  connection oriented, reliable packets with re-transmission
+  \item UDP  connectionless ``datagram" packets without confirmation. 
+\end{itemize}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 2.4
+\subsection{Application Layer}
+Examples:
+\begin{itemize}
+  \item HTTP
+  \item SMTP (sendmail transfer protocol) for email.
+  \item  SSH/SCP (Secure Shell/Secure Copy) between hosts.
+\end{itemize}
+
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+<chn>\includegraphics[height=3.50in]{InternetRouteLayers.eps}
+<s>\includegraphics[height=2.2in]{InternetRouteLayers.eps} 
+
+Example of an Internet connection going through the 4-layer  Internetprotocol stack.
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+
+%%%%** Section 2.5
+\subsection{Internet Protocol Packet Types}
+
+Two major types of packets on internet:
+
+\begin{itemize}
+  \item  {\bf TCP}    Reliable.   IP Layer 3 will retransmit until valid data is received at final destination.   Slow
+  \item  {\bf UDP}    Fast.   IP Layer 3 sends and forgets.  Packets can be lost or arrive at destination out of sequence.    
+\end{itemize}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+
+
+%%%%** Section 3 
+\section{Internet Addressing}
+
+%%%%** Section 3.1
+\subsection{Address Format}
+An internet protocol address consists of four integers $ 0 <= i <256$.   They are written (for humans) separated by periods:
+
+Example:    {\tt 128.95.42.10} is ``ee.washington.edu".
+
+<!s> Every node on the internet has an IP address.    Each digit of the IP address can be represented by an unsigned 8 bit value.  There are three ranges of IP addresses which can be freely used on {\bf private} networks (such as the one we will have in the lab).  These are:
+
+<s> {\bf Private Address Ranges}
+
+
+{\tt 10.0.0.0} $\to$ {\tt 10.255.255.255}
+
+{\tt 172.16.0.0} $\to$ {\tt 172.31.255.255}
+
+{\tt 192.168.0.0} $\to$ {\tt 192.168.255.255}
+ 
+
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 3.2
+\subsection{How to obtain an address}
+There are two ways to get an IP address (such as for a new machine for example):
+
+\begin{itemize}
+   \item Get one dynamically (automatically) using a protocol called DHCP. (May change each time you restart).
+   \item Get a static (permanent) one assigned to you by the network administrator. 
+\end{itemize}
+
+
+<!s> Servers usually require static IP addresses because users need to know how to connect to them, but clients often get their IP dyanmically assigned through DHCP.  This allows networks to recycle addresses when not in use. 
+
+<s>\end{slide}
+<s>\begin{slide}
+
+%%%%** Section 3.3
+\subsection{Ports}
+
+Numbers which identify specific user and server connections within a computer.  
+
+0 $\leftarrow$ 2000          Reserved for system ports
+
+2001 $\leftarrow$ 32767      User ports
+
+Servers bind to a specific port which indicates type of server.   Example:  Http is port 80.
+
+Clients get a random port number assigned to them by OS.   Servers can ``{\tt accept()}" multiple connections on their port.   Clients are one-to-one with port numbers. 
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+%%%%** Section 4 
+\section{EE472 Private Lab Network}
+
+The EE472 lab will have a separate local ethernet which connects all the Make Controllers with two Linux servers.  This net will not be bridged to the Internet or the EE department network.
+
+In the 472 lab, we will assign a static IP to each team for you to program into your Make Controller as follows:
+
+
+\begin{tabular}{ll}
+{\tt 192.168.0.100} $\to$ {\tt 192.168.0.120}    &      Make Controllers \\
+{\tt 192.168.0.25} and {\tt 192.168.0.26}       &       Linux servers. 
+\end{tabular}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%** Section 5 
+\section{Sockets}
+
+%%%%** Section 5.1
+\subsection{Berkeley Sockets API}
+Sockets are an API into the Internet Transport Layer for sending information between applications located on different systems over the network using TCP or UDP.
+
+Originated at U.C. Berkeley in 1980's.   Most common API for networking.   
+
+Windows version:  {\tt winsock}.
+
+<s>\end{slide}
+<s>\begin{slide}
+Steps to program a connection with sockets:
+
+{\tt \#include <sys/socket.h> }
+ 
+{\bf Server:}
+\begin{enumerate}
+  \item Open a ``socket" with   {\tt socket()}.
+  \item Server binds the socket to a ``port" identified by an integer using {\tt bind()}
+  \item Server makes the socket ``listen" for incoming connections. {\tt listen()}
+  \item Accept incoming connection with {\tt accept() }
+  \item Send or receive data to/from remote system use {\tt send()/recv() or write()/read()}
+  \item Close the socket when done with {\tt close()}
+\end{enumerate}
+
+<s>\end{slide}
+<s>\begin{slide}
+
+Client:
+\begin{enumerate}
+  \item Create a socket with {\tt socket()}
+  \item Connect to a server.  Specify host address and port number with {\tt connect()}
+  \item Send or receive data to/from remote system using {\tt send()/recv() or write()/read()}
+  \item Close the socket when done with {\tt close()}
+\end{enumerate}
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+
+%<chn>\includegraphics[width=3.50in]{socket-programs.eps}
+%<s>\includegraphics[height=2.75in]{socket-programs.eps} 
+<chn>\newpage
+<chn>\includegraphics[height=7.0in]{socketprotocol.eps}
+<s>\includegraphics[height=2.75in]{socketprotocol.eps} 
+
+Overview of Socket Client/Server model
+<chn>\newpage
+
+<s>\end{slide}
+<s>\begin{slide}
+ 
+%%%%** Section 5.2
+\subsection{Using Sockets in the Make API}
+
+The Making Things Core API has a simplified programmers interface to sockets which we will use in the lab. The MakingThings API simplifies the process by 
+
+1) combining some of the steps above. 
+
+2) using slightly simpler data structures for the function parameters.
+
+The procedures for TCP based servers and clients using the Make Core API are:
+
+<s>\end{slide}
+<s>\begin{slide}
+
+Server:
+\begin{enumerate}
+  \item Create a socket with {\tt ServerSocket(int port)}.
+  \item Wait for a connection to your socket with {\tt ServerSocketAccept( void* serverSocket)}.
+\end{enumerate}
+Code Example:
+{\small
+\begin{verbatim}
+ // create a socket and start listening on port 10101
+  struct netconn* server = ServerSocket( 10101 );
+  // ServerSocketAccept( ) will block until an incoming connection is made
+  struct netconn* newConnection = ServerSocketAccept( server );
+  // now grab the data from the new connection
+\end{verbatim}
+}
+<s>\end{slide}
+<s>\begin{slide}
+
+Client:
+\begin{enumerate}
+  \item Create a connected socket to an IP address and port with {\tt Socket(int address, int port)}.\\
+Use the macro {\tt IP\_ADDRESS(a,b,c,d)} to convert a numerical IP address into an address integer. 
+\end{enumerate}
+
+Code Example:
+{\small
+\begin{verbatim}
+  // use the IP_ADDRESS macro to format the address properly
+  int addr = IP_ADDRESS( 192, 168, 0, 54 );
+  // then create the socket, connecting on port 10101
+  struct netconn* socket = Socket( addr, 10101 );
+\end{verbatim}
+}
+<s>\end{slide}
+<shn>\end{document}
