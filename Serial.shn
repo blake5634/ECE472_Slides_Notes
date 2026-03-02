@@ -13,6 +13,9 @@
 <s>\addtolength\oddsidemargin{3cm}
 <shn>\usepackage{graphicx}
 <shn>\usepackage{hyperref}
+<s>\hypersetup{hypertexnames=false}
+<s>\hypersetup{hypertexnames=false}
+
 <shn>\usepackage{listings}
 
 <*hn>

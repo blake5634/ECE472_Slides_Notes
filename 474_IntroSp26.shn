@@ -14,6 +14,7 @@
 <s>\addtolength\oddsidemargin{3cm}
 <shn>\usepackage{graphicx}
 <shn>\usepackage{hyperref}
+<s>\hypersetup{hypertexnames=false}
 <shn>\usepackage{listings}
 
 
@@ -87,16 +88,27 @@ Each lab exercise will require a report to be turned in and also an in-person, i
 Both team members must be able to answer written or oral
 questions about the entire lab project.
 
+<*s>
+<s>\end{slide}
+<s>\begin{slide}
+\subsection*{Lab: rm 345 ECE bldg.}
+
+\includegraphics[width=4.0in]{intro_figs/labRm345.png}
+{\small (Photo Vikram Iyer) }
+
+
 <s>\end{slide}
 <s>\begin{slide}
 
-
+<*>
 \section{Canvas Strategy}
 For easier updating and compatibility, most information about the course will be in a 
-\href{https://drive.google.com/drive/folders/1rBIyCbCrFNSuD6t70sQlF_oDXax7UrRu?usp=drive_link}{Google Drive Folder}
-accessible to all students.   The Syllabus including detailed week-by-week 
-assignments is in a 
-\href{https://docs.google.com/spreadsheets/d/16EKCsbianN9MxyGyvhjx5A7XP5cWTcK8c6I8fwjFqso/edit?gid=0#gid=0} {Google Sheets Spreadsheet}.
+\href{https://drive.google.com/drive/folders/1rBIyCbCrFNSuD6t70sQlF_oDXax7UrRu?usp=drive_link}
+{Google Drive Folder}
+accessible to all students.
+The Syllabus including detailed week-by-week assignments is in a
+\href{https://docs.google.com/spreadsheets/d/16EKCsbianN9MxyGyvhjx5A7XP5cWTcK8c6I8fwjFqso/edit?gid=0#gid=0}
+{Google Sheets Spreadsheet}.
 The spreadsheet contains the following important {\bf tabs}:
 \begin{enumerate}
     \item Weekly course schedule including topics, readings, assignments, videos.
@@ -112,7 +124,9 @@ The spreadsheet contains the following important {\bf tabs}:
  J.K. Peckol. ``Embedded Systems: A Contemporary Design Tool",
 pre-publication draft, June 2006.   
 
-Distributed in Drive as free \href{https://drive.google.com/file/d/12-hadf3HYavI7C8lP2hGyRWdtywFiX86/view?usp=sharing}{PDFs (.zip)}
+Distributed in Drive as free
+\href{https://drive.google.com/file/d/12-hadf3HYavI7C8lP2hGyRWdtywFiX86/view?usp=sharing}
+{PDFs (.zip)}
 PDF. 
 
 <*chn>

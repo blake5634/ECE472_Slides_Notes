@@ -13,6 +13,7 @@
 <s>\addtolength\oddsidemargin{3cm}
 <shn>\usepackage{graphicx}
 <shn>\usepackage{hyperref}
+<s>\hypersetup{hypertexnames=false}
 <shn>\usepackage{listings}
 
 <*hn>
@@ -64,7 +65,7 @@ Example Tasks:
 \begin{itemize}
     \item Flash an LED for 100ms, repeat every 1.5 seconds.
     \item Send a byte of data over a communication link whenever a hardware bit indicates
-    the com. link is ready. 
+    the com. link is ready.
     \item Every 60 seconds, read an analog voltage from a Thermistor, convert it to a resistance, calibrate to temperature. 
 \end{itemize}
 
@@ -488,7 +489,7 @@ How quickly system responds to external asynchronus events.
 
 \section*{Scheduler Types:}
 %%%%** Section 3.4.1 
-\subsubsection{Periodic Schedulers}
+\subsection{Periodic Schedulers}
 <chn>\begin{itemize}
 
 <chn>        \item

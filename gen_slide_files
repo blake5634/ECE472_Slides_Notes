@@ -1,4 +1,4 @@
-#$!/bin/bash
+#!/bin/bash
 # Generate slide source files
 coursetex -out s ConstDef.shn
 coursetex -out s Cprog.shn
@@ -8,6 +8,7 @@ coursetex -out s Hardware_IO.shn
 coursetex -out s Interrupts.shn
 coursetex -out s Pointers.shn
 coursetex -out s SchedImplementation.shn
+coursetex -out s Schedulers.shn
 coursetex -out s Secure.shn
 coursetex -out s Serial.shn
 coursetex -out s USB.shn
@@ -23,6 +24,19 @@ pdflatex Hardware_IO.s.tex
 pdflatex Interrupts.s.tex
 pdflatex Pointers.s.tex
 pdflatex SchedImplementation.s.tex
+pdflatex Schedulers.s.tex
+pdflatex Secure.s.tex
 pdflatex Serial.s.tex
 pdflatex USB.s.tex
 pdflatex 474_Intro*.s.tex
+
+# organize and clean up
+
+SLIDES="./SlidePDFs"
+[ ! -d "$SLIDES" ] && mkdir "$SLIDES"
+
+mv *.s.pdf "$SLIDES"
+
+rm *.s.tex
+
+cleantex   # rm latex junk files

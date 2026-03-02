@@ -13,6 +13,7 @@
 <s>\addtolength\oddsidemargin{3cm}
 <shn>\usepackage{graphicx}
 <shn>\usepackage{hyperref}
+<s>\hypersetup{hypertexnames=false}
 <shn>\usepackage{listings}
 
 <*hn>
@@ -283,23 +284,19 @@ Most Famous Public Key System
 <s>\end{slide}
 <s>\begin{slide}
 %%%%** Section 3 
-\section{Data Encryption Standard (DES)}
+\section{Advanced Encryption Standard (AES)}
 
-US Government Standard developed by IBM.
+Developed by Joan Daemen and Vincent Rijmen with NIST.
 
-\begin{tabular}{cc}
-1977 &  56 bit key \\
-1990 & 112 bit key \\
-\end{tabular}
+Now standardized as ISO/IEC 18033-3
 
-64 bit block code with single encryption key.
+Block size 128bits.    Key lengths 128, 192, 256 bits
 
-<*chn> Some claimed that the US National Security Agency (NSA) designed weaknesses into
-the DES in the 1970's so that it could have the ability to break it at will.   However
-later research has seemed to reduce this concern. 
-<*> 
+\href{https://en.wikipedia.org/wiki/Advanced_Encryption_Standard}{Wikipedia Link}
 
+\includegraphics[width=1in]{misc_figs/AES_(Rijndael)_Round_Function.png}
 
+<*>
 
 <s>\end{slide}
 

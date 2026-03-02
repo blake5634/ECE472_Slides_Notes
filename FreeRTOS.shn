@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 \usepackage{graphpap}
 \usepackage{hyperref}
+<s>\hypersetup{hypertexnames=false}
 
 
 <s>\newpagestyle{BHstyle}{\sl U. of Washington \hfil EE 474 \hfil \thepage}{Hannaford \hfil \today}
