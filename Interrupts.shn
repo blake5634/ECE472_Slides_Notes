@@ -24,14 +24,14 @@
 \topmargin 0.2in
 
 
-<*shn> 
+<*shn>
 \linespread{1.0}
 
 <*>
 <!c>\begin{document}
 <s>\begin{slide}
 
-%%%%** Section 1 
+%%%%** Section 1
 \section{Process Context}
 %%%%** Section 1.1
 \subsection{What is context?}
@@ -168,6 +168,7 @@ Stacks are implemented with a {\bf Stack Pointer}.
 <s>\end{slide}
 <s>\begin{slide}
 
+<*>
 %%%%** Section 1.6
 \subsection{Subroutine Call}
 How to call a subroutine (function in C).
@@ -176,8 +177,12 @@ so you don't have to!)
 \begin{enumerate}
         \item Push i argument {\it values} to stack: \\
 % <s>                {\tt foreach {i} (*SP)-- = argument(i);}
-                {\tt foreach {i} \_\_\_\_\_\_ = argument(i);}
-% <n>                {\tt foreach {i} *(SP--) = argument(i);}
+%                 {\tt foreach {i} \_\_\_\_\_\_ = argument(i);}
+                \begin{verbatim}
+                foreach {i} {
+                    *(SP--) = argument(i);
+                    }
+                    \end{verbatim}
         \item Generate {\tt JSR} machine instruction.
         \begin{enumerate}
                 \item Push machine registers onto stack.
@@ -201,44 +206,78 @@ so you don't have to!)
 
 \end{enumerate}
 
-%%%%** Section 2 
+
+
+<s>\end{slide}
+<s>\begin{slide}
+
+<*>
+%%%%** Section 2
 \section{Interrupts}
 
 An interrupt stops whatever instruction sequence is being executed by the processor and starts
-some new code.  This happens in response to a specific hardware event event (the ``Interrupt") which 
-could be internal or external.  The purpose of the new code is to immediately perform tasks 
+some new code.  This happens in response to a specific hardware event event (the ``Interrupt") which
+could be internal or external.
+<*cn>
+The purpose of the new code is to immediately perform tasks
 specifically related to the event.   Let's look at some common terms used with interrupt programming.
 
+<*>
 \subsection{Interrupt Definitions}
+<*s>
 
-{\bf Interrupt Service Routine (ISR):} When an interrupt is generated, some code, 
-called an ISR, must be run immediately to “service” the interrupt.   ``Service"
-means to perform tasks needed by the event that caused the interrupt.   For an 
-extremely simple example, if a timer is causing regular clock interrupts, an ISR 
-might just increment a variable called “time” and return.  A more advanced 
-example would be a disk drive which earlier got a command to read data from a 
-hardware disc sector.    After the sector read is completed, the drive generates 
-an interrupt, and the ISR must grab the data from the drive and put it into the 
-right place in memory. 
+\begin{itemize}
+        \item  Interrupt Service Routine (ISR):  some code which is run with very low latency after
+        the interrupt.   The ISR ``services'' the interrupt.
+        \item Enable/Disable:
+              Hardware bits that turn on or off a hardware interrupt.
+        \item By default, all interrupts are {\bf dis}abled.
+        \item In most CPUs, interrupts are grouped into priority levels (e.g. a priority 1
+        interrupt cannot be interrupted by a priority 2 interrupt).
+        \item There is an ``interrupt vector'' defined for each interrupt.  This is the
+        address of the ISR for each interrupt.
+        \item A hardware specific address points to a region called the ``Interrupt Vector Table''.
+        Each entry is a pointer to the ISR for the corresponding ISR.
 
-{\bf Enabling interrupts:  } Just like when you concentrate on some reading or 
-writing task, interruptions are costly for the CPU.  Furthermore, if there is no 
-ISR defined for the interrupt, then acting on that interrupt could hang (freeze) 
-the system.   Therefore there are bits controlled by software that enable or 
-disable interrupts from hardware signals.   By default all the interrupts are 
-disabled.    In addition to enabling individual interrupts, the CPU has bits 
+        \end{itemize}
+<*cn>
+{\bf Interrupt Service Routine (ISR):} When an interrupt is generated, some code,
+called an ISR, must be run immediately to “service” the interrupt.
+``Service"
+means to perform tasks needed by the event that caused the interrupt.   For an
+extremely simple example, if a timer is causing regular clock interrupts, an ISR
+might just increment a variable called “time” and return.  A more advanced
+example would be a disk drive which earlier got a command to read data from a
+hardware disc sector.    After the sector read is completed, the drive generates
+an interrupt, and the ISR must grab the data from the drive and put it into the
+right place in memory.
+
+
+{\bf Enabling interrupts:  }
+<*cn>Just like when you concentrate on some reading or
+writing task, interruptions are costly for the CPU.  Furthermore, if there is no
+ISR defined for the interrupt, then acting on that interrupt could hang (freeze)
+the system.   Therefore there are bits controlled by software that enable or
+disable interrupts from hardware signals.   By default all the interrupts are
+disabled.    In addition to enabling individual interrupts, the CPU has bits
 that can globally enable or disable all interrupts.
 
-{\bf Internal Interrupts:} Interrupts from components inside the computer itself such as timer/counters. 
+{\bf Internal Interrupts:} Interrupts from components inside the computer itself such as timer/counters.
+
 
 {\bf External interrupts: } Interrupts from components outside the CPU such as a digital input bit, a network interface, or an SSD.
 
-{\bf Interrupt Priorities:}   Interrupts can interrupt ISRs(!)  ... or not!    You might have one interrupt which is a very time-critical control function, and a plane will crash if this ISR does not execute correctly in 2milliseconds.   You might also have another ISR that updates a log file.   The first ISR is therefore a much higher priority than a log-file update.   Yes, we need to guarantee that the log file gets updated, but the speed does not matter.    Most processors group the available interrupts into priority levels such that lower priority interrupts have to wait until there are no running ISRs of higher priority. 
+{\bf Interrupt Priorities:}   Interrupts can interrupt ISRs(!)  ... or not!    You might have one interrupt which is a very time-critical control function, and a plane will crash if this ISR does not execute correctly in 2milliseconds.   You might also have another ISR that updates a log file.   The first ISR is therefore a much higher priority than a log-file update.   Yes, we need to guarantee that the log file gets updated, but the speed does not matter.    Most processors group the available interrupts into priority levels such that lower priority interrupts have to wait until there are no running ISRs of higher priority.
 
-{\bf Interrupt Vectors: }    A powerful computer system could have many different interrupts that are enabled at a given time.   A simple example would be a Network-Attached-Storage (NAS) device which is basically a computer with a bunch of disk drives (or SSDs) attached to it to be a file server.    If there are four drives attached to the NAS, each one needs a separate interrupt so that they can operate simultaneously.   The way to implement this is for each hardware interrupt mechanism to have a pointer to a software ISR function.    The address of the ISR for each interrupt is the “Interrupt Vector”.  
+{\bf Interrupt Vectors: }    A powerful computer system could have many different interrupts that are enabled at a given time.   A simple example would be a Network-Attached-Storage (NAS) device which is basically a computer with a bunch of disk drives (or SSDs) attached to it to be a file server.    If there are four drives attached to the NAS, each one needs a separate interrupt so that they can operate simultaneously.   The way to implement this is for each hardware interrupt mechanism to have a pointer to a software ISR function.    The address of the ISR for each interrupt is the “Interrupt Vector”.
 
-{\bf Interrupt Vector Table:}  This is a hardware-specific region of memory that is specially set aside (and hardware-defined) to hold an interrupt vector for each hardware interrupt the processor can support.   If the interrupt is not enabled then it doesn’t matter what is in the table, but for every enabled interrupt, there must be a valid pointer to a function that can run and return. 
- 
+{\bf Interrupt Vector Table:}  This is a hardware-specific region of memory that is specially set aside (and hardware-defined) to hold an interrupt vector for each hardware interrupt the processor can support.   If the interrupt is not enabled then it doesn’t matter what is in the table, but for every enabled interrupt, there must be a valid pointer to a function that can run and return.
+
+<*>
+
+
+<s>\end{slide}
+<s>\begin{slide}
 
 Types of inputs that can cause an interrupt:
 \begin{itemize}
@@ -248,7 +287,7 @@ Types of inputs that can cause an interrupt:
         \item Disk drive
 <chn> completes an operation and has a bunch of data ready for CPU.
         \item A clock
-<chn> can be programmed to set up interupts at regular intervals.
+<chn> can be programmed to set up interrupts at regular intervals.
         \item A hardware timer
 <chn> can count clock pulses and generate an interrupt when it gets to zero.
         \item A thermostat
@@ -256,9 +295,13 @@ Types of inputs that can cause an interrupt:
 \end{itemize}
 
 
-\paragraph{Connections}
 
-Interupts are logic signals physically wired to the CPU
+<s>\end{slide}
+<s>\begin{slide}
+
+\paragraph{Connections:}
+
+Interrupts are logic signals physically wired to the CPU
 <chn>(or interrupt processor peripheral).
 
 There are various schemes for wiring multiple interrupts:
@@ -269,7 +312,7 @@ There are various schemes for wiring multiple interrupts:
         \item 7 lines leading into CPU.
         \item peripherals can pull one line low
 <chn> for example using open collector ``wired OR''.
-        \item A small address bus identifies the specific
+        \item A small (e.g. 3-8 bit) address bus identifies the specific
         interrupt within a line.
         \item Lines are ranked by priority
 <chn> e.g. ISR for Line 0 cannot be interrupted by any other interrupt,
@@ -278,16 +321,16 @@ There are various schemes for wiring multiple interrupts:
 
 \paragraph{Interrupt Vectors}
 
-Each interupt has a specific code number which is applied to
+Each interrupt has a specific code number which is applied to
 the processor interrupt address bits (maybe 8bits).
 
 CPU has a specific hard-wired memory address called the
 {\bf interrupt vector table.}    The interrupt vector
-table is an array of function pointers.  The functions
-they point to are called
+table is an array of function pointers to
 {\bf interrupt service routines, ISRs}.
 
-\paragraph{Typical Interupt Vector Table}
+\subsubsection*{Typical Interrupt Vector Table}
+
 {\tt
 \begin{tabular}{|r|r|}
 \hline
@@ -299,15 +342,17 @@ Memory Addr             &       Contents \\ \hline
 1006                    &       isr\_3()  \\ \hline
 ...                     &       ...       \\ \hline
 1100                    &       isr\_N()  \\ \hline
-
 \end{tabular}
 }
+
+Any of the {\tt isr\_N} pointers could be {\tt NULL}
 
 \paragraph{Meaning of ISRs}
 
 Each hardware device is hooked up to a specific interrupt vector
 table address.  We need to write each ISR to handle the proper
-device.
+device.   Rarely would {\bf all} of the Interrupt Vector Table entries
+need to be programmed.
 
 %%%%** Section 2.1
 \subsection{ISRs}
@@ -402,70 +447,74 @@ device.
 
 
 <s>\end{slide}
-<s>\begin{slide}
-%%%%** Section 3 
-\section{Real Time Control }
-
-%%%%** Section 3.1
-\subsection{Basic Task}
-Map inputs to outputs (through a control law) at
-{\it regular } time intervals.
-
-
-<s>\end{slide}
-<s>\begin{slide}
-
-\begin{verbatim}
-\% Initialization
-set_up(timer0);
-set_up(input,output);
-
-\% endless control loop
-while(1)
-        {
-        wait(timer0);
-        x=read(input);
-        y=control_function(x);
-        output(y,output);
-        }
-\end{verbatim}
-
-<s>\end{slide}
-<s>\begin{slide}
-
-%%%%** Section 3.2
-\subsection{Timing}
-Different ways to ensure regular time sampling.
-
-
-\begin{itemize}
-        \item While loop + Interrupt
-        \begin{itemize}
-                \item ``main" program is {\tt while(1);}
-                \item Timer is set up for regular interrupts
-                every {\tt T} seconds.
-                \item ISR is I/O and control law: \\
-                {\tt x=read(input); \\
-                y=control\_function(x);  \\
-                output(y,output); \\
-                return();}
-        \end{itemize}
-<s>\end{itemize}
-
-<s>\end{slide}
-<s>\begin{slide}
-
-<s>\begin{itemize}
-        \item  ``spin-lock'': \\
-         {\tt wait(timer0) $\to$ while(timer0 == 0) ;}
-        \item  OS Call:   \\
-        {\tt wait(event)} \\
-        return control to OS until {\bf event} occurs.  {\bf event} is timer0.
-\end{itemize}
-
-
-
-
-<s>\end{slide}
+%
+%
+%    Seems to be obsolete material    May '26
+%
+% <s>\begin{slide}
+% %%%%** Section 3
+% \section{Real Time Control }
+%
+% %%%%** Section 3.1
+% \subsection{Basic Task}
+% Map inputs to outputs (through a control law) at
+% {\it regular } time intervals.
+%
+%
+% <s>\end{slide}
+% <s>\begin{slide}
+%
+% \begin{verbatim}
+% \% Initialization
+% set_up(timer0);
+% set_up(input,output);
+%
+% \% endless control loop
+% while(1)
+%         {
+%         wait(timer0);
+%         x=read(input);
+%         y=control_function(x);
+%         output(y,output);
+%         }
+% \end{verbatim}
+%
+% <s>\end{slide}
+% <s>\begin{slide}
+%
+% %%%%** Section 3.2
+% \subsection{Timing}
+% Different ways to ensure regular time sampling.
+%
+%
+% \begin{itemize}
+%         \item While loop + Interrupt
+%         \begin{itemize}
+%                 \item ``main" program is {\tt while(1);}
+%                 \item Timer is set up for regular interrupts
+%                 every {\tt T} seconds.
+%                 \item ISR is I/O and control law: \\
+%                 {\tt x=read(input); \\
+%                 y=control\_function(x);  \\
+%                 output(y,output); \\
+%                 return();}
+%         \end{itemize}
+% <s>\end{itemize}
+%
+% <s>\end{slide}
+% <s>\begin{slide}
+%
+% <s>\begin{itemize}
+%         \item  ``spin-lock'': \\
+%          {\tt wait(timer0) $\to$ while(timer0 == 0) ;}
+%         \item  OS Call:   \\
+%         {\tt wait(event)} \\
+%         return control to OS until {\bf event} occurs.  {\bf event} is timer0.
+% \end{itemize}
+%
+%
+%
+%
+% <s>\end{slide}
 
 <shn>\end{document}

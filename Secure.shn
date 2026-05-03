@@ -265,12 +265,12 @@ Most Famous Public Key System
 \item RSA Keys:  200bits
 \item $k_1 = P_1 * P_2$ where $P_1, P_2$ are large prime numbers.
 \item can break code if you can factor $k_1$ into $P_1 \times P_2$.
-\item for $k_1 =$ 200 bits, factoring takes 3.8B years at 1 op$/mu$sec.
+\item for $k_1 =$ 200 bits, factoring takes 3.8B years at 1 op$\mu$sec.
 \item Encoding is expensive.
 \begin{itemize}
 	\item Block size 512 bits
         \item encode 1 block:  $3\times 10^6$ multiplications.
-        \item at 1$/mu$sec/mult.,  3 seconds per 64 bytes = 13hrs / Mbyte!
+        \item at 1$\mu$sec/multiply,  3 seconds per 64 bytes = 13hrs / Mbyte!
         (special hardware considerably faster).
         \end{itemize}
 \end{itemize}

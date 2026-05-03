@@ -38,7 +38,7 @@
 \end{center}
 
 <*>
-%%%%** Section 1 
+%%%%** Section 1
 \section{Tasks, Processes, and Threads}
 %%%%** Section 1.1
 \subsection{Processor State / Context}
@@ -60,14 +60,14 @@ specified we know the exact state of the CPU.  These include:
 \subsection{Tasks or Processes}
 
 A {\it Task} or {\it Process} is a unit of code and data which is
-described by one processor state\footnote{AKA ``process context"}  when it is running. 
+described by one processor state\footnote{AKA ``process context"}  when it is running.
 
 Example Tasks:
 \begin{itemize}
     \item Flash an LED for 100ms, repeat every 1.5 seconds.
     \item Send a byte of data over a communication link whenever a hardware bit indicates
     the com. link is ready.
-    \item Every 60 seconds, read an analog voltage from a Thermistor, convert it to a resistance, calibrate to temperature. 
+    \item Every 60 seconds, read an analog voltage from a Thermistor, convert it to a resistance, calibrate to temperature.
 \end{itemize}
 
 A task is usually implemented in {\tt C} by writing a function.
@@ -78,9 +78,9 @@ A task is usually implemented in {\tt C} by writing a function.
 
 A computer must often switch from one task to another (don't we all?) and then back.
 
-To restart a suspended task, we have to be able to {\it restore} its state. 
+To restart a suspended task, we have to be able to {\it restore} its state.
 
-To restore its state, we have to save it.  
+To restore its state, we have to save it.
 
 Thus a context switch means
 \begin{enumerate}
@@ -94,7 +94,7 @@ Thus a context switch means
 <s>\begin{slide}
 \subsection{Types of Tasks:}
 
-%%%%** Section 1.2.1 
+%%%%** Section 1.2.1
 \subsubsection{Periodic Tasks}\label{Periodic}
 \begin{itemize}
         \item Found in  Hard-Real time applications
@@ -128,7 +128,7 @@ name() {
 <s>\end{slide}
 <s>\begin{slide}
 
-%%%%** Section 1.2.2 
+%%%%** Section 1.2.2
 \subsubsection{Intermittent Tasks}
 \begin{itemize}
         \item Found in  all types of applications
@@ -156,7 +156,7 @@ name() {
 <s>\end{slide}
 <s>\begin{slide}
 
-%%%%** Section 1.2.3 
+%%%%** Section 1.2.3
 \subsubsection{Background Tasks}
 \begin{itemize}
         \item A soft real time or non real time task.
@@ -182,7 +182,7 @@ name() {
 
 <s>\end{slide}
 <s>\begin{slide}
-%%%%** Section 1.2.4 
+%%%%** Section 1.2.4
 \subsubsection{Complex Tasks}
 \begin{itemize}
         \item Found in all types of applications
@@ -216,18 +216,18 @@ the I/O and the time it gets the data or writes the data so now the CPU is free 
 \subsection{Task States}\label{TaskStates}
 Tasks are in one of four states:
 \begin{enumerate}
-        \item {\tt Running} 
+        \item {\tt Running}
         \item {\tt Ready} to Run (but not running)
         \item {\tt Waiting}    (for something {\it other} than the CPU.)
-        \item {\tt Inactive}   
+        \item {\tt Inactive}
 \end{enumerate}
 <*chn>
-Only one task can be {\bf Running} at a time (unless we are using a ``multicore" CPU).  
-A task which is waiting for the CPU 
+Only one task can be {\bf Running} at a time (unless we are using a ``multicore" CPU).
+A task which is waiting for the CPU
 is {\bf Ready}.  When a task has requested
 I/O or put itself to sleep, it is {\tt Waiting}.
-An {\tt Inactive} task is waiting to be allowed into the schedule.  It is like 
-Microsoft Word when you are NOT running it. 
+An {\tt Inactive} task is waiting to be allowed into the schedule.  It is like
+Microsoft Word when you are NOT running it.
 
 We'll see later how a task can get into or out of the {\tt Inactive} state.
 
@@ -240,7 +240,7 @@ We'll see later how a task can get into or out of the {\tt Inactive} state.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
 %
-%%%%** Section 2 
+%%%%** Section 2
 \section{Threads: Smaller Units of Computation}
 We have talked about:
 \begin{itemize}
@@ -319,7 +319,7 @@ Threads are like pieces within a program which can be scheduled by the OS indepe
 <*>
 <s>  \scalebox{1.0}{  \includegraphics{sched_figs/00265.eps} }
 
-A complete software system with two processes.   
+A complete software system with two processes.
 <s>Process 1: normal, Process 2: threaded
 <chn>Process 1 is a ``normal" single-threaded process.
 <chn>Process 2 is a multithreaded process.
@@ -402,7 +402,7 @@ option.
 <s>\begin{slide}
 
 
-%%%%** Section 3 
+%%%%** Section 3
 \section{RTOS Scheduling Concepts}
 <hcn>RTOS = Real Time Operating System
 
@@ -453,8 +453,38 @@ short. $P = D = T, C << P$.
 At each opportunity, OS asks:
 If $N$ tasks are {\bf Ready}, which one should I run?
 
-If you can show that scheduler always can achieve deadlines, 
+If you can show that scheduler always can achieve deadlines,
 the system is ``deterministically schedulable".
+
+
+<s>\end{slide}
+<s>\begin{slide}
+%%%%** Section 3.4
+\subsection{ Task Parameters for Scheduling:   }
+Summarizing our key scheduling information about periodic tasks, we define 4 parameters:
+\begin{enumerate}
+        \item $Pr$ the task {\it priority}.  Usually 1 means highest priority.
+        \item $P$ the task {\it period}.   At what time interval should the task
+        be ``woken up''?
+        \item $C$ the {\it compute demand}.   How much CPU time does the task require
+        every time it is woken up? CPU speed is implicit in the $C$ parameter.
+        \item $D$ the {\it deadline}. What is the {\it maximum allowed elapsed time}.   What is the longest
+        time allowed before the task has finished it's compute demand?
+\end{enumerate}
+$Pr$ is a small int, $P,C,D$ are units of time.
+
+
+\subsection*{Inequality}
+\[
+P > D > C
+\]
+
+Relative to the scheduler ``tick'', typically $T \leq P_{min}$. Sometimes $T << P_{min}$.
+
+Often we have to {\bf verify the inequality } for a given scheduler algorithm,
+and specific tasks.
+
+
 
 
 <s>\end{slide}
@@ -472,24 +502,24 @@ Tradional measure for mainframes.  100\% is better.
 
 Goal:   low load - 40\%, high load - 90\%.
 
-\item Throughput: 
+\item Throughput:
 Work units completed per unit time.
 
 \item Turnaround Time:
 Total time from task start to completion (waiting + execution + I/O)
 
-\item Waiting Time: 
-Choose scheduler which minimizes waiting time. 
+\item Waiting Time:
+Choose scheduler which minimizes waiting time.
 
 \item Response Time **
-How quickly system responds to external asynchronus events. 
+How quickly system responds to external asynchronus events.
 \end{enumerate}
 
 <s>\end{slide}
 <s>\begin{slide}
 
 \section*{Scheduler Types:}
-%%%%** Section 3.4.1 
+%%%%** Section 3.4.1
 \subsection{Periodic Schedulers}
 <chn>\begin{itemize}
 
@@ -509,8 +539,9 @@ task3_fcn();
                 \end{verbatim}
                 \item Each task {\bf must} voluntarily return to
                 scheduler quickly
-                \item $C << P$, $P=T$.
+                \item $C_i << P_i$, $P_i \approx T \approx \Sigma_i C_i$.
 
+\subsubsection*{Task template:}
 \begin{verbatim}
 taskN_fcn()
 {
@@ -528,16 +559,8 @@ return();
 Synchronized Infinite Loop
         \begin{itemize}
                 \item the top of the loop waits on a hardware clock.
-                \item \begin{verbatim}
-while(1)
-{
-wait(CLOCK_PULSE);
-task1_fcn();
-task2_fcn();
-task3_fcn();
-...
-}
-                \end{verbatim}
+
+
                 \item Each task {\bf must} voluntarily return to
                 scheduler quickly, as above.
                 \item $C << P$, $T=P$.
@@ -545,15 +568,26 @@ task3_fcn();
 
 <chn>\end{itemize}
 
+\subsubsection*{Task template:}\begin{verbatim}
+while(1)
+{
+wait(CLOCK_PULSE);
+task1_fcn();
+task2_fcn();
+...
+}
+\end{verbatim}
+
+
 <s>\end{slide}
 <s>\begin{slide}
 \subsection{Pre-emption}
-Each function in these schedulers must ``voluntarily" return back to the main loop, 
+Each function in these schedulers must ``voluntarily" return back to the main loop,
 and must make sure that it doesn't compute for too much time.   If a task gets
-stuck, it breaks the whole system.  
+stuck, it breaks the whole system.
 
-The fix for this is {\bf preemption} - the ability to break into a running task and 
-stop it. In other words to force a context switch. 
+The fix for this is {\bf preemption} - the ability to break into a running task and
+stop it. In other words to force a context switch.
 
 
 <*chn>

@@ -39,7 +39,7 @@
 \end{center}
 
 <*>
-%%%%** Section 4 
+%%%%** Section 4
 \section{Scheduling Exercises}
 
 <s>\end{slide}
@@ -52,7 +52,7 @@ In this section we will conduct a series of in-class exercises.  We will zoom in
 \begin{enumerate}
   \item Our basic {\tt while(1)} loop:  Non-preemptive Round Robin (RR).
   \item The same loop with synchronization timing loop or timer function: Synchronized Non-premptive RR
-  \item Special hacks to the synchronized non-preemptive RR to enable different task periods. 
+  \item Special hacks to the synchronized non-preemptive RR to enable different task periods.
   \item Adding a {\tt sleep(int d)} delay option for tasks: Non-premptive synchronized RR with delays.
   \item Making the scheduler dynamic: Non-premptive synchronized RR with {\tt halt\_me()} function.
   \item Handling I/O requests which take time.
@@ -80,14 +80,14 @@ a system clock which generates timer events every 1,000 $\mu$s.
 To indicate these, make a mark at the left edge of every third
 horizontal line.
 
-Relax a bit about exactness or accuracy when doing this kind of diagramming. 
-It would be impossible to make an {\it exact} diagram without full access to 
+Relax a bit about exactness or accuracy when doing this kind of diagramming.
+It would be impossible to make an {\it exact} diagram without full access to
 and understanding of the scheduler's code.   The main purpose of these exercises
 is to understand key features and attributes of various schedulers as we
-generate various scenarios and ask ``What would the scheduler do next?".  
-The exact answer will depend very specifically on how the scheduler is 
+generate various scenarios and ask ``What would the scheduler do next?".
+The exact answer will depend very specifically on how the scheduler is
 implemented,  but we
-can learn better how to think about schedulers by encountering these situations. 
+can learn better how to think about schedulers by encountering these situations.
 
 <*s>
 
@@ -97,7 +97,7 @@ Each Line = 333 $\mu$sec.
 
 Assume a system interrupt every 1,000 $\mu$sec.
 Mark interrupts at left edge of every third line.
-Each time scheduler runs it requires 100$\mu$sec (approximately 1/3 of a line).
+Each time scheduler services the interrupt it requires 100$\mu$sec (approximately 1/3 of a line). But assume other operations by the scheduler take zero time.
 
 <s>\end{slide}
 <s>\begin{slide}
@@ -105,11 +105,12 @@ Diagram the tasks A,B,C as described above
 for the following scheduler policies:
 
 <*>
-%%%%** Section 4.1.1 
+%%%%** Section 4.1.1
 \subsubsection{Exercise 1}\label{SchEx1}
 
-\paragraph{Scheduler Type:} Non-synchronized, non-preemptive Round Robin
-\paragraph{Task List and Characteristics:} 
+\paragraph{Scheduler Type:} Non-synchronized, non-preemptive Round Robin.
+Assume interrupts are disabled.
+\paragraph{Task List and Characteristics:}
 
 \begin{itemize}
 \item The three tasks are labeled A, B, C
@@ -124,11 +125,12 @@ for the following scheduler policies:
 
 <s>\end{slide}
 <s>\begin{slide}
-%%%%** Section 4.1.2 
+%%%%** Section 4.1.2
 \subsubsection{Exercise 2}
 
-\paragraph{Scheduler Type:} Synchronized, non-preemptive Round Robin
-\paragraph{Task List and Characteristics:} 
+\paragraph{Scheduler Type:} Synchronized, non-preemptive Round Robin.
+Interrupts allow the scheduler to enforce time ``ticks'' of 1$ms$.
+\paragraph{Task List and Characteristics:}
 <*chn>
 \begin{itemize}
 \item Same as Section \ref{SchEx1}
@@ -136,7 +138,7 @@ for the following scheduler policies:
 <*s>
 \begin{itemize}
 \item The three tasks are labeled A, B, C
-\item The nature of the three tasks is as follows:
+\item The nature of the three tasks is as follows (same as Ex 1):
     \begin{description}
       \item [A] Periodic. $P = .001$sec, $C = 200\mu$sec, $D =P$.
       \item [B] Periodic. $P = .002$sec, $C = 200\mu$sec, $D =P$.
@@ -148,7 +150,7 @@ for the following scheduler policies:
 
 <s>\end{slide}
 <s>\begin{slide}
-%%%%** Section 4.1.3 
+%%%%** Section 4.1.3
 \subsubsection{Exercise 3}
 
 \paragraph{Scheduler Type:} Diagram the schedule for the following
@@ -162,8 +164,8 @@ while(1) {
   wait(CLOCK_PULSE);
   taskA();
   }
-\end{verbatim} 
-\paragraph{Task List and Characteristics:} 
+\end{verbatim}
+\paragraph{Task List and Characteristics:}
 <*chn>
 \begin{itemize}
 \item Same as Section \ref{SchEx1}
@@ -171,12 +173,7 @@ while(1) {
 <*s>
 \begin{itemize}
 \item The three tasks are labeled A, B, C
-\item The nature of the three tasks is as follows:
-    \begin{description}
-      \item [A] Periodic. $P = .001$sec, $C = 200\mu$sec, $D =P$.
-      \item [B] Periodic. $P = .002$sec, $C = 200\mu$sec, $D =P$.
-      \item [C] Periodic. $P = .002$sec, $C = 200\mu$sec, $D =P$.
-    \end{description}
+\item The  three tasks are the same as Ex1 and Ex2.
 \end{itemize}
 <*>
 
@@ -224,7 +221,7 @@ worst bad thing about this method is that it doesn't meet the third
 reason, it uses all the CPU time itself.  (There are other problems as
 well). We can define
 the call {\tt sleep(int delay)} which does the following:
- 
+
 
 <*s>
 The scheduler can help implement delays with a function:
@@ -233,21 +230,21 @@ The scheduler can help implement delays with a function:
 <*>
 \begin{itemize}
         \item returns to the scheduler
-        \item sets a software counter to {\tt delay}.  
+        \item sets a software counter to {\tt delay}.
         \item schedules the next task.
-        \item the task which called {\tt OS\_TimeDelay()} will be set to 
+        \item the task which called {\tt OS\_TimeDelay()} will be set to
          {\tt Waiting} (not started by the scheduler)
-         \item Each tick, decrement {\tt delay} value for each sleeping task. 
+         \item Each tick, decrement {\tt delay} value for each sleeping task.
         \item when the {\tt delay } is over, set task to {\tt Ready}
 \end{itemize}
 
 <s>\end{slide}
 <s>\begin{slide}
 
-%%%%** Section 4.1.4 
+%%%%** Section 4.1.4
 \subsubsection{Exercise 4}
 
-\paragraph{Scheduler Type:} Assume a time delay function: {\tt sleep(int d)} is now available to the tasks 
+\paragraph{Scheduler Type:} Assume a time delay function: {\tt sleep(int d)} is now available to the tasks
 within a non-preemptive round robin scheduler.  Tasks take the form:
 \begin{verbatim}
 while(1) {
@@ -255,14 +252,14 @@ while(1) {
   sleep(14);  // 14 ms. is just example.
   return;
   }
-\end{verbatim} 
-\paragraph{Task List and Characteristics:} 
+\end{verbatim}
+\paragraph{Task List and Characteristics:}
 \begin{itemize}
 \item The three tasks are labeled A, B, C
 \item The nature of the three tasks is as follows:
     \begin{description}
       \item [A] P=2.0ms, C= 233$\mu$sec, D=1.0ms
-      \item [B] P=4.0ms, C= 233$\mu$sec, D=1.0ms, task pseudocode: 
+      \item [B] P=4.0ms, C= 233$\mu$sec, D=1.0ms, task pseudocode:
 \begin{verbatim}
             taskB(void) {
             compute for 233 mu sec;
@@ -270,7 +267,7 @@ while(1) {
             return;
             }
 \end{verbatim}
-      \item [C]  P=1.0ms, C=100$\mu$sec, D=1.0ms  
+      \item [C]  P=1.0ms, C=100$\mu$sec, D=1.0ms
     \end{description}
 \end{itemize}
 
@@ -285,7 +282,7 @@ while(1) {
 
 <*chn>
 \paragraph{Starting and Stopping}
-Sometimes it is desireable to make a task stop and start. Recall the task states defined in 
+Sometimes it is desireable to make a task stop and start. Recall the task states defined in
 Section \ref{TaskStates}.  We defined the
 task state {\tt Inactive}, to describe a stopped task.  To implement
 this, assume
@@ -312,7 +309,7 @@ to {\tt Inactive}
 <s>\end{slide}
 <s>\begin{slide}
 
-%%%%** Section 4.1.5 
+%%%%** Section 4.1.5
 \subsubsection{Exercise 5: Scheduling with {\tt halt\_me()} function}
 
 \paragraph{Scheduler Type:} Assume a halt function ({\tt halt\_me()}) is now available to the tasks within a non-preemptive round robin scheduler.   Tasks now might look like
@@ -324,8 +321,8 @@ taskA(void *p){
   if(i++ > 2) halt_me();  // turn off after 3 loops
   return;
   }
-\end{verbatim} 
-\paragraph{Task List and Characteristics:}  
+\end{verbatim}
+\paragraph{Task List and Characteristics:}
 	\begin{itemize}
 	\item The three tasks are labeled A, B, C
 	\item The nature of the three tasks is as follows:
@@ -342,14 +339,14 @@ taskA(void *p){
 		return();
 		}
 		\end{verbatim}
-		\end{description} 
+		\end{description}
 	\end{itemize}
 
 <s>\end{slide}
 <s>\begin{slide}
- 
-  
-\subsubsection*{Scheduling with I/O requests} 
+
+
+\subsubsection*{Scheduling with I/O requests}
 <*chn>
 \paragraph{I/O}
 Sometimes tasks in embedded systems do I/O by directly manipulating
@@ -366,12 +363,12 @@ which handles all I/O requests through subroutine calls.  Since tasks
 using these devices will have to wait a long time for them to respond, the scheduler
 is invoked after I/O requests.  If a task is waiting for I/O, the
 scheduler will try to run another task until the I/O is complete.
-From a scheduler's point of view, I/O requests are a lot like {\tt sleep(int d)} except {\tt d} is not known in advance (we will specify {\tt d} for schedule diagramming excercises or exam problems). 
+From a scheduler's point of view, I/O requests are a lot like {\tt sleep(int d)} except {\tt d} is not known in advance (we will specify {\tt d} for schedule diagramming excercises or exam problems).
 <*s>
 \begin{itemize}
  \item Bit level I/O is fast and can be done by periodic hard real time tasks.
  \item I/O to devices like disk drives and network interfaces are different.
- \item Complex, slow, variable completion time. 
+ \item Complex, slow, variable completion time.
  \item Requires driver software
  \item Operating System handles the I/O with subroutine calls to driver.
 \end{itemize}
@@ -393,8 +390,8 @@ From a scheduler's point of view, I/O requests are a lot like {\tt sleep(int d)}
 <s>\end{slide}
 <s>\begin{slide}
 
-%%%%** Section 4.1.8 
-\subsubsection{Exercise 6. I/O Delays} 
+%%%%** Section 4.1.8
+\subsubsection{Exercise 6. I/O Delays}
 
 \paragraph{Scheduler Type:} Assume an I/O function: {\tt OS\_request\_IO(int device)} is now available to the tasks within a non-preemptive round robin scheduler.   Tasks now might look like
 \begin{verbatim}
@@ -404,7 +401,7 @@ taskA(void *p){
   OS_request_IO(device);
   return;
   }
-\end{verbatim} 
+\end{verbatim}
 
 <s>\end{slide}
 <s>\begin{slide}
@@ -416,33 +413,33 @@ taskA(void *p){
                 \item[B] Complex task:
         \end{description}
 \begin{verbatim}
-            void taskB(){ 
+            void taskB(){
             compute for 0.233ms;
             I/O Request lasting for 3ms;
             //( much longer for physical I/O devs.)
             }
-\end{verbatim} 
+\end{verbatim}
 
 
 <s>\end{slide}
 <s>\begin{slide}
- 
+
 
 \subsubsection*{Exercise 6a: Contention}
 
 \paragraph{Scheduler Type:} Synchronized Non-preemptive RR.
-\paragraph{Task List and Characteristics:}  
+\paragraph{Task List and Characteristics:}
             \begin{description}
               \item [A] Periodic. $P = 2$msec, $C = 233\mu$sec, $D =P$.
               \item [B] Periodic. $P = 2$msec, $C = 656\mu$sec, $D =P$.
               \item [C] Periodic. $P = 2$msec, $C = 233\mu$sec, $D =P$.
         \end{description}
-       Who starts when 3 tasks are ready? 
+       Who starts when 3 tasks are ready?
 
 \subsubsection*{Exercise 6b}
 
 \paragraph{Scheduler Type:} Synchronized Non-preemptive RR.
-\paragraph{Task List and Characteristics:}  
+\paragraph{Task List and Characteristics:}
             \begin{description}
                 \item[A:] Periodic.  $P = 2$msec, $C = 233\mu$sec,
                            $D =500\mu$sec.
@@ -454,7 +451,7 @@ while(1){
   }
 \end{verbatim}
               \end{description}
- 
+
 
 <s>\end{slide}
 <s>\begin{slide}
@@ -462,7 +459,7 @@ while(1){
 
 
 
- 
+
 \subsubsection*{Foreground/Background}
 \begin{itemize}
         \item A mix of hard real-time periodic tasks with
@@ -485,7 +482,7 @@ real-time, forground)
 \subsubsection{Exercise 7: Foreground/Background}
 \paragraph{Scheduler Type:} Non-preemptive RR
 \paragraph{Task List and Characteristics:}
-\begin{description} 
+\begin{description}
                 \item[A:] Periodic.  $P = 2$msec, $C = 233\mu$sec,
                            $D =500\mu$sec.
 \begin{verbatim}
@@ -495,7 +492,7 @@ while(1){
   return;
   }
 \end{verbatim}
-                \item[B:] Complex (background): 
+                \item[B:] Complex (background):
 \begin{verbatim}
 while(1){
   compute for 0.233ms;
@@ -503,7 +500,7 @@ while(1){
   }
 \end{verbatim}
 
-\end{description} 
+\end{description}
 
 
 
@@ -511,7 +508,7 @@ while(1){
 <s>\begin{slide}
 
 
-%%%%** Section 5 
+%%%%** Section 5
 \section{Pre-emptive Scheduling}
 
 <*chn>
@@ -524,7 +521,7 @@ vulnerable if some task doesn't ``play fair".
 The solution to this is a scheduler that can break in to a running task
 using a regular interrupt such as a clock interrupt.   There are many
 complex issues in having this ability but the value is very great.
-Preemptive schedulers solve this problem.  While a task is running, 
+Preemptive schedulers solve this problem.  While a task is running,
 the pre-emptive scheduler can stop it and run something else.
 
 This idea changes how we can write tasks --- for the better! We no longer have to divide our work into bite-size chunks which can fit into a small part of the OS tick and then keep returning.  Instead, we just pretend that we are the only task needing the CPU:
@@ -571,11 +568,11 @@ In this case, we do our whole job, and then we wait for 100ms.   We can use this
 while(1){
   Output(PIN, 1) ;   // set the first pulse
   sleep(10);
-  Output(PIN, 0) ; 
+  Output(PIN, 0) ;
   sleep(26);
   Output(PIN, 1) ;   // set the second pulse
   sleep(10);
-  Output(PIN, 0) ; 
+  Output(PIN, 0) ;
   sleep(200);
   }
 \end{verbatim}
@@ -589,7 +586,7 @@ Several types of pre-emptive schedulers are described below.
 <s>\end{slide}
 <s>\begin{slide}
 
-%%%%** Section 5.0.1 
+%%%%** Section 5.0.1
 \subsubsection*{Types of pre-emptive schedulers:}
 
 <chn>\begin{itemize}
@@ -632,7 +629,7 @@ ready.                \item \begin{verbatim}
                 period, $P$.
                 \item Short period = high priority.
                 \item Can prove optimality and schedulability (with
-assumptions).      
+assumptions).
                 \item \begin{verbatim}
 (same)
 \end{verbatim}
@@ -649,7 +646,7 @@ $P_i = $ period of task $i$.
 
 $n = $ number of tasks.
 
-if 
+if
 
 \[
 \sum^{n-1}_{i=0}\frac{C_i}{P_i} \leq n(2^{1/n}-1)
@@ -660,7 +657,7 @@ Assumption:  All tasks pre-emptable 100\% of the time.
 <s>\end{slide}
 <s>\begin{slide}
 
-<chn>        \item 
+<chn>        \item
 Priority Based: How to avoid {\tt starvation}
 
 \begin{quotation}
@@ -700,7 +697,7 @@ Task()
 <s>\end{slide}
 <s>\begin{slide}
 <chn> \item
-FreeRTOS Style Priority-Based. 
+FreeRTOS Style Priority-Based.
              \begin{itemize}
                 \item 7 priority levels
 		\item RR within each level.
@@ -711,14 +708,14 @@ FreeRTOS Style Priority-Based.
 <s>\end{slide}
 <s>\begin{slide}
 
-%%%%** Section 5.0.2 
+%%%%** Section 5.0.2
 \subsubsection*{Preemptive Scheduling Exercises}
 
 \subsubsection{Exercise 8: Preemptive Priority Based Scheduling}
 
 \paragraph{Scheduler Type:} Preemptive Priority Based. Priority order: A=2, B=1, C=3. (1= highest)
-\paragraph{Task List and Characteristics:}  
-            \begin{description} 
+\paragraph{Task List and Characteristics:}
+            \begin{description}
     \item [A] Intermittent: Run for 2ms and then {\tt halt\_me()}.
     \item [B] Complex:  run for 1.0ms, then call the OS to do I/O which
       lasts for 2.0 ms.  Repeat.
@@ -731,14 +728,14 @@ FreeRTOS Style Priority-Based.
 \subsubsection{Exercise 9: Preemptive Round Robin Scheduling}
 
 \paragraph{Scheduler Type:} Preemptive RR (no priorities)
-\paragraph{Task List and Characteristics:}  
-            \begin{description} 
+\paragraph{Task List and Characteristics:}
+            \begin{description}
     \item [A] Intermittent: Run for 2ms and then {\tt halt\_me()}.
     \item [B] Complex:  run for 1.0ms, then call the OS to do I/O which
       lasts for 2.0 ms.  Repeat.
     \item [C] Background: Run forever.
 \end{description}
-  
+
 
 
 <s>\end{slide}
@@ -747,19 +744,19 @@ FreeRTOS Style Priority-Based.
 \subsubsection{Exercise 10: Pre-emptive RR Scheduling}
 
 \paragraph{Scheduler Type:} Preemptive RR (no priorities)
-\paragraph{Task List and Characteristics:}  
-            \begin{description} 
-               \item 5 tasks. For each one P = 20ms, C=3ms, D=20ms. 
+\paragraph{Task List and Characteristics:}
+            \begin{description}
+               \item 5 tasks. For each one P = 20ms, C=3ms, D=20ms.
   	       \item OS time tick is 1ms.
             \end{description}
 
 How can you set up priorities (each task gets a different priority) and delay values to meet their schedules?
- 
+
 
 <s>\end{slide}
 <s>\begin{slide}
 
-%%%%** Section 6 
+%%%%** Section 6
 \section{Scheduling Summary}
 
 
@@ -776,7 +773,7 @@ How can we meet deadlines {\bf and} make full use of CPU? & Background Tasks \\\
 <s>\end{slide}
 <s>\begin{slide}
 
-%%%%** Section 7 
+%%%%** Section 7
 \section{RTOS Types}
 
 {\tt
@@ -794,18 +791,18 @@ Non RT          &   X               & X             & Trivial           \\ \hlin
 
 <s>\end{slide}
 
-<*chn> 
-%%%%** Section 8 
+<*chn>
+%%%%** Section 8
 \section{Scheduler Diagramming}
-Print out multiple copies of the Scheduler Diagramming Worksheet on the next page. 
-We will use them in class to practice analysis of scheduling situations. 
+Print out multiple copies of the Scheduler Diagramming Worksheet on the next page.
+We will use them in class to practice analysis of scheduling situations.
 
 We will use each line in the worksheet to represent 333 $\mu$sec.  Thus every three lines
 is one millisecond (our usual operating system time tick).   Color in each column when
-its task should be running. 
+its task should be running.
 
 \newpage
-\section{\large\bf Scheduler Diagramming Worksheet} 
+\section{\large\bf Scheduler Diagramming Worksheet}
 \label{SchedWorksheet}
 \renewcommand\arraystretch{1.8}% Vertical Row size, 1.0 is for standard spacing)
 \begin{tabular}{|p{1in}|p{0.3in}|p{1in}|p{1in}|p{1in}|}\hline
@@ -838,7 +835,7 @@ OS      &  & A & B & C \\ \hline
         &  &   &   &   \\ \hline
         &  &   &   &   \\ \hline
         &  &   &   &   \\ \hline
-\end{tabular} 
+\end{tabular}
 <s>\end{document}
 <*>
 

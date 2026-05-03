@@ -3,6 +3,8 @@
 *.n.tex
 *.s.tex
 *.h.tex
+*.pdf
+*.zip
 
 # pdfcomment annotation cache (always empty, safe to delete)
 *.upa

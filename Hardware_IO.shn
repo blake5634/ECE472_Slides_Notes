@@ -166,8 +166,8 @@ Read Cycle
 \subsection{Microprocessor: Register View}
 
 \begin{center}
-<chn>   \includegraphics[height=2.5in]{hwio_figs/00162.eps}   \\
-<s>   \includegraphics[height=2.75in]{hwio_figs/00162.eps}   \\
+<chn>   \includegraphics[height=2.5in]{hwio_figs/00162.png}   \\
+<s>   \includegraphics[height=2.75in]{hwio_figs/00162.png}   \\
 
 \end{center}
 
@@ -178,7 +178,7 @@ Read Cycle
 \begin{itemize}
 \item ALU: Arithmetic \& Logic Unit
 \item PC:  Program Counter. Holds Address of next instruction.
-\item IR:  Instruction Register. Holds current instruction.
+\item IR:  ('INSTR') Instruction Register. Holds current instruction.
 \item ADDR: Address Register. Holds address of next bus access.
 \item GP\#: General Purpose Registers.  Hold intermediate results.
 \item A1, A2: ALU Arguments. Hold inputs to an ALU operation.

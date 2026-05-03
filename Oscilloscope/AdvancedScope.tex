@@ -86,9 +86,11 @@ How does this work?   First we have to understand what the input circuit of an o
 
 \includegraphics[width=75mm]{ID24734.png}
 
-Here we show the amplifier input as idealized (drawing no current from the signal) but a $1M\Omega$
-resistor in parallel with an $18pF$ capacitor.   These represent the non-ideal
-electrical properties of the input
+Here we show the amplifier input as idealized (drawing no current from the signal).  But,
+we also have a $1M\Omega$
+resistor in parallel with an $18pF$ capacitor connected to ground.
+These represent the non-ideal
+electrical properties of the actual scope input
 and in fact are calibrated/standardized and the values are usually printed on the front of the scope.
 
 Note that depending on other impedances like the source impedance of the signal and the cables,
@@ -158,9 +160,9 @@ V_{in} = V_{signal}\frac{Z_1}{Z_{Th}+10Z_1}
 We've made the input impedance of the scope 10x higher so we drop ~10x less from the parasitic and unknown
 $Z_{Th}$.
 
-Now we can look at the voltage divider assuming $Z_{Th} = 0$ where
- we {\bf assume} that the new impedance totalling
-$Z_1+9Z_1=10Z_1$ is $>> Z_{Th}$.
+Now we can look at the voltage divider approximating $Z_{Th} \approx 0$ (where
+ we {\bf assume} that the new impedance
+$Z_1+9Z_1=10Z_1$ is $>> Z_{Th}$).
 
 \[
 V_{in} = \frac{Z_1}{9Z_1+Z_1} = \frac {1}   {10}
@@ -169,10 +171,10 @@ V_{in} = \frac{Z_1}{9Z_1+Z_1} = \frac {1}   {10}
 The result has a flat frequency response!  We've reduced the frequency dependent effects of the
 mysterious $Z_{Th}$ by 10x.
 
-\section*{Calibrating your 10x probe.}
+\section{Calibrating your 10x probe.}
 
 The above analysis is great, but it   is sensitive to component tolerances, especially for the capacitor in
-$Z_2$ (the 10x probe).   If you look at the base of your probe, you can see a little hole.
+$Z_2$ (the 10x probe).   If you look at the connector body of your probe, you can see a little hole.
 In this hole is the screw head for an adjustable capacitor.
 The probe kit comes with a special small blade screwdriver.
 

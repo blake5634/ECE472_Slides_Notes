@@ -141,7 +141,7 @@ a byte of memory requires 2.5 octal characters since each
 character only encodes 3 bits.  For example,
 <*>
 
-{\tt HEX 9A}  = Binary {\tt 1011010 } = Octal {\tt 132}
+{\tt HEX 9A}  =   {\tt 01011010 } = {\tt 0101 1010 } ={\tt 01 011 010 }=Octal {\tt 132}
 
 (Hex: 4-bit groups.   Octal: 3-bit groups)
 
@@ -152,12 +152,14 @@ character only encodes 3 bits.  For example,
 \begin{itemize}
   \item
   Ordinary numbers are interpreted by the C compiler
-          as decimal values.   Example: {\tt 25 = 1101}
+          as decimal values.   Example: {\tt '25' = 25}
 
   \item Hex values are indicated to the C compiler by the
               prefix {\tt Ox} for example:   {\tt Ox2F}
 
-  \item Octal values are indicated by a leading zero: {\tt 028}
+  \item Octal values are indicated by a leading zero:\\
+       example: {0347 = 011 100 111}
+  \item {\tt 028}
             is a syntax error (why?).
 
 \end{itemize}
@@ -243,9 +245,15 @@ else {};
 
 %%%%** Section 1.2.2 
 \subsubsection{Example 2}
-Suppose you are going to control a CD-ROM drive and you want
-to open and close the drive door.  The bit to open and close
-the drawer is the 4th bit in a register located at address
+% ~2010
+% Suppose you are going to control a CD-ROM drive and you want
+% to open and close the drive door. The bit to open and close the drawer
+
+% ~2026
+Suppose you are writing code in a phone and you need to turn on Airplane
+Mode in the hardware.   The bit to do this
+%
+is the 4th bit in a register located at address
 {\tt 0x2DA}.  Let's say that to set that bit we use the function
 \begin{verbatim}
 IO_Register_Set([addr],[value])
@@ -259,6 +267,7 @@ It is ``technically'' correct to use the following code:
 \\ open CD-ROM door
 IO_Register_Set(0x2DA, 0x10) ;
 \end{verbatim}
+but it's a {\bf terrible } coding practice!
 
 
 <s>\end{slide}
@@ -275,13 +284,13 @@ for much better code as follows:
 
 \\ (this part is in the preamble before "main ()"
 \\  or in a special ".h" include file
-#define  CD_ROM_CONTROL_REG  0x2DA
-#define  CD_ROM_DOOR_OPEN    0x010
+#define  RF_MODE_CONTROL_REG  0x2DA
+#define  AIRPLANE_MODE        0x010
 
 \\ .... skip to inside the code
 
-\\ open CD-ROM door
-IO_Register_Set(CD_ROM_CONTROL_REG, CD_ROM_DOOR_OPEN) ;
+\\ enable Airplane Mode
+IO_Register_Set(RF_MODE_CONTROL_REG, AIRPLANE_MODE) ;
 
 \end{verbatim}
 
@@ -368,6 +377,7 @@ These operators are only defined for integer-like variables i.e.
 #define  Bit_Four   0x10
 #define  Bit_Five   0x20
 #define  Bit_Six    0x40
+#define  Bit_Seven  0x80
 
 // etc etc etc ..
 
@@ -408,6 +418,9 @@ Convert 020 to Hex:    _____10_______
 Convert 0x20 to Octal: _____40_________
 
 \end{verbatim}
+
+<s>\end{slide}
+<s>\begin{slide}
 
 {\tt
 \begin{verbatim}
@@ -462,9 +475,12 @@ int a = x | y;     // a  = [                     ]
 int b = Bit_Two | Bit_Five | Bit_Seven;
                    // b  = [                     ]
 
+
+int z  = [... 0 0 1 0 1 1 0 0]
 int c = ~((z | Bit_Zero) << 1);
                    // c  = [                     ]
 
+int z1 = [... 0 0 0 0 1 0 0 0]
 int d = !(z1 | Bit_Two);
                    // d  = [                     ]
 \end{verbatim}
@@ -479,10 +495,10 @@ int d = !(z1 | Bit_Two);
 \subsection{Unsigned Integer}
 
 Typically just a
-16 bit binary number.  Straightforward, but cannot represent
+$N={16, 32,64}$ bit binary number.  Straightforward, but cannot represent
 negative numbers.
 
-If {\tt x } is of type {\tt unsigned int}, then
+If {\tt x } is of type {\tt uint16\_t}, then
 \[
 0 \leq {\mathtt x} \leq 65535
 \]
@@ -493,12 +509,20 @@ If {\tt x } is of type {\tt unsigned int}, then
 
 C declaration of unsigned integers:
 
+One: machine independent:
 \begin{verbatim}
 unsigned char a,b;            // 8 bit unsigned
-unsigned int  x,y,z;          // 16 bit unsigned
-unsigned long int p,q,r;      // 32 bit unsigned
+unsigned int  x,y,z;          // N bit unsigned
+                          // (N depends on the CPU model)
+unsigned long int p,q,r;      // 2N bit unsigned
 \end{verbatim}
 
+Two: Hardware specific:
+\begin{verbatim}
+uint8_t    a,b;       // 8 bit unsigned
+uint16_t   x,y,z;     // 16 bit unsigned (always 16)
+uint32_t  p,q,r;     // 32 bit unsigned (always 32)
+\end{verbatim}
 
 
 <s>\end{slide}
@@ -508,7 +532,7 @@ unsigned long int p,q,r;      // 32 bit unsigned
 \subsubsection{Exercise}
 
 Write a C function using bitwise logical operators etc. to print
-the binary value of a 16 bit word.
+the binary value of a 16 bit {\tt int}.
 
 <cn>\vspace{4in}
 
@@ -560,7 +584,8 @@ For an $n$ bit number, $x$,  the range of all possible integers in 2's complemen
 \[
 -2^{n-1} \leq x \leq (2^{n-1}-1)
 \]
-(see Lewis Figure 2-4, page 22 for a useful chart).
+
+% (see Lewis Figure 2-4, page 22 for a useful chart).
 
 <s>\end{slide}
 <s>\begin{slide}
@@ -624,7 +649,8 @@ char *argv;
 [blake@alec code]$
 
 \end{verbatim}
-
+\href{https://www.youtube.com/watch?v=m_G3z-C1C2g}
+{Another way to think about 2's complement from MIT.}
 <s>\end{slide}
 <shn>\end{document}
 

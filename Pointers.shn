@@ -43,35 +43,35 @@
 \section{Data in memory}
 
 <*>
-The {\bf key} to understanding C code and writing C code is to clearly visualize data in the computer memory in it's lowest level form: 
-a bunch of 0's and 1's.  
+The {\bf key} to understanding C code and writing C code is to clearly visualize data in the computer memory in it's lowest level form:
+a bunch of 0's and 1's.
 <*chn>If you don't feel confident on binary, octal, and hex representations
-of numbers, now would be the time to review (there are many  online tutorials and quizzes). 
-But don't rely on converting calculators.  You must understand what the conversion actually means. 
+of numbers, now would be the time to review (there are many  online tutorials and quizzes).
+But don't rely on converting calculators.  You must understand what the conversion actually means.
 <*>
 
 Now let's review what happens in computer memory when we write a statement like this in C.
 \begin{verbatim}
-int c_int_variable = 17;   // 
+int c_int_variable = 17;   //
 \end{verbatim}
 
 <*chn>
 First of all this is called a ``variable declaration" because it ``declares" the existence
-of a thing we are going to call {\tt c\_int\_variable}, and also that it is an 
+of a thing we are going to call {\tt c\_int\_variable}, and also that it is an
 integer (``{\tt int}").  More precisely, the statement reserves a specific slot in memory
 for this {\tt int} that we will call  {\tt c\_int\_variable}. {\tt int} is the variable's ``type" and we can have other types like
-{\tt char} (character), or {\tt float} or {\tt double} (floating point number like 3.14159. {\tt double} means having more precision after the decimal place).  The type is 
-how the bits in memory (which are simply 1's and 0's) get human usefulness and meaning.  but 
+{\tt char} (character), or {\tt float} or {\tt double} (floating point number like 3.14159. {\tt double} means having more precision after the decimal place).  The type is
+how the bits in memory (which are simply 1's and 0's) get human usefulness and meaning.  but
 in memory there are only 1's and 0's, ever.
 
-How many bits/bytes are reserved for the new variable depends on the specific computer 
+How many bits/bytes are reserved for the new variable depends on the specific computer
 (and adapted C-compiler) that you are using.   So on a powerful PC, an {\tt int} might
-get 64 bits, but on an embedded processor, it might only get 16 bits.   
+get 64 bits, but on an embedded processor, it might only get 16 bits.
 You need to have a good idea what these standard sizes are for the computer you use,
-especially if it is a small one. 
+especially if it is a small one.
 
 <*>
-Assuming that the size of an {\tt int} is 2 bytes (16 bits), the C compiler sets up our 
+Assuming that the size of an {\tt int} is 2 bytes (16 bits), the C compiler sets up our
 declaration as follows:
 
 \vspace{0.1in}
@@ -84,16 +84,16 @@ declaration as follows:
 the 1's and 0's are the binary code for 17.  Now what about the following code?:
 
 \begin{verbatim}
-char *  c_char_array = "OK";   // 
+char *  c_char_array = "OK";   //
 \end{verbatim}
-C converts the two characters 'O' and 'K' to 8-bit binary versions in the ASCI (UTF-8) code:
+C converts the two characters 'O' and 'K' to 8-bit binary versions in the ASCII (UTF-8) code:
 
 \vspace{0.1in}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
 0&1&0&0 & 1&1&1&1 & 0&1&0&0 & 1&0&1&1\\\hline
 \end{tabular}
 \vspace{0.1in}
-where 
+where
 
 \begin{tabular}{|c|c|} \hline
 character  & numerical ASCII code \\ \hline
@@ -103,8 +103,8 @@ character  & numerical ASCII code \\ \hline
 
 <*chn>
 Now, we all know that a computer may have billions of bytes of memory (but maybe much fewer
-for an embedded computer).   How do we find those bits?  The answer is that each 
-byte has a unique {\bf address} just like all the houses in a big city.   So, we might redraw the previous 
+for an embedded computer).   How do we find those bits?  The answer is that each
+byte has a unique {\bf address} just like all the houses in a big city.   So, we might redraw the previous
 examples as:
 
 
@@ -137,8 +137,8 @@ let's say the same data is packed into sequential locations:
 \vspace{0.1in}
 
 <*chn>
-Here we have incremented the address by 2 since there are two bytes per line. 
-Finally, memory locations are almost always represented in Hex (base 16) so 
+Here we have incremented the address by 2 since there are two bytes per line.
+Finally, memory locations are almost always represented in Hex (base 16) so
 more commonly the above would be:
 <*>
 
@@ -189,7 +189,7 @@ Wrapping this up, when we write for example:
 int c_int_variable = 17;
 \end{verbatim}
 
-C keeps a table of your variable names (it's called the ``symbol table") which 
+C keeps a table of your variable names (it's called the ``symbol table") which
 for our examples would be:
 
 \begin{tabular}{l|l|l}\\
@@ -205,27 +205,27 @@ name & address(hex) & type \\ \hline
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%             Section 
+%             Section
 
 
 <*s>
 \end{slide}
 \begin{slide}
-<*> 
+<*>
 
-%%%%** Section 1 
+%%%%** Section 1
 \section{Memory Addresses and Pointers}
 \subsection{What is a pointer?}
 <*chn>
-In the last section, we saw that the variable {\tt c\_int\_variable} 
-represents a value stored at {\tt 0x257FE0} in memory.   For each 
+In the last section, we saw that the variable {\tt c\_int\_variable}
+represents a value stored at {\tt 0x257FE0} in memory.   For each
 C data type ({\tt int}, {\tt char} etc.) C has an additional type,
 a ``pointer".  Pointers for each type are declared with an asterisk, '*'
 like so:
 <*>
 \begin{verbatim}
 // my_int_pointer is a pointer to an int
-int * my_int_pointer; 
+int * my_int_pointer;
 \end{verbatim}
 now {\tt my\_int\_pointer} is set up to hold the {\it address of} an {\tt int}.
 If we want {\tt my\_int\_pointer} to ``point to" {\tt c\_int\_variable}, we write
@@ -233,14 +233,14 @@ If we want {\tt my\_int\_pointer} to ``point to" {\tt c\_int\_variable}, we writ
 <*s>
 \end{slide}
 \begin{slide}
-<*> 
+<*>
 
 \begin{verbatim}
 // make my_int_pointer point to c_int_variable
-my_int_pointer = &c_int_variable ;  
+my_int_pointer = &c_int_variable ;
 \end{verbatim}
-using the $=$ and ampersand (\&) in this way means 
-\begin{quotation} 
+using the $=$ and ampersand (\&) in this way means
+\begin{quotation}
    ``Make {\tt my\_int\_pointer} equal to the address of {\tt c\_int\_variable}."
 \end{quotation}
 <*chn>
@@ -250,27 +250,27 @@ but pointers do not have to be constants.   Later on, we can change it to:
 <s> or ...
 \begin{verbatim}
 // the pointer now points to c_int_01 instead!
-my_int_pointer = &c_int_01 ;  
+my_int_pointer = &c_int_01 ;
 \end{verbatim}
 
 
 <*s>
 \end{slide}
 \begin{slide}
-<*> 
+<*>
 
 
 \subsection{``Dereferencing a pointer"}
 <*chn>
-OK, since a pointer holds the location of some data, what can we do with that?   The phrase 
-``to dereference pointer" means to grab the data stored at the location stored in the pointer. 
+OK, since a pointer holds the location of some data, what can we do with that?   The phrase
+``to dereference pointer" means to grab the data stored at the location stored in the pointer.
 As a trivial example, suppose we have the code:
 <*>
 
 \begin{verbatim}
 int c_int_01 = 50;
 // my_int_pointer "points to" c_int_01
-my_int_pointer = &c_int_01 ; 
+my_int_pointer = &c_int_01 ;
 int x = *my_int_pointer;
 if (x == 50) printf(" I understand pointers!\n");
 \end{verbatim}
@@ -280,26 +280,26 @@ if (x == 50) printf(" I understand pointers!\n");
 <*s>
 \end{slide}
 \begin{slide}
-<*> 
+<*>
 
 
-After this code is executed, {\tt (x==50)} is true.  
+After this code is executed, {\tt (x==50)} is true.
 The expression {\tt *my\_int\_pointer} means
-\begin{quotation} 
+\begin{quotation}
    ``Get the value at the address contained in {\tt my\_int\_pointer}."
    \end{quotation}
 When not used in a declaration (e.g. {\tt int * x = 0x2457854}),
 asterisk (*) is known as the ``dereferencing operator".
-   
-   
+
+
 <*>
 <s>\end{slide}
-<s>\begin{slide} 
-Consider some more examples:
+<s>\begin{slide}
+Consider some more examples.   Assume that each {\tt int} = 4 bytes.
 
 \begin{verbatim}
 int *pa;  // (assume (int)pa == 0x3000)
-*pa = 0x000B;
+*pa = 0x000B;  // i.e. hex B
 *(pa++) = 0x0010;
 *(pa+1) = 0x00C0;
 \end{verbatim}
@@ -310,7 +310,9 @@ What are the values of
 (int)pa == ??
 \end{verbatim}
 
-<*ch>
+<s>\end{slide}
+<s>\begin{slide}
+<*sch>
 \begin{tabular}{l|c|c|c|c|c|}
 \hline
 Name &Addr & & & & \\ \hline
@@ -323,6 +325,8 @@ Name &Addr & & & & \\ \hline
      & & & & & \\ \hline
 \end{tabular}
 
+<s>\end{slide}
+<s>\begin{slide}
 
 <*sn>
 \subsubsection*{Answers}
@@ -345,9 +349,10 @@ pa$\to$ & 3004 &0 &0 &0 &0 \\ \hline
 
 %%    Incrementing pointers.
 \subsection{Pointer Types and increments}
-Pointers are typed so that they ``know" how big the thing is they point to.  
-<chn>For example, if an integer is 32 bits (4 bytes), suppose we have memory as follows:
-<s>Example:
+Pointers are typed so that they ``know" how big the thing is they point to.
+<chn>For example, if an integer is 32 bits (4 bytes),
+suppose we have memory as follows:
+
 
 \begin{tabular}{c|c|c|c|c|}
 address & byte & byte & byte & byte \\\hline
@@ -360,14 +365,14 @@ address & byte & byte & byte & byte \\\hline
 {(assume a blank cell contains 0x00)}
 
 <chn>Note how the addresses differ by increments of 4.
-We have stored an integer in each row of 4 bytes, specifically \{1, 2, 16, 513\}.  
+We have stored an integer in each row of 4 bytes, specifically \{1, 2, 16, 513\}.
 <chn>Now lets say we have the following code:
 
 <*s>
 \end{slide}
 \begin{slide}
-<*> 
-<s> Example code:
+<*>
+<s> Let's say we have the following code:
 \begin{verbatim}
 int * p1 = 0x257FE0
 printf("%d", *p1);   // prints 1
@@ -376,7 +381,7 @@ printf("%d", *(p1+2) );  // prints 16 (added 8 to byte address)
 \end{verbatim}
 
 <*chn>
-The C compiler knows that an int takes 4 bytes so when you increment an int pointer, it automatically adds 4. 
+The C compiler knows that an int takes 4 bytes so when you increment an int pointer, it automatically adds 4.
 To summarize,
 <*>
 C Pointers advance in increments of the thing they
@@ -386,10 +391,10 @@ point to.
 <*s>
 \end{slide}
 \begin{slide}
-<*> 
+<*>
 
-<*chn>How can you print a pointer to see what address it contains?   We can convert it to an {\tt int} using the 
-{\bf cast} operator, in this case {\tt (int) }.  For example, 
+<*chn>How can you print a pointer to see what address it contains?   We can convert it to an {\tt int} using the
+{\bf cast} operator, in this case {\tt (int) }.  For example,
 
 <s> You can change variables from one type to another by ``casting"
 
@@ -452,12 +457,12 @@ Not so fast!!   Lets check with actual code
 <*>
 <*chn>
 
-File: \framebox{ptrCastExpl.c}
-
+% File: \framebox{ptrCastExpl.c}
+File: \framebox{pointerCastExpl.c}
 
 \lstset{language=c}
 \lstset{basicstyle=\ttfamily, commentstyle=\textit}
-\begin{lstlisting}[frame=trbl]{} 
+\begin{lstlisting}[frame=trbl]{}
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -475,10 +480,10 @@ void main() {
     // Assume intPtr has the value 0x3000
     //  and floatPtr == 0x4000
     //  and szint = 4, szflt = 8 (bytes)
-    
+
     int intsize = sizeof(myInt);
     int floatsize = sizeof(myFloat);
-    
+
     printf("Size of int is %d bytes. Size of float is %d bytes.\ns",intsize,floatsize);
 
     printf("intPtr   = %d\n", (int)intPtr);
@@ -487,7 +492,7 @@ void main() {
     printf("fltPtr   = %d\n", (int)floatPtr);
     printf("fltPtr++ = %d\n", (int)(floatPtr+1) );
     printf("fltPtr++ = %d\n", (int)floatPtr+1 );
-    
+
     printf("\n now lets cast to unsigned ints\n");
     printf("intPtr   = %u\n", (unsigned int)intPtr);
     printf("intPtr+1 = %u\n", (unsigned int)intPtr+1);
@@ -505,22 +510,26 @@ void main() {
 \noindent
 {\bf Examples: }
 
-Consider the following code:
+Consider the following C code:
+
 \begin{verbatim}
-\\ variable declarations
+// variable declarations (all ints)
 int j=3;
-int * pa;
+int k=5;
 int a;
 int b = 0x2F;
 
-\\ executable code
+//a pointer
+int *pa = NULL;
+
+// executable code
 pa = &j;
 a = *pa;
 *pa = b;
 \end{verbatim}
 
 Exercise: Assume compiler assigns memory up from {\tt 0x3000}.
-Also assume that an integer is 32 bits (4 bytes). Assuming the Exanoke code just above
+Also assume that an integer is 32 bits (4 bytes). Assuming the Example code just above
 is compiled, show each byte of memory as it would be assigned
 by the compiler.
 
@@ -537,37 +546,114 @@ Addr & & & & \\ \hline
  & & & & \\ \hline
 \end{tabular}
 
-Note that all this happens before your program ever runs.  It's really just a plan 
-for where the data will go when your program does run. 
+Print the address pointed to by {\tt pa}:
+
+\begin{verbatim}
+__________________________  (hex)
+\end{verbatim}
+
+
+Note that all this happens before your program ever runs.  It's really just a plan
+for where the data will go when your program does run.
 
 
 
-<*n>
+<s>\end{slide}
+<s>\begin{slide}
+
 
 %%%%** Section 1.2
-\subsection{Memory Map}
-Assume compiler assigns memory up from {\tt 0x3000}. \\
+Assume compiler assigns memory up from {\tt 0x3000}
+(it will be different and ``random-looking''
+in an actual computer). \\
 
 Answer:
 \vspace{0.4in}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline
 Name &Addr & & & & \\ \hline
- j   & 3000 &0 &0 &0  &3 \\ \hline
- pa  & 3004 &0 &0 &30 &00 \\ \hline
+ j   & 3000 &0 &0 &0  &2F \\ \hline
+ k   & 3004 &0 &0 &0  & 5 \\ \hline
  a   & 3008 &0 &0 &0 &3 \\ \hline
  b   & 300C &0 &0 &0 &2F \\ \hline
      & & & & & \\ \hline
-     & & & & & \\ \hline
-     & & & & & \\ \hline
 \end{tabular}
 
+Print the address pointed to by {\tt pa}:
+\begin{verbatim}
+___3000________________  (hex)
+\end{verbatim}
 
+As shown in the solution above, the integer is stored
+with the least significant byte last (e.g. {\tt 0x2F} is
+the last (highest-address) value in the 4-byte int.
+In the most common CPU architectures (e.g. Intel x86,
+x96-64bit), this is reversed and the least significant byte
+is the first (lowest) address in the 4-byte group!
+Don't worry: {\bf a main job of the C compiler} is to {\it completely hide this
+from you so you don't ever have to worry about it!}
+
+<s>\end{slide}
+<s>\begin{slide}
 <*>
 <s>\end{slide}
 <s>\begin{slide}
+
+Here is code to solve the above puzzle ({\tt pointerSlide.c}):
+
+\begin{verbatim}
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+void main(){
+    // variable declarations (all ints)
+    int j=3;
+    int k=5;
+    int a;
+    int b = 0x2F;
+    // initial printouts
+    printf("&j: %lx    j:   %x\n",(long unsigned int)&j,j);
+    printf("&k: %lx    k:   %x\n",(long unsigned int)&k,k);
+    printf("&a: %lx    a:   %x\n",(long unsigned int)&a,a);
+    printf("&b: %lx    b:   %x\n",(long unsigned int)&b,b);
+
+    //a pointer
+    int *pa = NULL;
+
+    // executable code
+    pa = &j;
+    a = *pa;
+    *pa = b;
+    int * pstart = &j;
+    int * pend = &b + 1; // why?
+
+    int i = 0;
+    printf("sizeof(int)= %d\n\n",(int)sizeof(int));
+    int row_size = (int)sizeof(int);
+    int Nints = ((uintptr_t)pend-(uintptr_t)pstart)/sizeof(int);
+    printf("row_size = %d\n", row_size);
+    printf("N ints/rows: %d\n", Nints);
+
+    // use a void pointer to step through memory
+    for (void *tptr=(void*)pstart ; (int*)tptr<pend ; tptr++){
+        if (i%row_size==0){
+            printf("\n  %lx |", (uintptr_t)tptr);
+           }
+        i++;
+        char *byte_ptr = (uint8_t*) tptr;
+        printf(" %2x |", *byte_ptr);   // print the value of each byte making up the ints
+        fflush(stdout);
+        }
+    printf("\n\npa: %lx\n", (uintptr_t) pa);
+    printf("Notice: in 'Intel Architecture' chips,  ints in memory are in 'little endian' byte order!\n\n" );
+ }
+\end{verbatim}
+
+
 %%%%** Section 1.5
-\subsection{Example: Pointers and Arrays}
+\section{Example: Pointers and Arrays}
 {\bf (Lewis, Section 3.6)}\\
 Consider the original IBM-PC
 80 col x 40 rows, display buffer \\
@@ -602,7 +688,7 @@ character position.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%** Section 1.7
-\section{Arrays}
+\subsection{Arrays}
 An array is an ordered set of memory elements. For example,
 {\tt int j[3]} sets up memory for three integers known as {\tt j[0], j[1], j[2]}.
 
@@ -799,7 +885,7 @@ didn't have to --- why not?
 <s>\end{slide}
 <s>\begin{slide}
 
-%%%%** Section 2 
+%%%%** Section 2
 \section{Generic ({\tt void}) Pointers}
 
 Sometimes we want a pointer which is not locked to a
@@ -914,7 +1000,7 @@ IFP(5)       // can also use function pointer just like
 <s>\end{slide}
 <s>\begin{slide}
 
-%%%%** Section 3 
+%%%%** Section 3
 \section{Pointer Arithmetic}
 
 A powerful feature of pointers is the ability to compute with them like

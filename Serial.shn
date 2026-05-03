@@ -57,16 +57,11 @@
 
 Send bits from point A to point B one at a time.
 
-Info Sources:
-{\tt http://www.seetron.com/ser\_an1.htm} \\
-{\tt http://www.taltech.com/TALtech\_web/resources/intro-sc.html }\\
-(on-line 12-Nov-02)
-
 \section*{RS232C}
 
 An international standard for serial communication (~1960s).
+It's very old, but still influential in ~2020's systems.
 
-Very old but still influential in ~2020 systems.
 
 <s>\end{slide}
 <s>\begin{slide}
@@ -78,7 +73,7 @@ Very old but still influential in ~2020 systems.
 -2.5V --- -15V  &  logic 1 &  ``mark''  \\ \hline
 \end{tabular}
 
-High voltage {\it margin} gives some immunity to noise.
+High {\it voltage  margin} gives some immunity to noise.
 
 Also a hassle since many systems don't otherwise
 need +15V, -15V supplies.

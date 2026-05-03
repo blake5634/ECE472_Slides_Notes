@@ -157,7 +157,7 @@ use both.
 \begin{itemize}
   \item Simplest:   {\tt type name(arg1type, arg2type,...);}  \\
   for example:\\
-  {\tt float hypotenuse(float a, float b);}\\
+  {\tt float hypotenuse(float, float);}\\
 <chn>  note we don't code the function in the declaration, we are just telling the compiler what it needs to know when it comes up in .c files.  It is ok to have no arguments.
   \item Advanced: {\tt [static][extern] type name(arg1type, arg2type,...);}  \\
 <chn>{\tt static} means that this function will only be used within the current file. {\tt extern} has the same meaning for function declarations as for variable.
@@ -186,6 +186,8 @@ use both.
   \item Simplest:  {\tt type name(arg1type arg1name, arg2type arg2name,...); \{function code here\}} \\
   Note that here we have put names on the argument list after
   each type.
+  for example:\\
+  {\tt float hypotenuse(float a, float b);}\\
   \item Advanced: {\tt [static] type name(arg1type arg1name, arg2type arg2name,...); \{function code here\} }\\
   {\tt static} has the same definition as in function declarations.
 \end{itemize}
@@ -200,10 +202,11 @@ use both.
 
 \begin{itemize}
 	\item Variable declared  inside a function is {\it local}.
+	\item local means it is {\bf invisible} outside the function.
 	\item Variable declared outside a function is visible anywhere
 inside that ``.c" file.
 	\item Variable declared outside a function can also be visible in
-other ``.c" files --- if {\tt extern} is used.
+other ``.c" files --- if {\tt extern} is used in other files.
 	\item Variables declared with prefix {\tt extern} must be declared
 outside a function in {\it another } ``.c" file.
 \end{itemize}
@@ -237,12 +240,13 @@ outside a function in {\it another } ``.c" file.
 
 A C program is typically written in multiple files.
 
-Simpler editing (?)
+Simpler editing and scales to big projects.
 
-Helps modularity and multiple authors.
+Helps with modularity and multiple authors.
 
 <s>\end{slide}
 <s>\begin{slide}
+\subsection{Example}
     
 File: \framebox{main.c}
 \lstset{language=c}
@@ -287,9 +291,7 @@ fcn3()
 Execution starts with first line of {\tt main() }.
 
 All functions (except {\tt main()}) require a {\bf function prototype}
-in any file in which they will be called or defined. 
-
-All functions are visible from any file (but prototype must be supplied in the file).
+in any file in which they will be called or defined.  (not shown above!)
 
 <s>\end{slide}
 <s>\begin{slide}
@@ -323,7 +325,7 @@ File: \framebox{X.h}
 
 <s>\end{slide}
 <s>\begin{slide}
-output:
+output from preprocessor going into the compiler:
 
 \lstset{language=c}
 \lstset{basicstyle=\ttfamily, commentstyle=\textit}
@@ -345,16 +347,20 @@ main()
 Reasons:
 \begin{itemize}
 	\item {\tt \#include} text which should be {\bf the same} in multiple ``.c" files. 
-	\item keep and edit just 1 copy.
 	\item less typing (as in fewer keystrokes to hit)
+	\item keep and edit just 1 copy.
     \item ensures consistency.
 \end{itemize}
 
 <s>\end{slide}
 <s>\begin{slide}
 
-    \includegraphics[width=4.5in]{cprog_figs/includes_multi_protos.png}
-    
+\begin{center}
+<hnc>\includegraphics[width=6.0in]{cprog_figs/includes_multi_protos.png}
+<s>\includegraphics[width=4.0in]{cprog_figs/includes_multi_protos.png}
+\end{center}
+
+
     A single {\tt .h} file introduces the exact same function prototypes
     and data declarations into multiple files without having to maintain 
     separate identical copies in multiple files. 
@@ -365,7 +371,7 @@ Reasons:
 <*chn>
 \subsection{What goes in {\tt xxxxx.h}}
 
-\paragraph{Include files ({\tt xxxxx.h})}
+\paragraph{Include files ({\tt xxxxx.h}) contain {\it declarations}}
 \begin{itemize}
   \item Variable declarations.\\
   These inform the compiler how to recognize the type and optional qualifiers
@@ -375,7 +381,7 @@ Reasons:
   These inform the compiler how to recognize function details it encounters in
   {\tt .c} files.
 \end{itemize}
-\paragraph{Code files ({\tt yyyy.c})}
+\paragraph{Code files ({\tt yyyy.c}) contain {\it definitions}}
 \begin{itemize}
   \item Variable definitions.\\
   Actually allocate memory and optionally initialize the variable.
@@ -430,7 +436,7 @@ C pre-processor can turn on-off  blocks of code before compilation.
 #endif 
 \end{lstlisting}
 
-
+<*>
 <s>\end{slide}
 <s>\begin{slide}
 
